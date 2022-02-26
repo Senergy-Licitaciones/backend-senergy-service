@@ -1,6 +1,7 @@
 const { httpError } = require("../../helpers/handleError");
 const { mostrarLicitacionesService, crearLicitacionService, updateLicitacionService } = require("../../services/licitacion");
-
+const { formatFileLicitacion } = require("../../utils/nameFormat");
+const fs=require("fs");
 exports.showLicitaciones=async(req,res)=>{
     try{
         const result=await mostrarLicitacionesService();
@@ -16,7 +17,9 @@ exports.showLicitaciones=async(req,res)=>{
 exports.createLicitacion=async(req,res)=>{
     try{
         const fields=req.body;
-        const result=await crearLicitacionService(fields);
+        const filenames=req.files;
+        const files= formatFileLicitacion(filenames);
+        const result=await crearLicitacionService({...fields,files});
         if(result.error)return res.send({message:result.message,error:result.error});
         return res.send({
             message:result.message
@@ -34,4 +37,24 @@ exports.updateLicitacion=async(req,res)=>{
     }catch(err){
         httpError(res,err);
     }
+}
+exports.showFile=(req,res)=>{
+    try{
+        const path=req.pathFilename;
+        if(fs.readFileSync(path)){
+            res.contentType("application/pdf");
+            fs.createReadStream(path).pipe(res)
+        }else{
+            return res.send({
+                message:"No existe el archivo"
+            })
+        }
+    }catch(err){
+        console.log("error",err);
+        httpError(res,err);
+    }
+}
+exports.findFilename=(req,res,next,id)=>{
+    req.pathFilename=`uploads/pdfs/${id}`;
+    next();
 }

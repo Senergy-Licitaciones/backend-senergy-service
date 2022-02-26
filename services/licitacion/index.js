@@ -12,7 +12,8 @@ const mostrarLicitacionesService=async()=>{
 }
 const crearLicitacionService=async(fields)=>{
     try{
-        const result=await createLicitacionDao(fields);
+        const {title,descripcion,estado,fechaFin,usuario,participantes,files}=fields;
+        const result=await createLicitacionDao({title,descripcion,estado,fechaFin,usuario,participantes,files});
         if(result.error)handleError(result.error,result.message);
         return {
             message:"Licitación creada exitosamente"

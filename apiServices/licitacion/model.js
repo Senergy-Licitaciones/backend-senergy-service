@@ -28,6 +28,12 @@ const licitacionSchema=new mongoose.Schema({
             type:ObjectId,
             ref:"ProveedorModel"
         }
+    ],
+    files:[
+        {
+            type:String,
+            trim:true
+        }
     ]
 },{
     timestamps:true,
