@@ -2,6 +2,7 @@ const { httpError } = require("../../helpers/handleError");
 const { mostrarLicitacionesService, crearLicitacionService, updateLicitacionService } = require("../../services/licitacion");
 const { formatFileLicitacion } = require("../../utils/nameFormat");
 const fs=require("fs");
+const { sendEmails } = require("../../services/emails");
 exports.showLicitaciones=async(req,res)=>{
     try{
         const result=await mostrarLicitacionesService();
@@ -21,6 +22,8 @@ exports.createLicitacion=async(req,res)=>{
         const files= formatFileLicitacion(filenames);
         const result=await crearLicitacionService({...fields,files});
         if(result.error)return res.send({message:result.message,error:result.error});
+        const info=await sendEmails(fields);
+        if(info.error)return res.send({message:info.message,error:info.error})
         return res.send({
             message:result.message
         })
