@@ -25,6 +25,15 @@ const usuarioSchema=new mongoose.Schema({
     estado:{
         type:String,
         trim:true
+    },
+    role:{
+        type:String,
+        trim:true,
+        default:"basico"
+    },
+    jwt:{
+        type:String,
+        trim:true
     }
 },{
     versionKey:false,

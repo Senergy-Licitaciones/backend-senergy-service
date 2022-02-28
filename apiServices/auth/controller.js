@@ -28,10 +28,12 @@ exports.registerProveedor=async(req,res)=>{
 exports.loginProveedor=async(req,res)=>{
     try{
         const fields=req.body;
-        const {message,error}=await loginProveedorService(fields);
+        const hash=req.hash;
+        const {message,error,token}=await loginProveedorService({...fields,hash});
         if(err)return res.send({message,error});
         return res.send({
-            message
+            message,
+            token
         })
     }catch(err){
         httpError(res,err);
@@ -40,10 +42,12 @@ exports.loginProveedor=async(req,res)=>{
 exports.loginUsuario=async(req,res)=>{
     try{
         const fields=req.body;
-        const {message,error}=await loginUsuarioService(fields);
+        const hash=req.hash;
+        const {message,error,token}=await loginUsuarioService({...fields,hash});
         if(error)return res.send({message,error});
         return res.send({
-            message
+            message,
+            token
         })
     }catch(err){
         httpError(res,err);

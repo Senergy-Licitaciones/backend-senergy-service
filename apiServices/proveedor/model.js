@@ -9,7 +9,7 @@ const proveedorSchema=new mongoose.Schema({
     role:{
         type:String,
         trim:true,
-        default:"Basico"
+        default:"basico"
     },
     descripcion:{
         type:String,
@@ -44,6 +44,10 @@ const proveedorSchema=new mongoose.Schema({
         }
     ],
     estado:{
+        type:String,
+        trim:true
+    },
+    jwt:{
         type:String,
         trim:true
     }

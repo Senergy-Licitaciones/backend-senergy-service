@@ -6,7 +6,7 @@ const participarLicitacionService=async(idProveedor,id)=>{
     try{
         const result=await updateLicitacionDao({licitaciones:[...licitaciones,idProveedor]},id);
         if(result.error)handleError(result.error,result.message);
-        const resultProveedor=await updateProveedorDao(id,idProveedor);
+        const resultProveedor=await updateProveedorDao({licitaciones:[...licitaciones,id]},idProveedor);
         if(resultProveedor.error)handleError(result.error,result.message);
         return{
             message:"Se ha inscrito en la licitación exitosamente"
