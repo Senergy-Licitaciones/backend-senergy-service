@@ -1,16 +1,16 @@
 const { httpError } = require("../../helpers/handleError");
-const { mostrarLicitacionesService, crearLicitacionService, updateLicitacionService } = require("../../services/licitacion");
+const { mostrarLicitacionesService, crearLicitacionService, updateLicitacionService, getTiposService } = require("../../services/licitacion");
 const { formatFileLicitacion } = require("../../utils/nameFormat");
 const fs=require("fs");
 const { sendEmails } = require("../../services/emails");
 exports.showLicitaciones=async(req,res)=>{
     try{
         const result=await mostrarLicitacionesService();
-        if(result.error)return res.send({
+        if(result.error)return res.status(400).send({
             message:result.message,
             error:result.error
         });
-        return res.send(result);
+        return res.status(200).send(result);
     }catch(err){
         httpError(res,err)
     }
@@ -18,13 +18,10 @@ exports.showLicitaciones=async(req,res)=>{
 exports.createLicitacion=async(req,res)=>{
     try{
         const fields=req.body;
-        const filenames=req.files;
-        const files= formatFileLicitacion(filenames);
-        const result=await crearLicitacionService({...fields,files});
-        if(result.error)return res.send({message:result.message,error:result.error});
-        const info=await sendEmails(fields);
-        if(info.error)return res.send({message:info.message,error:info.error})
-        return res.send({
+        const result=await crearLicitacionService(fields);
+        if(result.error)return res.status(400).send({message:result.message,error:result.error});
+        
+        return res.status(200).send({
             message:result.message
         })
     }catch(err){
@@ -37,6 +34,19 @@ exports.updateLicitacion=async(req,res)=>{
         const result=await updateLicitacionService(fields,id);
         if(result.error)return res.send({message:result.message,error:result.error});
         return res.send({message:result.message})
+    }catch(err){
+        httpError(res,err);
+    }
+}
+exports.getTipos=async(req,res)=>{
+    try{
+        const id=req.user;
+        const result=await getTiposService(id);
+        if(result.error) return res.status(400).send({
+            message:result.message,
+            error:result.error
+        });
+        return res.status(200).send(result);
     }catch(err){
         httpError(res,err);
     }

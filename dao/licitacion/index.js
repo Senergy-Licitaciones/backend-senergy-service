@@ -5,7 +5,7 @@ const showLicitacionesDao=async()=>{
         const licitaciones=await LicitacionModel.find();
         return licitaciones;
     }catch(err){
-        handleError(err,"Ha ocurrido un error en la capa de datos")
+        return handleError(err,"Ha ocurrido un error en la capa de datos")
     }
 }
 const createLicitacionDao=async(fields)=>{
@@ -15,7 +15,7 @@ const createLicitacionDao=async(fields)=>{
             message:"Licitacion creada exitosamente"
         }
     }catch(err){
-        handleError(err,"Ha ocurrido un error en la capa de datos");
+        return handleError(err,"Ha ocurrido un error en la capa de datos");
     }
 }
 const updateLicitacionDao=async(fields,id)=>{
@@ -28,4 +28,12 @@ const updateLicitacionDao=async(fields,id)=>{
         handleError(err,"Ha ocurrido un error en la capa de datos");
     }
 }
-module.exports={showLicitacionesDao,createLicitacionDao,updateLicitacionDao}
+const getTiposDao=async(id)=>{
+    try{
+        const result=await LicitacionModel.find({usuario:id}).select("-participantes -usuario -puntoSum -brg -meses -tipoServicio");
+        return result
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error en la capa de datos");
+    }
+}
+module.exports={getTiposDao,showLicitacionesDao,createLicitacionDao,updateLicitacionDao}
