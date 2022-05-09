@@ -3,37 +3,28 @@ const usuarioSchema=new mongoose.Schema({
     correo:{
         type:String,
         trim:true,
-        required:true
+        required:true,
+        unique:true
     },
     password:{
         type:String,
         trim:true,
         required:true
     },
-    nombre:{
-        type:String,
-        trim:true
-    },
-    descripcion:{
-        type:String,
-        trim:true
-    },
-    razSocial:{
-        type:String,
-        trim:true
-    },
-    estado:{
-        type:String,
-        trim:true
-    },
-    role:{
+    empresa:{
         type:String,
         trim:true,
-        default:"basico"
+        required:true
     },
-    jwt:{
-        type:String,
-        trim:true
+    estado:{
+        type:["online","offline","toConfirm"],
+        trim:true,
+        default:"toConfirm"
+    },
+    role:{
+        type:["basico","premium"],
+        trim:true,
+        default:"basico"
     }
 },{
     versionKey:false,

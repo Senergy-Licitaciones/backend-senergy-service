@@ -1,14 +1,12 @@
 const { httpError } = require("../../helpers/handleError");
-const {registrarUsuarioService, registrarProveedorService, loginUsuarioService, loginProveedorService } = require("../../services/auth");
+const {registrarUsuarioService, registrarProveedorService, loginUsuarioService, loginProveedorService, confirmAccountService } = require("../../services/auth");
 
 exports.registerUsuario=async(req,res)=>{
     try{
         const fields=req.body;
-        const {message,error}=await registrarUsuarioService(fields);
-        if(error)return res.send({message,error});
-        return res.send({
-            message
-        })
+        const result=await registrarUsuarioService(fields);
+        if(result.error)return res.status(400).send({message:result.message,error:result.error});
+        return res.status(200).send(result)
     }catch(err){
         httpError(res,err);
     }
@@ -49,6 +47,16 @@ exports.loginUsuario=async(req,res)=>{
             message,
             token
         })
+    }catch(err){
+        httpError(res,err);
+    }
+}
+exports.confirmAccount=async(req,res)=>{
+    try{
+        const fields=req.body;
+        const result=await confirmAccountService(fields);
+        if(result.error)return res.status(400).send({message:result.message,error:result.error});
+        return res.status(200).send(result);
     }catch(err){
         httpError(res,err);
     }

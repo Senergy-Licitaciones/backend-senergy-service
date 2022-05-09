@@ -6,7 +6,6 @@ const app= express();
 app.use(morgan("dev"));
 app.use( express.json() );
 app.use(cors());
-
 //routes
 app.use("/api/auth",require("./apiServices/auth/route"));
 app.use("/api/licitacion",require("./apiServices/licitacion/route"));

@@ -2,12 +2,22 @@ const { handleError } = require("../../helpers/handleError")
 const UsuarioModel=require("../../apiServices/usuario/model");
 const crearUsuarioDao=async(fields)=>{
     try{
-        await UsuarioModel.create({...fields});
+        const user=await UsuarioModel.create({...fields});
+        const response=await user.save();
+        return response
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error en la capa de datos")
+    }
+}
+const verifyCorreoDao=async(correo)=>{
+    try{
+        const result=await UsuarioModel.findOne({correo});
+        if(!result) return handleError(true,"Correo ya usado");
         return{
-            message:"Usuario creado exitosamente"
+            _id:result._id
         }
     }catch(err){
-        handleError(err,"Ha ocurrido un error en la capa de datos")
+        return handleError(err,"Ha ocurrido un error en la capa de datos");
     }
 }
 const updateUsuarioDao=async(fields,id)=>{
@@ -20,4 +30,15 @@ const updateUsuarioDao=async(fields,id)=>{
         handleError(err,"Ha ocurrido un error en la capa de datos");
     }
 }
-module.exports={crearUsuarioDao,updateUsuarioDao}
+const confirmUserDao=async(idUser)=>{
+    try{
+        const response=await UsuarioModel.findByIdAndUpdate(idUser,{estado:"offline"});
+        if(!response) return handleError(true,"Usuario no encontrado");
+        return{
+            message:"Cuenta confirmada exitosamente"
+        }
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error en la capa de datos");
+    }
+}
+module.exports={crearUsuarioDao,updateUsuarioDao,verifyCorreoDao,confirmUserDao}
