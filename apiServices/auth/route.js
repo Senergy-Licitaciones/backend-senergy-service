@@ -1,9 +1,10 @@
 const express=require("express");
+const { validateUserLogin, validateUserRegister, validateCode } = require("../../middlewares/validator");
 const { registerProveedor, registerUsuario, loginProveedor,confirmAccount, loginUsuario } = require("./controller");
 const router=express.Router();
 router.put("/loginProveedor",loginProveedor);
-router.put("/loginUsuario",loginUsuario);
+router.put("/loginUsuario",validateUserLogin,loginUsuario);
 router.post("/registerProveedor",registerProveedor);
-router.post("/registerUsuario",registerUsuario);
-router.put("/confirmAccount",confirmAccount);
+router.post("/registerUsuario",validateUserRegister,registerUsuario);
+router.put("/confirmAccount",validateCode,confirmAccount);
 module.exports=router;
