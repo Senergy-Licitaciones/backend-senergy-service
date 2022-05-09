@@ -41,4 +41,13 @@ const confirmUserDao=async(idUser)=>{
         return handleError(err,"Ha ocurrido un error en la capa de datos");
     }
 }
-module.exports={crearUsuarioDao,updateUsuarioDao,verifyCorreoDao,confirmUserDao}
+const getUserHashDao=async(correo)=>{
+    try{
+        const response=await UsuarioModel.findOne({correo}).select("password ");
+        if(!response)return handleError(true,"Correo no registrado");
+        return response;
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error en la capa de datos");
+    }
+}
+module.exports={crearUsuarioDao,updateUsuarioDao,verifyCorreoDao,confirmUserDao,getUserHashDao}

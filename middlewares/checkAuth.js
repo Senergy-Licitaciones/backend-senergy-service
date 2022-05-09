@@ -6,7 +6,7 @@ const checkAuth=async(req,res,next)=>{
         const tokenData= await verifyToken(token);
         tokenData._id?
         next()
-        :res.status(409).send({message:"No tiene acceso a esta información",error:true});
+        :res.status(409).send({message:"No ha iniciado sesión",error:true});
     }catch(err){
         return res.send({
             message:"Ha ocurrido un error en el proceso de autenticación",

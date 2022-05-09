@@ -5,5 +5,5 @@ router.put("/loginProveedor",loginProveedor);
 router.put("/loginUsuario",loginUsuario);
 router.post("/registerProveedor",registerProveedor);
 router.post("/registerUsuario",registerUsuario);
-router.put("/confirmAccount",confirmAccount)
+router.put("/confirmAccount",confirmAccount);
 module.exports=router;

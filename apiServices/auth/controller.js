@@ -40,13 +40,9 @@ exports.loginProveedor=async(req,res)=>{
 exports.loginUsuario=async(req,res)=>{
     try{
         const fields=req.body;
-        const hash=req.hash;
-        const {message,error,token}=await loginUsuarioService({...fields,hash});
-        if(error)return res.send({message,error});
-        return res.send({
-            message,
-            token
-        })
+        const response=await loginUsuarioService(fields);
+        if(response.error)return res.status(400).send({message:response.message,error:response.error});
+        return res.status(200).send(response);
     }catch(err){
         httpError(res,err);
     }

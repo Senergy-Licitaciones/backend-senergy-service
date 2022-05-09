@@ -3,13 +3,12 @@ require("dotenv").config();
 const tokenSignUser=(user)=>{
     return jwt.sign({
         _id:user._id,
-        nombre:user.nombre,
-        razSocial:user.razSocial,
-        correo:user.correo
+        correo:user.correo,
+        type:"user"
     },
     process.env.JWT_SECRET,
     {
-        expiresIn:"2h"
+        expiresIn:"1h"
     })
 }
 const tokenSignProveedor=(proveedor)=>{

@@ -1,28 +1,11 @@
-const {verifyToken}=require("../helpers/generateToken");
-const UsuarioModel=require("../apiServices/usuario/model");
-const ProveedorModel=require("../apiServices/proveedor/model");
 const checkRoleAuth=(roles)=>async(req,res,next)=>{
     try{
-         const token=req.headers.authorization.split(" ").pop();
-        const tokenData=await verifyToken(token);
-        const user=await UserModel.findById(tokenData._id);
-        if(user.role){
-            req.hash=user.password;
-            [].concat(roles).includes(user.role)?next():res.status(409).send({
-            message:"No tiene permisos para realizar esta acción",
-            error:true
-        })
-        }else{
-            user=await ProveedorModel.findById(tokenData._id);
-            req.hash=user.password;
-            [].concat(roles).includes(user.role)?next():res.status(409).send({
-            message:"No tiene permisos para realizar esta acción",
-            error:true
-        })
-        }
-        
+        const proveedor=req.proveedor;
+        const user=req.user;
+        if(proveedor)[].concat(roles).includes(user.role)?next():res.status(409).send({message:"Usuario sin permisos",error:true});
+        if(user)[].concat(roles).includes(proveedor.role)?next():res.status(409).send({message:"Proveedor sin permisos",error:true});
     }catch(err){
-        res.send({
+        return res.status(500).send({
             message:"Ha ocurrido un error en la autenticación",
             error:err
         })
