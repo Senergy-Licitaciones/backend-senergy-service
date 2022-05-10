@@ -1,6 +1,10 @@
 const express=require("express");
-const route=express.Router();
-const {getServicios}=require("./controller");
-route.get("/getServicios",getServicios);
+const checkAuth = require("../../middlewares/checkAuth");
+const checkUserType = require("../../middlewares/checkUserType");
+const checkRoleAuth = require("../../middlewares/roleAuth");
+const router=express.Router();
+const {getServicios,addServicio}=require("./controller");
+router.get("/getServicios",checkAuth,checkUserType(["user"]),checkRoleAuth(["basico","premium"]),getServicios);
+router.post("/addServicio",addServicio);
 
-module.exports=route;
+module.exports=router;

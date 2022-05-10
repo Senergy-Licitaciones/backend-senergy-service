@@ -1,4 +1,4 @@
-const { getBrgDao } = require("../../dao/brg");
+const { getBrgDao, createBrgDao } = require("../../dao/brg");
 const { handleError } = require("../../helpers/handleError")
 
 const getBrgService=async()=>{
@@ -10,4 +10,13 @@ const getBrgService=async()=>{
         return handleError(err,"Ha ocurrido un error en la capa de servicios");
     }
 }
-module.exports={getBrgService}
+const addBrgService=async(fields)=>{
+    try{
+        const response=await createBrgDao(fields);
+        if(response.error)return handleError(response.error,response.message);
+        return response;
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error en la capa de servicios");
+    }
+}
+module.exports={getBrgService,addBrgService}

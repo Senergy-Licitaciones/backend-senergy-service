@@ -1,6 +1,9 @@
 const express=require("express");
-const route=express.Router();
-const {getBrg}=require("./controller");
-route.get("/brg",getBrg);
-
-module.exports=route;
+const checkAuth = require("../../middlewares/checkAuth");
+const checkUserType = require("../../middlewares/checkUserType");
+const checkRoleAuth = require("../../middlewares/roleAuth");
+const router=express.Router();
+const {getBrg, addBrg}=require("./controller");
+router.get("/brg",checkAuth,checkUserType(["user"]),checkRoleAuth(["basico","premium"]),getBrg);
+router.post("/addBrg",addBrg);
+module.exports=router;

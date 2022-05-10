@@ -1,4 +1,4 @@
-const { getServiciosDao } = require("../../dao/servicio");
+const { getServiciosDao, createServicioDao } = require("../../dao/servicio");
 const { handleError } = require("../../helpers/handleError")
 
 const getServiciosService=async()=>{
@@ -10,4 +10,13 @@ const getServiciosService=async()=>{
         return handleError(err,"Ha ocurrido un error en la capa de servicios");
     }
 }
-module.exports={getServiciosService}
+const addServicioService=async(fields)=>{
+    try{
+        const response=await createServicioDao(fields);
+        if(response.error)return handleError(response.error,response.message);
+        return response
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error en la capa de servicios");
+    }
+}
+module.exports={getServiciosService,addServicioService}
