@@ -25,7 +25,7 @@ const sendEmails=async(fields)=>{
 const sendCodeVerification=async(code,correo)=>{
     try{
         let info=await transporter.sendMail({
-            from: '"Prysmo Solutions" <equipo.servicio@prysmosolutions.com>', // sender address
+            from: '"Senergy Soporte" <contacto@prysmosolutions.com>', // sender address
             to:correo, // list of receivers
             subject:`Código de verificación para registro `, // Subject line
             html: `<b> Código de verificación. Expira en 4 minutos</b>

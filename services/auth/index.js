@@ -9,7 +9,7 @@ const { sendCodeVerification } = require("../emails");
 
 const registrarUsuarioService=async(fields)=>{
     try{
-        const {correo,password,empresa}=fields;
+        const {correo,password,empresa,ruc,web="Sin Página Web",phone,address}=fields;
         const isFree=await verifyCorreoDao(correo);
         if(isFree.error)return handleError(isFree.error,isFree.message);
         if(!isFree._id){
@@ -17,7 +17,7 @@ const registrarUsuarioService=async(fields)=>{
             const response=await sendCodeVerification(code,correo);
             if(response.error)return handleError(response.error,response.message);
             const hash=await encrypt(password);
-            const user=await crearUsuarioDao({correo,password:hash,empresa});
+            const user=await crearUsuarioDao({correo,password:hash,empresa,ruc,phone,address,web});
             if(user.error)return handleError(user.error,user.message);
             const resultCode=await createCodeDao({code,user:user._id});
             if(resultCode.error)return handleError(resultCode.error,resultCode.message);
