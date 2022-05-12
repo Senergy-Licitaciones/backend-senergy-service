@@ -7,6 +7,7 @@ const createCodeDao=async(fields)=>{
             message:"Código creado exitosamente"
         }
     }catch(err){
+        console.log("error code dao ",err);
         return handleError(err,"Ha ocurrido un error en la capa de datos");
     }
 }

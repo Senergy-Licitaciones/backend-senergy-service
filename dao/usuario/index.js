@@ -6,6 +6,7 @@ const crearUsuarioDao=async(fields)=>{
         const response=await user.save();
         return response
     }catch(err){
+        console.log("error crear user dao ",err);
         return handleError(err,"Ha ocurrido un error en la capa de datos")
     }
 }
