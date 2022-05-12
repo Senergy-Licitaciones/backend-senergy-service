@@ -12,9 +12,9 @@ const crearUsuarioDao=async(fields)=>{
 const verifyCorreoDao=async(correo)=>{
     try{
         const result=await UsuarioModel.findOne({correo});
-        if(result) return handleError(true,"Correo ya usado");
+        if(result) return{message:"Correo ya usado",_id:result._id};
         return{
-            _id:result._id
+            message:"Correo disponible"
         }
     }catch(err){
         return handleError(err,"Ha ocurrido un error en la capa de datos");
