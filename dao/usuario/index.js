@@ -12,7 +12,7 @@ const crearUsuarioDao=async(fields)=>{
 const verifyCorreoDao=async(correo)=>{
     try{
         const result=await UsuarioModel.findOne({correo});
-        if(!result) return handleError(true,"Correo ya usado");
+        if(result) return handleError(true,"Correo ya usado");
         return{
             _id:result._id
         }
