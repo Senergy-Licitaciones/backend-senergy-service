@@ -13,6 +13,7 @@ const registrarUsuarioService=async(fields)=>{
         const isFree=await verifyCorreoDao(correo);
         if(isFree.error)return handleError(isFree.error,isFree.message);
         if(!isFree._id){
+            console.log("primer condicional ")
             const code=generateCode();
             const response=await sendCodeVerification(code,correo);
             if(response.error)return handleError(response.error,response.message);

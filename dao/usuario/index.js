@@ -17,6 +17,7 @@ const verifyCorreoDao=async(correo)=>{
             message:"Correo disponible"
         }
     }catch(err){
+        console.log("usuario dao ",err);
         return handleError(err,"Ha ocurrido un error en la capa de datos");
     }
 }
