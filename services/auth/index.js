@@ -1,6 +1,6 @@
 const { createCodeDao, verifyCodeDao, removeCodeDao } = require("../../dao/code");
 const { crearProveedorDao } = require("../../dao/proveedor");
-const { crearUsuarioDao, verifyCorreoDao, confirmUserDao, getUserHashDao } = require("../../dao/usuario");
+const { crearUsuarioDao, verifyCorreoDao, confirmUserDao, getUserHashDao, updateUsuarioDao } = require("../../dao/usuario");
 const { tokenSignUser, tokenSignProveedor } = require("../../helpers/generateToken");
 const { compare, encrypt } = require("../../helpers/handleBcrypt");
 const { handleError } = require("../../helpers/handleError");
@@ -92,13 +92,14 @@ const loginUsuarioService=async(fields)=>{
         const isCorrect=await compare(password,user.password);
         if(!isCorrect || isCorrect.error)return handleError(true,"La contraseña es incorrecta");
         const token=tokenSignUser({_id:user._id,correo});
-        const result=await updateUsuarioDao({estado:"online"},id);
+        const result=await updateUsuarioDao({estado:"online"},user._id);
         if(result.error)return handleError(result.error,result.message);
         return{
             message:"Usuario logeado exitosamente",
             token
         }
     }catch(err){
+        console.log("error catch service ",err);
         return handleError(err,"Ha ocurrido un error en la capa de servicios");
     }
 }
