@@ -13,6 +13,7 @@ const checkUserType=(types)=>async(req,res,next)=>{
             if(tokenData.type==="user"){
                 const user=await UsuarioModel.findById(tokenData._id);
                 if(!user)return res.status(400).send({message:"Usuario sin permisos",error:true});
+                if(user.estado==="offline")return res.status(400).send({message:"Debe iniciar sesión",error:true})
                 req.user=user;
             }else{
                 const proveedor=await ProveedorModel.findById(tokenData._id);

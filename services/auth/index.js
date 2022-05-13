@@ -1,6 +1,6 @@
 const { createCodeDao, verifyCodeDao, removeCodeDao } = require("../../dao/code");
 const { crearProveedorDao } = require("../../dao/proveedor");
-const { crearUsuarioDao, verifyCorreoDao, confirmUserDao, getUserHashDao, updateUsuarioDao } = require("../../dao/usuario");
+const { crearUsuarioDao, verifyCorreoDao, confirmUserDao, getUserHashDao, updateUsuarioDao, logoutUserDao } = require("../../dao/usuario");
 const { tokenSignUser, tokenSignProveedor } = require("../../helpers/generateToken");
 const { compare, encrypt } = require("../../helpers/handleBcrypt");
 const { handleError } = require("../../helpers/handleError");
@@ -103,4 +103,13 @@ const loginUsuarioService=async(fields)=>{
         return handleError(err,"Ha ocurrido un error en la capa de servicios");
     }
 }
-module.exports={registrarUsuarioService,registrarProveedorService,loginProveedorService,loginUsuarioService,confirmAccountService}
+const logoutUserService=async(id)=>{
+    try{
+        const response=await logoutUserDao(id);
+        if(response.error)return handleError(response.error,response.message);
+        return response;
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error al cerrar sesión");
+    }
+}
+module.exports={logoutUserService,registrarUsuarioService,registrarProveedorService,loginProveedorService,loginUsuarioService,confirmAccountService}

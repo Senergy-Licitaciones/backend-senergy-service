@@ -1,5 +1,5 @@
 const { httpError } = require("../../helpers/handleError");
-const {registrarUsuarioService, registrarProveedorService, loginUsuarioService, loginProveedorService, confirmAccountService } = require("../../services/auth");
+const {registrarUsuarioService, registrarProveedorService, loginUsuarioService, loginProveedorService, confirmAccountService, logoutUserService } = require("../../services/auth");
 
 exports.registerUsuario=async(req,res)=>{
     try{
@@ -53,6 +53,16 @@ exports.confirmAccount=async(req,res)=>{
         const result=await confirmAccountService(fields);
         if(result.error)return res.status(400).send({message:result.message,error:result.error});
         return res.status(200).send(result);
+    }catch(err){
+        httpError(res,err);
+    }
+}
+exports.logoutUsuario=async(req,res)=>{
+    try{
+        const user=req.user,
+        response=await logoutUserService(user._id);
+        if(response.error)return res.status(400).send(response);
+        return res.status(200).send(response);
     }catch(err){
         httpError(res,err);
     }

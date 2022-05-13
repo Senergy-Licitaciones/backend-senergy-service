@@ -52,4 +52,14 @@ const getUserHashDao=async(correo)=>{
         return handleError(err,"Ha ocurrido un error en la capa de datos");
     }
 }
-module.exports={crearUsuarioDao,updateUsuarioDao,verifyCorreoDao,confirmUserDao,getUserHashDao}
+const logoutUserDao=async(id)=>{
+    try{
+        const response=await UsuarioModel.findByIdAndUpdate(id,{estado:"offline"});
+        return{
+            message:"Sesión cerrada exitosamente"
+        }
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error al cerrar sesión con los datos");
+    }
+}
+module.exports={logoutUserDao,crearUsuarioDao,updateUsuarioDao,verifyCorreoDao,confirmUserDao,getUserHashDao}
