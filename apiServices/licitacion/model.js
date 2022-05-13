@@ -36,7 +36,8 @@ const licitacionSchema=new mongoose.Schema({
         trim:true
     },
     estado:{
-        type:["cerrado","abierto"],
+        type:String,
+        enum:["cerrado","abierto"],
         trim:true,
         required:true,
         default:"cerrado"

@@ -39,12 +39,14 @@ const usuarioSchema=new mongoose.Schema({
         maxlength:64
     },
     estado:{
-        type:["online","offline","toConfirm"],
+        type:String,
+        enum:["online","offline","toConfirm"],
         trim:true,
         default:"toConfirm"
     },
     role:{
-        type:["basico","premium"],
+        type:String,
+        enum:["basico","premium"],
         trim:true,
         default:"basico"
     }
