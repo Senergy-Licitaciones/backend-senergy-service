@@ -29,7 +29,7 @@ const updateUsuarioDao=async(fields,id)=>{
             message:`Usuario ${result.correo} actualizado correctamente`
         }
     }catch(err){
-        handleError(err,"Ha ocurrido un error en la capa de datos");
+       return handleError(err,"Ha ocurrido un error en la capa de datos");
     }
 }
 const confirmUserDao=async(idUser)=>{

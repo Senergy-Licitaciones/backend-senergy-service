@@ -95,8 +95,10 @@ const loginUsuarioService=async(fields)=>{
         const token=tokenSignUser({_id:user._id,correo});
         const result=await createSessionUser(user._id,token);
         if(result.error)return handleError(result.error,result.message);
+        console.log("session user ",result);
         const response=await updateUsuarioDao({estado:"online",session:result.id},user._id);
         if(response.error)return handleError(response.error,response.message);
+        console.log("update user ",response);
         return{
             message:"Usuario logeado exitosamente",
             token
