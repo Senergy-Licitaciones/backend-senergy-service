@@ -1,6 +1,7 @@
 const { createCodeDao, verifyCodeDao, removeCodeDao } = require("../../dao/code");
 const { crearProveedorDao } = require("../../dao/proveedor");
-const { crearUsuarioDao, verifyCorreoDao, confirmUserDao, getUserHashDao, updateUsuarioDao, logoutUserDao } = require("../../dao/usuario");
+const { createSessionUser, logoutUserDao } = require("../../dao/sessionUser");
+const { crearUsuarioDao, verifyCorreoDao, confirmUserDao, getUserHashDao, updateUsuarioDao } = require("../../dao/usuario");
 const { tokenSignUser, tokenSignProveedor } = require("../../helpers/generateToken");
 const { compare, encrypt } = require("../../helpers/handleBcrypt");
 const { handleError } = require("../../helpers/handleError");
@@ -92,8 +93,10 @@ const loginUsuarioService=async(fields)=>{
         const isCorrect=await compare(password,user.password);
         if(!isCorrect || isCorrect.error)return handleError(true,"La contraseña es incorrecta");
         const token=tokenSignUser({_id:user._id,correo});
-        const result=await updateUsuarioDao({estado:"online"},user._id);
+        const result=await createSessionUser(user._id,token);
         if(result.error)return handleError(result.error,result.message);
+        const response=await updateUsuarioDao({estado:"online",session:result.id},user._id);
+        if(response.error)return handleError(response.error,response.message);
         return{
             message:"Usuario logeado exitosamente",
             token

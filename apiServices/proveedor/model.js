@@ -8,12 +8,10 @@ const proveedorSchema=new mongoose.Schema({
     },
     role:{
         type:String,
+        enum:["basico","premium"],
         trim:true,
+        required:true,
         default:"basico"
-    },
-    descripcion:{
-        type:String,
-        trim:true
     },
     pais:{
         type:String,
@@ -28,8 +26,10 @@ const proveedorSchema=new mongoose.Schema({
         trim:true,
         required:true
     },
-    telefono:{
-        type:String,
+    phone:{
+        type:Number,
+        required:true,
+        length:9,
         trim:true
     },
     password:{
@@ -45,11 +45,9 @@ const proveedorSchema=new mongoose.Schema({
     ],
     estado:{
         type:String,
-        trim:true
-    },
-    jwt:{
-        type:String,
-        trim:true
+        enum:["online","offline","toConfirm"],
+        required:true,
+        default:"toConfirm"
     }
 },{
     versionKey:false,

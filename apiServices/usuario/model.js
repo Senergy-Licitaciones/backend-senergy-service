@@ -44,6 +44,11 @@ const usuarioSchema=new mongoose.Schema({
         trim:true,
         default:"toConfirm"
     },
+    session:{
+        type:String,
+        unique:true,
+        trim:true
+    },
     role:{
         type:String,
         enum:["basico","premium"],

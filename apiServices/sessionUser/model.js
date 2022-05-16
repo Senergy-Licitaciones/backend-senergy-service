@@ -1,0 +1,30 @@
+const mongoose=require("mongoose");
+const sessionUserSchema=new mongoose.Schema({
+    type:{
+        type:String,
+        enum:["user"],
+        default:"user",
+        required:true
+    },
+    jwt:{
+        type:String,
+        required:true,
+        trim:true,
+        unique:true
+    },
+    user:{
+        type:String,
+        trim:true,
+        required:true,
+        unique:true
+    },
+    expiredTime:{
+        type:Date,
+        default:Date.now(),
+        expires:3600
+    }
+},{
+    versionKey:false,
+    timestamps:true
+});
+module.exports=mongoose.model("SessionUserModel",sessionUserSchema);
