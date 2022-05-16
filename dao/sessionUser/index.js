@@ -3,7 +3,7 @@ const UsuarioModel=require("../../apiServices/usuario/model");
 SessionUserModel.watch().on("change",(change)=>{
     if(change.operationType==="delete"){
         const closeSession=async()=>{
-            await UsuarioModel.findOneAndUpdate({session:change.documentKey._id},{estado:"offline",session:null});
+            await UsuarioModel.findOneAndUpdate({sessionId:change.documentKey._id},{estado:"offline",sessionId:null});
         }
         closeSession();
     }

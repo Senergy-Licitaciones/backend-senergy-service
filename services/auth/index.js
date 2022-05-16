@@ -96,7 +96,7 @@ const loginUsuarioService=async(fields)=>{
         const result=await createSessionUser(user._id,token);
         if(result.error)return handleError(result.error,result.message);
         console.log("session user ",result);
-        const response=await updateUsuarioDao({estado:"online",session:result.id},user._id);
+        const response=await updateUsuarioDao({estado:"online",sessionId:result.id},user._id);
         if(response.error)return handleError(response.error,response.message);
         console.log("update user ",response);
         return{
