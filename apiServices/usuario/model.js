@@ -44,7 +44,7 @@ const usuarioSchema=new mongoose.Schema({
         trim:true,
         default:"toConfirm"
     },
-    session:{
+    sessionId:{
         type:String,
         trim:true
     },
