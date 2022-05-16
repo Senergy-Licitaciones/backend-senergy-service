@@ -46,7 +46,6 @@ const usuarioSchema=new mongoose.Schema({
     },
     session:{
         type:String,
-        unique:true,
         trim:true
     },
     role:{
