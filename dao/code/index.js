@@ -25,6 +25,7 @@ const verifyCodeDao=async(idUser)=>{
 const removeCodeDao=async(idUser,code)=>{
     try{
         const response=await CodeModel.findOneAndDelete({user:idUser,code});
+        console.log("response code ",response);
         if(!response) return handleError(true,"Código inválido");
         return{
             message:"Código validado exitosamente"
