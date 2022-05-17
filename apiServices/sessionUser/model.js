@@ -20,8 +20,7 @@ const sessionUserSchema=new mongoose.Schema({
     },
     expiredTime:{
         type:Date,
-        default:Date.now(),
-        expires:"60min"
+        expires:3600
     }
 },{
     versionKey:false,
