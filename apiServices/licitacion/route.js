@@ -6,7 +6,7 @@ const checkRoleAuth = require("../../middlewares/roleAuth");
 const { showLicitaciones,getTipos, createLicitacion, updateLicitacion,findFilename,showFile } = require("./controller");
 const router=express.Router();
 
-router.get("/licitaciones",checkAuth,checkUserType(["proveedor"]),checkRoleAuth(["basico","premium"]),showLicitaciones);
+router.get("/licitaciones",showLicitaciones);
 router.post("/crearLicitacion",checkAuth,checkUserType(["user"]),checkRoleAuth(["basico","premium"]),createLicitacion);
 router.put("/actualizarLicitacion",updateLicitacion);
 router.get("/tipoLicitaciones",checkAuth,checkUserType(["user"]),checkRoleAuth(["basico","premium"]),getTipos);
