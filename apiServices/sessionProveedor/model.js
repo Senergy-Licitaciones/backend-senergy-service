@@ -8,10 +8,10 @@ const sessionProveedorSchema=new mongoose.Schema({
         required:true
     },
     user:{
-        type:ObjectId,
-        ref:"ProveedorModel",
-        trim:true,
-        required:true
+        type:String,
+        required:true,
+        unique:true,
+        trim:true
     },
     expiredAt:{
         type:Date,

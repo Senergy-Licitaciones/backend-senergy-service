@@ -6,6 +6,12 @@ const proveedorSchema=new mongoose.Schema({
         trim:true,
         required:true
     },
+    ruc:{
+        type:Number,
+        length:11,
+        required:true,
+        unique:true
+    },
     role:{
         type:String,
         enum:["basico","premium"],
@@ -24,7 +30,8 @@ const proveedorSchema=new mongoose.Schema({
     correo:{
         type:String,
         trim:true,
-        required:true
+        required:true,
+        unique:true
     },
     phone:{
         type:Number,
