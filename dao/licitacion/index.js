@@ -2,7 +2,7 @@ const { handleError } = require("../../helpers/handleError")
 const LicitacionModel=require("../../apiServices/licitacion/model");
 const showLicitacionesDao=async()=>{
     try{
-        const licitaciones=await LicitacionModel.find();
+        const licitaciones=await LicitacionModel.find().populate("tipoServicio");
         return licitaciones;
     }catch(err){
         return handleError(err,"Ha ocurrido un error en la capa de datos")
