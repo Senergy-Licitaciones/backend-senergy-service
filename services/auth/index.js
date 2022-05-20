@@ -75,7 +75,7 @@ const registrarProveedorService=async(fields)=>{
         if(result.error)return handleError(result.error,result.message);
         return{
             message:"Proveedor registrado esperando por confirmar",
-            idProveedor:proveedor._id
+            correo:proveedor.correo
         }
     }catch(err){
         return handleError(err,"Ha ocurrido un error en la capa de servicios");

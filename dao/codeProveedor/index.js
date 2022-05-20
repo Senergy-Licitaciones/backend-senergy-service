@@ -6,7 +6,8 @@ CodeProveedorModel.watch().on("change",(change)=>{
         const removeProveedorAccount=async()=>{
             try{
                 const response=await ProveedorModel.findOneAndDelete({toConfirm:{
-                    codeId:change.documentKey._id
+                    codeId:change.documentKey._id,
+                    verified:false
                 }});
                 if(!response) console.log("no existe la cuenta ",response);
                 console.log("response ",response);
