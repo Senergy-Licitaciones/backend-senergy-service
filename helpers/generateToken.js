@@ -16,9 +16,10 @@ const tokenSignProveedor=(proveedor)=>{
         _id:proveedor._id,
         razSocial:proveedor.razSocial,
         correo:proveedor.correo,
-        licitaciones:proveedor.licitaciones
+        ruc:proveedor.ruc,
+        type:"proveedor"
     },process.env.JWT_SECRET,{
-        expiresIn:"2h"
+        expiresIn:"1h"
     })
 }
 const verifyToken=async(token)=>{

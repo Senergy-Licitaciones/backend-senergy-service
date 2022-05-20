@@ -15,7 +15,6 @@ const codeProveedorSchema=new mongoose.Schema({
     },
     expiredTime:{
         type:Date,
-        default:Date.now(),
         expires:300
     }
 },{

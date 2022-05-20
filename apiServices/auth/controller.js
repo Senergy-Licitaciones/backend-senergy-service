@@ -1,5 +1,5 @@
 const { httpError } = require("../../helpers/handleError");
-const {registrarUsuarioService, registrarProveedorService, loginUsuarioService, loginProveedorService, confirmAccountService, logoutUserService } = require("../../services/auth");
+const {registrarUsuarioService, registrarProveedorService, loginUsuarioService, loginProveedorService, confirmAccountService, logoutUserService, confirmProveedorService, logoutProveedorService } = require("../../services/auth");
 
 exports.registerUsuario=async(req,res)=>{
     try{
@@ -14,9 +14,9 @@ exports.registerUsuario=async(req,res)=>{
 exports.registerProveedor=async(req,res)=>{
     try{
         const fields=req.body;
-        const {message,error}=await registrarProveedorService(fields);
-        if(error)return res.send({message,error});
-        return res.send({
+        const result=await registrarProveedorService(fields);
+        if(error)return res.status(400).send(result);
+        return res.status(200).send({
             message
         })
     }catch(err){
@@ -26,13 +26,9 @@ exports.registerProveedor=async(req,res)=>{
 exports.loginProveedor=async(req,res)=>{
     try{
         const fields=req.body;
-        const hash=req.hash;
-        const {message,error,token}=await loginProveedorService({...fields,hash});
-        if(err)return res.send({message,error});
-        return res.send({
-            message,
-            token
-        })
+        const response=await loginProveedorService(fields);
+        if(response.error)return res.status(400).send(response);
+        return res.status(200).send(response);
     }catch(err){
         httpError(res,err);
     }
@@ -62,6 +58,26 @@ exports.logoutUsuario=async(req,res)=>{
         const user=req.user,
         response=await logoutUserService(user._id);
         if(response.error)return res.status(400).send(response);
+        return res.status(200).send(response);
+    }catch(err){
+        httpError(res,err);
+    }
+}
+exports.confirmProveedorAccount=async(req,res)=>{
+    try{
+        const fields=req.body;
+        const response=await confirmProveedorService(fields);
+        if(response.error) return res.status(400).send(response);
+        return res.status(200).send(response);
+    }catch(err){
+        httpError(res,err);
+    }
+}
+exports.logoutProveedor=async(req,res)=>{
+    try{
+        const proveedor=req.proveedor;
+        const response=await logoutProveedorService(proveedor._id);
+        if(response.error) return res.status(400).send(response);
         return res.status(200).send(response);
     }catch(err){
         httpError(res,err);

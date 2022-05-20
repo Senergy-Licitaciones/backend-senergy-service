@@ -7,7 +7,13 @@ const sessionProveedorSchema=new mongoose.Schema({
         default:"proveedor",
         required:true
     },
-    user:{
+    jwt:{
+        type:String,
+        trim:true,
+        required:true,
+        unique:true
+    },
+    proveedor:{
         type:String,
         required:true,
         unique:true,

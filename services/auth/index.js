@@ -1,6 +1,8 @@
 const { createCodeDao, verifyCodeDao, removeCodeDao } = require("../../dao/code");
-const { crearProveedorDao } = require("../../dao/proveedor");
+const { createCodeProveedorDao, confirmCodeDao } = require("../../dao/codeProveedor");
+const { crearProveedorDao, verifyCorreoProveedorDao, confirmProveedorDao, proveedorEstadoDao } = require("../../dao/proveedor");
 const { createSessionUser, logoutUserDao } = require("../../dao/sessionUser");
+const {createSessionProveedor, logoutProveedorDao}=require("../../dao/sessionProveedor");
 const { crearUsuarioDao, verifyCorreoDao, confirmUserDao, getUserHashDao, updateUsuarioDao } = require("../../dao/usuario");
 const { tokenSignUser, tokenSignProveedor } = require("../../helpers/generateToken");
 const { compare, encrypt } = require("../../helpers/handleBcrypt");
@@ -61,29 +63,41 @@ const confirmAccountService=async(fields)=>{
 }
 const registrarProveedorService=async(fields)=>{
     try{
-        const {message,error}=await crearProveedorDao(fields);
-        if(error)handleError(error,message);
+        const exist=await verifyCorreoProveedorDao(fields.correo);
+        if(exist.error) return handleError(exist.error,exist.message);
+        const code=generateCode();
+        const hash=await encrypt(fields.password);
+        const response=await createCodeProveedorDao({code,proveedor:fields.correo});
+        if(response.error)return handleError(response.error,response.message);
+        const proveedor=await crearProveedorDao({...fields,password:hash,toConfirm:{codeId:response._id}});
+        if(proveedor.error)return handleError(proveedor.error,proveedor.message);
+        const result=await sendCodeVerification(code,fields.correo);
+        if(result.error)return handleError(result.error,result.message);
         return{
-            message:"Proveedor registrado exitosamente"
+            message:"Proveedor registrado esperando por confirmar",
+            idProveedor:proveedor._id
         }
     }catch(err){
-        handleError(err,"Ha ocurrido un error en la capa de servicios");
+        return handleError(err,"Ha ocurrido un error en la capa de servicios");
     }
 }
 const loginProveedorService=async(fields)=>{
     try{
-        const {correo,password,id,hash,razSocial,licitaciones}=fields;
-        const isCorrect=await compare(password,hash);
-        if(!isCorrect || isCorrect.error)handleError(true,"La contraseña es incorrecta");
-        const token=tokenSignProveedor({_id:id,razSocial,correo,licitaciones});
-        const {message,error}=await updateProveedorDao({estado:"online",token},id);
-        if(error)handleError(error,message);
+        const proveedor=await proveedorEstadoDao(fields.correo);
+        if(proveedor.error)return handleError(proveedor.error,proveedor.message);
+        const isCorrect=await compare(fields.password,proveedor.password);
+        if(!isCorrect || isCorrect.error)return handleError(true,"La contraseña es incorrecta");
+        const token=tokenSignProveedor(proveedor);
+        const session=await createSessionProveedor(proveedor._id,token);
+        if(session.error)return handleError(session.error,session.message);
+        const response=await updateProveedorDao({estado:"online",session:session._id},proveedor._id);
+        if(response.error)return handleError(response.error,response.message);
         return{
             message:"Proveedor logeado exitosamente",
             token
         }
     }catch(err){
-        handleError(err,"Ha ocurrido un error en la capa de servicios");
+        return handleError(err,"Ha ocurrido un error en la capa de servicios");
     }
 }
 const loginUsuarioService=async(fields)=>{
@@ -117,4 +131,30 @@ const logoutUserService=async(id)=>{
         return handleError(err,"Ha ocurrido un error al cerrar sesión");
     }
 }
-module.exports={logoutUserService,registrarUsuarioService,registrarProveedorService,loginProveedorService,loginUsuarioService,confirmAccountService}
+const confirmProveedorService=async(fields)=>{
+    try{
+        const {correo,code}=fields;
+        const response=await confirmCodeDao(correo,code);
+        if(response.error) return handleError(response.error,response.message);
+        const result=await confirmProveedorDao(response._id);
+        if(result.error) return handleError(result.error,result.message);
+        response.remove();
+        return{
+            message:"Cuenta de proveeedor confirmado"
+        }
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error al intentar confirmar la cuenta");
+    }
+}
+const logoutProveedorService=async(proveedorId)=>{
+    try{
+        const response=await logoutProveedorDao(proveedorId);
+        if(response.error)return handleError(response.error,response.message);
+        return{
+            message:"Sesión cerrada exitosamente"
+        }
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error al cerrar la sesión");
+    }
+}
+module.exports={logoutProveedorService,confirmProveedorService,logoutUserService,registrarUsuarioService,registrarProveedorService,loginProveedorService,loginUsuarioService,confirmAccountService}

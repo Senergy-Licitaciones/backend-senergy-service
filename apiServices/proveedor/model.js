@@ -52,9 +52,25 @@ const proveedorSchema=new mongoose.Schema({
     ],
     estado:{
         type:String,
-        enum:["online","offline","toConfirm"],
+        enum:["online","offline"],
         required:true,
-        default:"toConfirm"
+        default:"offline"
+    },
+    toConfirm:{
+        codeId:{
+            type:String,
+            trim:true,
+            unique:true
+        },
+        verified:{
+            type:Boolean,
+            required:true,
+            default:false
+        } 
+    },
+    session:{
+        type:String,
+        trim:true
     }
 },{
     versionKey:false,
