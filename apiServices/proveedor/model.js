@@ -33,6 +33,11 @@ const proveedorSchema=new mongoose.Schema({
         required:true,
         unique:true
     },
+    address:{
+        type:String,
+        trim:true,
+        required:true
+    },
     phone:{
         type:Number,
         required:true,
