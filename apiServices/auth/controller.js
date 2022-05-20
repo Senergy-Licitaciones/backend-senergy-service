@@ -15,7 +15,7 @@ exports.registerProveedor=async(req,res)=>{
     try{
         const fields=req.body;
         const result=await registrarProveedorService(fields);
-        if(error)return res.status(400).send(result);
+        if(result.error)return res.status(400).send(result);
         return res.status(200).send({
             message
         })
