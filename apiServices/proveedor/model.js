@@ -61,18 +61,15 @@ const proveedorSchema=new mongoose.Schema({
         required:true,
         default:"offline"
     },
-    toConfirm:{
-        codeId:{
+    codeToConfirm:{
             type:String,
-            trim:true,
-            unique:true
+            trim:true
         },
-        verified:{
+    verified:{
             type:Boolean,
             required:true,
             default:false
-        } 
-    },
+        },
     session:{
         type:String,
         trim:true

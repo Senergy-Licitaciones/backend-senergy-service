@@ -34,13 +34,11 @@ const verifyCorreoProveedorDao=async(correo)=>{
 }
 const confirmProveedorDao=async(idCode)=>{
     try{
-        const response=await ProveedorModel.findOneAndUpdate({toConfirm:{
-            codeId:idCode,
-            verified:false
-        }},{toConfirm:{
-            codeId:null,
+        const response=await ProveedorModel.findOneAndUpdate({
+            codeToConfirm:idCode,
+        verified:false},{codeToConfirm:null,
             verified:true
-        }});
+        });
         if(!response)return handleError(true,"No se pudo encontrar la cuenta a confirmar");
         return response;
     }catch(err){

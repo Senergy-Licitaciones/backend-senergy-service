@@ -69,7 +69,7 @@ const registrarProveedorService=async(fields)=>{
         const hash=await encrypt(fields.password);
         const response=await createCodeProveedorDao({code,proveedor:fields.correo});
         if(response.error)return handleError(response.error,response.message);
-        const proveedor=await crearProveedorDao({...fields,password:hash,toConfirm:{codeId:response._id}});
+        const proveedor=await crearProveedorDao({...fields,password:hash,codeToConfirm:response._id});
         if(proveedor.error)return handleError(proveedor.error,proveedor.message);
         const result=await sendCodeVerification(code,fields.correo);
         if(result.error)return handleError(result.error,result.message);
