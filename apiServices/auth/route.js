@@ -8,7 +8,7 @@ const router=express.Router();
 router.put("/loginProveedor",loginProveedor);
 router.put("/loginUsuario",validateUserLogin,loginUsuario);
 router.put("/logoutUsuario",checkAuth,checkUserType(["user"]),checkRoleAuth(["basico"]),logoutUsuario);
-router.put("/logoutProveedor",logoutProveedor);
+router.put("/logoutProveedor",checkAuth,checkUserType([`proveedor`]),checkRoleAuth([`basico`]),logoutProveedor);
 router.post("/registerProveedor",registerProveedor);
 router.post("/registerUsuario",validateUserRegister,registerUsuario);
 router.put("/confirmAccount",validateCode,confirmAccount);
