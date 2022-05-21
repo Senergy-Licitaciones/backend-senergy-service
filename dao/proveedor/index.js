@@ -6,7 +6,7 @@ const crearProveedorDao=async(fields)=>{
         const proveedor=await response.save();
         return proveedor
     }catch(err){
-        handleError(err,"Ha ocurrido un error en la capa de datos");
+        return handleError(err,"Ha ocurrido un error en la capa de datos");
     }
 }
 const updateProveedorDao=async(fields,id)=>{
