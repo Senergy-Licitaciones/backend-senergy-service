@@ -138,7 +138,8 @@ const confirmProveedorService=async(fields)=>{
         if(response.error) return handleError(response.error,response.message);
         const result=await confirmProveedorDao(response._id);
         if(result.error) return handleError(result.error,result.message);
-        response.remove();
+        console.log("response ",response," result ",result);
+        await response.remove();
         return{
             message:"Cuenta de proveeedor confirmado"
         }

@@ -37,7 +37,7 @@ const confirmProveedorDao=async(idCode)=>{
             codeToConfirm:idCode,
         verified:false},{codeToConfirm:null,
             verified:true
-        });
+        },{new:true});
         if(!response)return handleError(true,"No se pudo encontrar la cuenta a confirmar");
         return response;
     }catch(err){
