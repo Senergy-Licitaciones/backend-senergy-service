@@ -2,10 +2,9 @@ const { handleError } = require("../../helpers/handleError")
 const ProveedorModel=require("../../apiServices/proveedor/model");
 const crearProveedorDao=async(fields)=>{
     try{
-        await ProveedorModel.create({...fields});
-        return{
-            message:"Proveedor creado exitosamente"
-        }
+        const response=await ProveedorModel.create({...fields});
+        const proveedor=await response.save();
+        return proveedor
     }catch(err){
         handleError(err,"Ha ocurrido un error en la capa de datos");
     }
