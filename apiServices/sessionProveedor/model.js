@@ -21,8 +21,7 @@ const sessionProveedorSchema=new mongoose.Schema({
     },
     expiredAt:{
         type:Date,
-        expires:3600,
-        default:Date.now()
+        expires:3600
     }
 },{
     versionKey:false,
