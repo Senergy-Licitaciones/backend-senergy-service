@@ -13,9 +13,7 @@ const updateProveedorDao=async(fields,id)=>{
     try{
         const result=await ProveedorModel.findByIdAndUpdate(id,{...fields},{new:true});
         if(!result) return handleError(true,"Cuenta inexistente")
-        return{
-            message:`Proveedor ${result.correo} actualizado exitosamente`
-        }
+        return result
     }catch(err){
         return handleError(err,"Ha ocurrido un error en la capa de datos");
     }

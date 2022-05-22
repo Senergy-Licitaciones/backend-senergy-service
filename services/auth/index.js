@@ -1,6 +1,6 @@
 const { createCodeDao, verifyCodeDao, removeCodeDao } = require("../../dao/code");
 const { createCodeProveedorDao, confirmCodeDao } = require("../../dao/codeProveedor");
-const { crearProveedorDao, verifyCorreoProveedorDao, confirmProveedorDao, proveedorEstadoDao } = require("../../dao/proveedor");
+const { crearProveedorDao, verifyCorreoProveedorDao, confirmProveedorDao, proveedorEstadoDao, updateProveedorDao } = require("../../dao/proveedor");
 const { createSessionUser, logoutUserDao } = require("../../dao/sessionUser");
 const {createSessionProveedor, logoutProveedorDao}=require("../../dao/sessionProveedor");
 const { crearUsuarioDao, verifyCorreoDao, confirmUserDao, getUserHashDao, updateUsuarioDao } = require("../../dao/usuario");
@@ -84,19 +84,23 @@ const registrarProveedorService=async(fields)=>{
 const loginProveedorService=async(fields)=>{
     try{
         const proveedor=await proveedorEstadoDao(fields.correo);
+        console.log("proveedor ",proveedor);
         if(proveedor.error)return handleError(proveedor.error,proveedor.message);
         const isCorrect=await compare(fields.password,proveedor.password);
         if(!isCorrect || isCorrect.error)return handleError(true,"La contraseña es incorrecta");
         const token=tokenSignProveedor(proveedor);
         const session=await createSessionProveedor(proveedor._id,token);
+        console.log("session ",session);
         if(session.error)return handleError(session.error,session.message);
         const response=await updateProveedorDao({estado:"online",session:session._id},proveedor._id);
+        console.log("response ",response);
         if(response.error)return handleError(response.error,response.message);
         return{
             message:"Proveedor logeado exitosamente",
             token
         }
     }catch(err){
+        console.log("error ",err);
         return handleError(err,"Ha ocurrido un error en la capa de servicios");
     }
 }
