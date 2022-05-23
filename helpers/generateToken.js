@@ -12,6 +12,7 @@ const tokenSignUser=(user)=>{
     })
 }
 const tokenSignProveedor=(proveedor)=>{
+    console.log("jwt_secret ",process.env.JWT_SECRET);
     return jwt.sign({
         _id:proveedor._id,
         razSocial:proveedor.razSocial,
