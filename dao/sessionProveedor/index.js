@@ -4,7 +4,7 @@ const ProveedorModel=require("../../apiServices/proveedor/model");
 SessionProveedorModel.watch().on("change",(change)=>{
     if(change.operationType==="delete"){
         const closeSession=async()=>{
-            await ProveedorModel.findOneAndUpdate({session:change.documentKey._id},{estado:"offline",session:null});
+            await ProveedorModel.findOneAndUpdate({session:change.documentKey._id},{estado:"offline",session:""});
         }
         closeSession();
     }
