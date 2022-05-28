@@ -21,11 +21,10 @@ const createLicitacionDao=async(fields)=>{
 const updateLicitacionDao=async(fields,id)=>{
     try{
         const result=await LicitacionModel.findByIdAndUpdate(id,{...fields},{new:true});
-        return{
-            message:`Licitación: ${result.title} ,actualizada exitosamente`
-        }
+        if(!result)return handleError(true,"No se encontró la licitación");
+        return result;
     }catch(err){
-        handleError(err,"Ha ocurrido un error en la capa de datos");
+        return handleError(err,"Ha ocurrido un error en la capa de datos");
     }
 }
 const getTiposDao=async(id)=>{
