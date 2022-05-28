@@ -17,6 +17,11 @@ const ofertaSchema=new mongoose.Schema({
         type:Number,
         required:true
     },
+    potenciaFacturar:{
+        type:String,
+        trim:true,
+        required:true
+    },
     excesoPotencia:{
         type:Number,
         required:true
