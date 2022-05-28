@@ -6,6 +6,7 @@ const crearOfertaDao=async(fields)=>{
         const result=await oferta.save();
         return result;
     }catch(err){
+        console.log("error ",err);
         return handleError(err,"Ha ocurrido un error en la capa de datos al crear la oferta");
     }
 }
