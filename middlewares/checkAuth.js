@@ -8,7 +8,7 @@ const checkAuth=async(req,res,next)=>{
         next()
         :res.status(409).send({message:"No ha iniciado sesión",error:true});
     }catch(err){
-        return res.send({
+        return res.status(409).send({
             message:"Ha ocurrido un error en el proceso de autenticación",
             error:err
         })
