@@ -25,6 +25,7 @@ const logoutProveedorDao=async(proveedorId)=>{
         if(!proveedor) return handleError(true,"La sesión no existe");
         return proveedor;
     }catch(err){
+        console.log("error ",err);
         return handleError(err,"Ha ocurrido un error al eliminar la sesión");
     }
 }
