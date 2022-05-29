@@ -21,7 +21,7 @@ const createSessionProveedor=async(proveedorId,token)=>{
 }
 const logoutProveedorDao=async(proveedorId)=>{
     try{
-        const proveedor=await SessionProveedorModel.findOnedAndDelete({proveedor:proveedorId});
+        const proveedor=await SessionProveedorModel.findOneAndDelete({proveedor:proveedorId});
         if(!proveedor) return handleError(true,"La sesión no existe");
         return proveedor;
     }catch(err){

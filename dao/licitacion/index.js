@@ -39,7 +39,7 @@ const getLicitacionesFreeDao=async(proveedorId)=>{
     try{
         const licitaciones=await LicitacionModel.find({
             $nor:[{"participantes":proveedorId}]
-        });
+        }).populate("tipoServicio");
         return licitaciones;
     }catch(err){
         console.log("error ",err);
