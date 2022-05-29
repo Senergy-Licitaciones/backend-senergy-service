@@ -35,4 +35,15 @@ const getTiposDao=async(id)=>{
         return handleError(err,"Ha ocurrido un error en la capa de datos");
     }
 }
-module.exports={getTiposDao,showLicitacionesDao,createLicitacionDao,updateLicitacionDao}
+const getLicitacionesFreeDao=async(proveedorId)=>{
+    try{
+        const licitaciones=await LicitacionModel.find({
+            $nor:[{"participantes":proveedorId}]
+        });
+        return licitaciones;
+    }catch(err){
+        console.log("error ",err);
+        return handleError(err,"Ha ocurrido un error en la capa de datos al obtener licitaciones libres");
+    }
+}
+module.exports={getLicitacionesFreeDao,getTiposDao,showLicitacionesDao,createLicitacionDao,updateLicitacionDao}

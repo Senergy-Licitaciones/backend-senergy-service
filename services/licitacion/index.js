@@ -1,4 +1,4 @@
-const { showLicitacionesDao, createLicitacionDao,updateLicitacionDao, getTiposDao } = require("../../dao/licitacion");
+const { showLicitacionesDao, createLicitacionDao,updateLicitacionDao, getTiposDao, getLicitacionesFreeDao } = require("../../dao/licitacion");
 const { handleError } = require("../../helpers/handleError")
 
 const mostrarLicitacionesService=async()=>{
@@ -42,4 +42,13 @@ const getTiposService=async(id)=>{
         return handleError(err,"Ha ocurrido un error en la capa de servicios");
     }
 }
-module.exports={getTiposService,mostrarLicitacionesService,crearLicitacionService,updateLicitacionService}
+const getLicitacionesFreeService=async(proveedorId)=>{
+    try{
+        const licitaciones=await getLicitacionesFreeDao(proveedorId);
+        if(licitaciones.error)return handleError(licitaciones.error,licitaciones.message);
+        return licitaciones
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error en la capa de servicios al mostrar licitaciones libres");
+    }
+}
+module.exports={getLicitacionesFreeService,getTiposService,mostrarLicitacionesService,crearLicitacionService,updateLicitacionService}
