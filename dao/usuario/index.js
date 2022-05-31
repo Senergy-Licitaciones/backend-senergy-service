@@ -45,12 +45,21 @@ const confirmUserDao=async(idUser)=>{
 }
 const getUserHashDao=async(correo)=>{
     try{
-        const response=await UsuarioModel.findOne({correo}).select("password ");
+        const response=await UsuarioModel.findOne({correo}).select("password role correo");
         if(!response)return handleError(true,"Correo no registrado");
         return response;
     }catch(err){
         return handleError(err,"Ha ocurrido un error en la capa de datos");
     }
 }
+const getUserDao=async(correo)=>{
+    try{
+        const user=await UsuarioModel.findOne({correo,role:"admin"});
+        if(!user) return handleError(true,"Usuario no encontrado");
+        return user
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error en la capa de datos al encontrar el usuario");
+    }
+}
 
-module.exports={crearUsuarioDao,updateUsuarioDao,verifyCorreoDao,confirmUserDao,getUserHashDao}
+module.exports={getUserDao,crearUsuarioDao,updateUsuarioDao,verifyCorreoDao,confirmUserDao,getUserHashDao}

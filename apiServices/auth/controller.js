@@ -1,5 +1,5 @@
 const { httpError } = require("../../helpers/handleError");
-const {registrarUsuarioService, registrarProveedorService, loginUsuarioService, loginProveedorService, confirmAccountService, logoutUserService, confirmProveedorService, logoutProveedorService } = require("../../services/auth");
+const {registrarUsuarioService, registrarProveedorService, loginUsuarioService, loginProveedorService, confirmAccountService, logoutUserService, confirmProveedorService, logoutProveedorService, loginAdminService } = require("../../services/auth");
 
 exports.registerUsuario=async(req,res)=>{
     try{
@@ -35,7 +35,7 @@ exports.loginUsuario=async(req,res)=>{
     try{
         const fields=req.body;
         const response=await loginUsuarioService(fields);
-        if(response.error)return res.status(400).send({message:response.message,error:response.error});
+        if(response.error)return res.status(400).send(response);
         return res.status(200).send(response);
     }catch(err){
         httpError(res,err);
@@ -76,6 +76,16 @@ exports.logoutProveedor=async(req,res)=>{
         const proveedor=req.proveedor;
         const response=await logoutProveedorService(proveedor._id);
         if(response.error) return res.status(400).send(response);
+        return res.status(200).send(response);
+    }catch(err){
+        httpError(res,err);
+    }
+}
+exports.loginAdmin=async(req,res)=>{
+    try{
+        const fields=req.body;
+        const response=await loginAdminService(fields);
+        if(response.error)return res.status(400).send(response);
         return res.status(200).send(response);
     }catch(err){
         httpError(res,err);

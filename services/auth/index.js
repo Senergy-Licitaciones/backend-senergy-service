@@ -3,7 +3,7 @@ const { createCodeProveedorDao, confirmCodeDao } = require("../../dao/codeProvee
 const { crearProveedorDao, verifyCorreoProveedorDao, confirmProveedorDao, proveedorEstadoDao, updateProveedorDao } = require("../../dao/proveedor");
 const { createSessionUser, logoutUserDao } = require("../../dao/sessionUser");
 const {createSessionProveedor, logoutProveedorDao}=require("../../dao/sessionProveedor");
-const { crearUsuarioDao, verifyCorreoDao, confirmUserDao, getUserHashDao, updateUsuarioDao } = require("../../dao/usuario");
+const { crearUsuarioDao, verifyCorreoDao, confirmUserDao, getUserHashDao, updateUsuarioDao, getUserDao } = require("../../dao/usuario");
 const { tokenSignUser, tokenSignProveedor } = require("../../helpers/generateToken");
 const { compare, encrypt } = require("../../helpers/handleBcrypt");
 const { handleError } = require("../../helpers/handleError");
@@ -110,7 +110,7 @@ const loginUsuarioService=async(fields)=>{
         const user=await getUserHashDao(correo);
         const isCorrect=await compare(password,user.password);
         if(!isCorrect || isCorrect.error)return handleError(true,"La contraseña es incorrecta");
-        const token=tokenSignUser({_id:user._id,correo});
+        const token=tokenSignUser(user);
         const result=await createSessionUser(user._id,token);
         if(result.error)return handleError(result.error,result.message);
         console.log("session user ",result);
@@ -162,4 +162,24 @@ const logoutProveedorService=async(proveedorId)=>{
         return handleError(err,"Ha ocurrido un error al cerrar la sesión");
     }
 }
-module.exports={logoutProveedorService,confirmProveedorService,logoutUserService,registrarUsuarioService,registrarProveedorService,loginProveedorService,loginUsuarioService,confirmAccountService}
+const loginAdminService=async(fields)=>{
+    try{
+        const {correo,password}=fields;
+        const user=await getUserDao(correo);
+        if(user.error)return handleError(user.error,user.message);
+        const isCorrect=await compare(password,user.password);
+        if(!isCorrect || isCorrect.error)return handleError(true,"Contraseña incorrecta");
+        const token=tokenSignUser(user);
+        const result=await createSessionUser(user._id,token);
+        if(result.error)return handleError(result.error,result.message);
+        const response=await updateUsuarioDao({estado:"online",sessionId:result.id},user._id);
+        if(response.error)return handleError(response.error,response.message);
+        return{
+            message:"Usuario admin logeado exitosamente",
+            token
+        }
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error al iniciar sesión")
+    }
+}
+module.exports={loginAdminService,logoutProveedorService,confirmProveedorService,logoutUserService,registrarUsuarioService,registrarProveedorService,loginProveedorService,loginUsuarioService,confirmAccountService}

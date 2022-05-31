@@ -4,6 +4,7 @@ const tokenSignUser=(user)=>{
     return jwt.sign({
         _id:user._id,
         correo:user.correo,
+        role:user.role,
         type:"user"
     },
     process.env.JWT_SECRET,
