@@ -14,6 +14,7 @@ app.use("/api/user",require("./apiServices/usuario/route"));
 app.use("/api/brg",require("./apiServices/brg/route"));
 app.use("/api/puntoSum",require("./apiServices/puntoSum/route"));
 app.use("/api/servicio",require("./apiServices/servicio/route"));
+app.use("/api/oferta",require("./apiServices/oferta/route"));
 
 
 module.exports=app;
