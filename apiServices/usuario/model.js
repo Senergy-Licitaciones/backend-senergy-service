@@ -50,7 +50,7 @@ const usuarioSchema=new mongoose.Schema({
     },
     role:{
         type:String,
-        enum:["basico","premium"],
+        enum:["basico","premium","admin"],
         trim:true,
         default:"basico"
     }

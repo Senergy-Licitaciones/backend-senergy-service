@@ -5,6 +5,6 @@ const checkRoleAuth = require("../../middlewares/roleAuth");
 const { participarLicitacion } = require("./controller");
 const router=express.Router();
 
-router.post("/crearOferta",checkAuth,checkUserType(["proveedor"]),checkRoleAuth(["basico","premium"]),participarLicitacion);
+router.post("/crearOferta",checkAuth,checkUserType(["proveedor"]),checkRoleAuth(["basico","premium","admin"]),participarLicitacion);
 
 module.exports=router;

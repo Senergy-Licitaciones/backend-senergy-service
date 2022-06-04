@@ -7,10 +7,10 @@ const { showLicitaciones,showLicitacionesFree,getTipos, createLicitacion, update
 const router=express.Router();
 
 router.get("/licitaciones",showLicitaciones);
-router.get("/licitacionesLibres",checkAuth,checkUserType(["proveedor"]),checkRoleAuth(["basico","premium"]),showLicitacionesFree);
-router.post("/crearLicitacion",checkAuth,checkUserType(["user"]),checkRoleAuth(["basico","premium"]),createLicitacion);
+router.get("/licitacionesLibres",checkAuth,checkUserType(["proveedor"]),checkRoleAuth(["basico","premium","admin"]),showLicitacionesFree);
+router.post("/crearLicitacion",checkAuth,checkUserType(["user"]),checkRoleAuth(["basico","premium","admin"]),createLicitacion);
 router.put("/actualizarLicitacion",updateLicitacion);
-router.get("/tipoLicitaciones",checkAuth,checkUserType(["user"]),checkRoleAuth(["basico","premium"]),getTipos);
+router.get("/tipoLicitaciones",checkAuth,checkUserType(["user"]),checkRoleAuth(["basico","premium","admin"]),getTipos);
 router.get("/file/:filename",showFile);
 router.param("filename",findFilename);
 module.exports=router;
