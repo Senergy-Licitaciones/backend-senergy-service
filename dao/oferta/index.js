@@ -10,4 +10,14 @@ const crearOfertaDao=async(fields)=>{
         return handleError(err,"Ha ocurrido un error en la capa de datos al crear la oferta");
     }
 }
-module.exports={crearOfertaDao}
+const getOfertasDao=async(id)=>{
+    try{
+        const ofertas=await OfertaModel.find({
+            proveedor:id
+        }).populate("licitacion");
+        return ofertas;
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error en la capa de datos al obtener las ofertas")
+    }
+}
+module.exports={crearOfertaDao,getOfertasDao}
