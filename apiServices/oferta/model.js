@@ -26,7 +26,20 @@ const ofertaSchema=new mongoose.Schema({
         type:Number,
         required:true
     },
-    formulaIndex:[
+    formulaIndexPotencia:[
+        {
+            index:{
+                type:String,
+                required:true,
+                trim:true
+            },
+            factor:{
+                type:Number,
+                required:true
+            }
+        }
+    ],
+    formulaIndexEnergia:[
         {
             index:{
                 type:String,
