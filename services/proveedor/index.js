@@ -5,8 +5,8 @@ const { handleError } = require("../../helpers/handleError")
 
 const participarLicitacionService=async(fields)=>{
     try{
-        const {potencia,energiaHp,energiaHfp,potenciaFacturar,formulaIndex,potMinFacturable,excesoPotencia,idLicitacion,idProveedor}=fields;
-        const oferta=await crearOfertaDao({potencia,energiaHfp,energiaHp,potenciaFacturar,formulaIndex,potMinFacturable,excesoPotencia,proveedor:idProveedor,licitacion:idLicitacion});
+        const {potencia,energiaHp,energiaHfp,potenciaFacturar,formulaIndexPotencia,formulaIndexEnergia,potMinFacturable,excesoPotencia,idLicitacion,idProveedor}=fields;
+        const oferta=await crearOfertaDao({potencia,energiaHfp,energiaHp,potenciaFacturar,formulaIndexPotencia,formulaIndexEnergia,potMinFacturable,excesoPotencia,proveedor:idProveedor,licitacion:idLicitacion});
         if(oferta.error)return handleError(oferta.error,oferta.message);
         const licitacion=await updateLicitacionDao({$push:{participantes:idProveedor}},idLicitacion);
         if(licitacion.error)return handleError(licitacion.error,licitacion.message);
