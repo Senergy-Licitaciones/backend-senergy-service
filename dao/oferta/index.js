@@ -2,8 +2,11 @@ const OfertaModel=require("../../apiServices/oferta/model");
 const { handleError } = require("../../helpers/handleError");
 const crearOfertaDao=async(fields)=>{
     try{
+        console.log("fields ",fields);
         const oferta=await OfertaModel.create(fields);
         const result=await oferta.save();
+        console.log("oferta: ",oferta);
+        console.log("result ",result);
         return result;
     }catch(err){
         console.log("error ",err);
