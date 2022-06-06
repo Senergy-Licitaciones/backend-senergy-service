@@ -1,4 +1,5 @@
 const { updateLicitacionDao } = require("../../dao/licitacion");
+const { getUsersDao } = require("../../dao/usuario");
 const {handleError } = require("../../helpers/handleError")
 
 const changeStatusService=async(status,id)=>{
@@ -12,4 +13,13 @@ const changeStatusService=async(status,id)=>{
         handleError(err,"Error en la capa de servicios");
     }
 }
-module.exports={changeStatusService}
+const getUsersService=async()=>{
+    try{
+        const users=await getUsersDao();
+        if(users.error)return handleError(users.error,users.message);
+        return users
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error en la capa de servicios al obtener los usuarios");
+    }
+}
+module.exports={changeStatusService,getUsersService}

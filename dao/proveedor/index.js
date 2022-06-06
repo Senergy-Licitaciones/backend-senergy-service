@@ -51,4 +51,12 @@ const proveedorEstadoDao=async(correo)=>{
         return handleError(err,"Ha ocurrido un error al verificar la cuenta")
     }
 }
-module.exports={proveedorEstadoDao,confirmProveedorDao,crearProveedorDao,updateProveedorDao,verifyCorreoProveedorDao}
+const getProveedoresDao=async()=>{
+    try{
+        const proveedores=await ProveedorModel.find();
+        return proveedores;
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error en la capa de datos al listar los proveedores");
+    }
+}
+module.exports={getProveedoresDao,proveedorEstadoDao,confirmProveedorDao,crearProveedorDao,updateProveedorDao,verifyCorreoProveedorDao}

@@ -61,5 +61,14 @@ const getUserDao=async(correo)=>{
         return handleError(err,"Ha ocurrido un error en la capa de datos al encontrar el usuario");
     }
 }
-
-module.exports={getUserDao,crearUsuarioDao,updateUsuarioDao,verifyCorreoDao,confirmUserDao,getUserHashDao}
+const getUsersDao=async()=>{
+    try{
+        const users=await UsuarioModel.find({
+            $nor:[{role:"admin"}]
+        });
+        return users;
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error en la capa de datos al obtener la lista de usuarios")
+    }
+}
+module.exports={getUsersDao,getUserDao,crearUsuarioDao,updateUsuarioDao,verifyCorreoDao,confirmUserDao,getUserHashDao}

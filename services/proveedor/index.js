@@ -1,7 +1,7 @@
 const { updateLicitacionDao } = require("../../dao/licitacion");
 const { crearOfertaDao } = require("../../dao/oferta");
-const { updateProveedorDao } = require("../../dao/proveedor");
-const { handleError } = require("../../helpers/handleError")
+const { updateProveedorDao, getProveedoresDao } = require("../../dao/proveedor");
+const { handleError, httpError } = require("../../helpers/handleError")
 
 const participarLicitacionService=async(fields)=>{
     try{
@@ -19,4 +19,13 @@ const participarLicitacionService=async(fields)=>{
         return handleError(err,"Ha ocurrido un error en la capa de servicios");
     }
 }
-module.exports={participarLicitacionService}
+const getProveedoresService=async()=>{
+    try{
+        const proveedores=await getProveedoresDao(); 
+        if(proveedores.error)return handleError(proveedores.error,proveedores.message);
+        return proveedores
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error en la capa de servicios al listar los proveedores");
+    }
+}
+module.exports={getProveedoresService,participarLicitacionService}

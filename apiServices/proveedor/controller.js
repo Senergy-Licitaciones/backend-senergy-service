@@ -1,5 +1,5 @@
 const { httpError } = require("../../helpers/handleError");
-const { participarLicitacionService } = require("../../services/proveedor");
+const { participarLicitacionService, getProveedoresService } = require("../../services/proveedor");
 
 exports.participarLicitacion=async(req,res)=>{
     try{
@@ -8,6 +8,15 @@ exports.participarLicitacion=async(req,res)=>{
         const result=await participarLicitacionService({...fields,idProveedor:proveedor._id});
         if(result.error)return res.status(400).send(result);
         return res.status(200).send(result);
+    }catch(err){
+        httpError(res,err);
+    }
+}
+exports.showProveedores=async(req,res)=>{
+    try{
+        const proveedores=await getProveedoresService();
+        if(proveedores.error)return res.status(400).send(proveedores);
+        return res.status(200).send(proveedores);
     }catch(err){
         httpError(res,err);
     }
