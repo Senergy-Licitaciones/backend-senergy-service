@@ -1,0 +1,10 @@
+import express from "express";
+import checkAuth from "../../middlewares/checkAuth";
+import checkUserType from "../../middlewares/checkUserType";
+import checkRoleAuth from "../../middlewares/roleAuth";
+import { Role, Type } from "../../types/data";
+const router=express.Router();
+import { getPuntoSum, addPuntoSum } from "./controller";
+router.get("/getPuntoSums",checkAuth,checkUserType([Type.User]),checkRoleAuth([Role.Basico,Role.Premium,Role.Admin]),getPuntoSum);
+router.post("/addPuntoSum",addPuntoSum);
+export default router;
