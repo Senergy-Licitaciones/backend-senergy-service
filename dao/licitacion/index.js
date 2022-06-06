@@ -46,4 +46,13 @@ const getLicitacionesFreeDao=async(proveedorId)=>{
         return handleError(err,"Ha ocurrido un error en la capa de datos al obtener licitaciones libres");
     }
 }
-module.exports={getLicitacionesFreeDao,getTiposDao,showLicitacionesDao,createLicitacionDao,updateLicitacionDao}
+const getLicitacionByIdDao=async(id)=>{
+    try{
+        const licitacion=await LicitacionModel.findById(id).select("-usuario -participantes").populate("tipoServicio puntoSum brg");
+        if(!licitacion) return handleError(true,"La licitación no existe");
+        return licitacion
+    }catch(err){
+        return handleError(err,"Ha ocurrido un error en la capa de datos al mostrar la licitación ");
+    }
+}
+module.exports={getLicitacionByIdDao,getLicitacionesFreeDao,getTiposDao,showLicitacionesDao,createLicitacionDao,updateLicitacionDao}

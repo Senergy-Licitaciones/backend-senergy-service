@@ -1,5 +1,5 @@
 const { httpError } = require("../../helpers/handleError");
-const { mostrarLicitacionesService, crearLicitacionService, updateLicitacionService, getTiposService, getLicitacionesFreeService } = require("../../services/licitacion");
+const { mostrarLicitacionesService, crearLicitacionService, updateLicitacionService, getTiposService, getLicitacionesFreeService, getLicitacionByIdService } = require("../../services/licitacion");
 const { formatFileLicitacion } = require("../../utils/nameFormat");
 const fs=require("fs");
 const { sendEmails } = require("../../services/emails");
@@ -80,4 +80,18 @@ exports.showLicitacionesFree=async(req,res)=>{
     }catch(err){
         httpError(res,err);
     }
+}
+exports.showLicitacionById=async(req,res)=>{
+    try{
+        const licitacionId=req.licitacionId;
+        const licitacion=await getLicitacionByIdService(licitacionId);
+        if(licitacion.error)return res.status(400).send(licitacion);
+        return res.status(200).send(licitacion);
+    }catch(err){
+        httpError(res,err);
+    }
+}
+exports.licitacionId=(req,res,next,id)=>{
+req.licitacionId=id;
+next();
 }
