@@ -35,6 +35,7 @@ export const sendCodeVerification=async(code:string,correo:string)=>{
              <br/>
              <h2>Si no solicitaste esta acción repórtalo en: ${process.env.CORREO_SOPORTE}</h2>`,
         });
+        console.log("info ",info);
         return{
             message:"Email enviado exitosamente"
         }

@@ -13,10 +13,10 @@ export const getBrgDao=async()=>{
 }
 export const createBrgDao=async(fields:FieldsAdd)=>{
     try{
-        const response=await BrgModel.create({name:fields.name});
+        const response=await BrgModel.create<FieldsAdd>({name:fields.name});
         const brg=await response.save();
         return{
-            message:"BRG añadido exitosamente"
+            message:`BRG ${brg.name} añadido exitosamente `
         }
     }catch(err){
         let error=err as Error;

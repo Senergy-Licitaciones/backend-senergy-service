@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-const brgSchema=new mongoose.Schema({
+import { FieldsAdd } from "../../types/form";
+const brgSchema=new mongoose.Schema<FieldsAdd>({
     name:{
         type:String,
         required:true,
@@ -9,4 +10,4 @@ const brgSchema=new mongoose.Schema({
     versionKey:false,
     timestamps:true
 });
-export default mongoose.model("BrgModel",brgSchema);
+export default mongoose.model<FieldsAdd>("BrgModel",brgSchema);

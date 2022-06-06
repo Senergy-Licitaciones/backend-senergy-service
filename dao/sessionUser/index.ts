@@ -27,6 +27,7 @@ export const createSessionUser=async(idUser:string,token:string)=>{
 export const logoutUserDao=async(id:string)=>{
     try{
         const response=await SessionUserModel.findOneAndDelete({user:id});
+        console.log("response ",response);
         return{
             message:"Sesión cerrada exitosamente"
         }
