@@ -1,7 +1,7 @@
 import SessionUserModel from "../../apiServices/sessionUser/model";
 import UsuarioModel from "../../apiServices/usuario/model";
 import { handleError } from "../../helpers/handleError";
-import { Estado } from "../../types/data";
+import { Estado } from "../../types/data/enums";
 SessionUserModel.watch().on("change",(change)=>{
     if(change.operationType==="delete"){
         let docKey=change.documentKey as {_id:string};

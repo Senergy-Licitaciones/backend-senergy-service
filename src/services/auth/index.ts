@@ -3,7 +3,7 @@ import { ConfirmAccount, ConfirmProveedor, LoginFields, ProveedorRegisterFields,
 import { createCodeDao, verifyCodeDao, removeCodeDao } from "../../dao/code";
 import { createCodeProveedorDao, confirmCodeDao } from "../../dao/codeProveedor";
 import { crearProveedorDao, verifyCorreoProveedorDao, confirmProveedorDao, proveedorEstadoDao, updateProveedorDao } from "../../dao/proveedor";
-import { Estado } from "../../types/data";
+import { Estado } from "../../types/data/enums";
 import { createSessionUser, logoutUserDao } from "../../dao/sessionUser";
 import { createSessionProveedor, logoutProveedorDao } from "../../dao/sessionProveedor";
 import { crearUsuarioDao, verifyCorreoDao, confirmUserDao, getUserHashDao, updateUsuarioDao, getUserDao } from "../../dao/usuario";

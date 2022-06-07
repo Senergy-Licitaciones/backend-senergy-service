@@ -1,5 +1,5 @@
 import { verifyToken } from "../helpers/generateToken";
-import { Type } from "../types/data";
+import { Type } from "../types/data/enums";
 import { CheckUserType } from "../types/methods";
 
 import UsuarioModel from "../apiServices/usuario/model";

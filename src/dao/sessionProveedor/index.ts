@@ -1,7 +1,7 @@
 import { handleError } from "../../helpers/handleError";
 import SessionProveedorModel from "../../apiServices/sessionProveedor/model";
 import ProveedorModel from "../../apiServices/proveedor/model";
-import { Estado } from "../../types/data";
+import { Estado } from "../../types/data/enums";
 import { ObjectId } from "mongoose";
 SessionProveedorModel.watch().on("change",(change)=>{
     if(change.operationType==="delete"){

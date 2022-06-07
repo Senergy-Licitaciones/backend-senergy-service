@@ -1,5 +1,6 @@
 import { ObjectId } from "mongoose"
 import { LicitacionRegisterFields, OfertaCreateFields, ProveedorRegisterFields, UserRegisterFields } from "../form"
+import { Estado, Role, Type } from "./enums"
 
 export type DataToken=DataProveedorToken|DataUserToken
 export type DataUserToken={
@@ -14,11 +15,6 @@ export type DataProveedorToken={
     correo:string,
     ruc:number,
     type:Type.Proveedor
-}
-enum Estado{
-    Online="online",
-    Offline="offline",
-    ToConfirm="toConfirm"
 }
 export type ErrorResponse={
     error:Error,
@@ -40,15 +36,6 @@ export interface Proveedor extends ProveedorRegisterFields{
     verified:boolean,
     session:string,
     licitaciones:string[]
-}
-enum Role{
-    Basico="basico",
-    Premium="premium",
-    Admin="admin"
-}
-export enum Type{
-    User="user",
-    Proveedor="proveedor"
 }
 export interface User extends UserRegisterFields{
     _id:string,

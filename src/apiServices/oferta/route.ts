@@ -2,7 +2,7 @@ import express from "express";
 import checkAuth from "../../middlewares/checkAuth";
 import checkUserType from "../../middlewares/checkUserType";
 import checkRoleAuth from "../../middlewares/roleAuth";
-import { Role, Type } from "../../types/data";
+import { Role, Type } from "../../types/data/enums";
 import { getOfertas, updateOferta, getOfertaById, ofertaId } from "./controller";
 const router=express.Router();
 

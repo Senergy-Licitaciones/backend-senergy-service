@@ -1,5 +1,5 @@
 import { ObjectId, Types } from "mongoose"
-import { Estado } from "../data"
+import { Estado } from "../enums"
 
 export type FieldsAdd={
     name:string
@@ -27,10 +27,6 @@ type EspecificacionMes={
     mes:string,
     hp:number,
     hfp:number
-}
-export enum Estado{
-    Abierto="abierto",
-    Cerrado="cerrado"
 }
 type FactorIndex={
     factor:number,
