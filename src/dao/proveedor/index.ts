@@ -1,9 +1,12 @@
 import { handleError } from "../../helpers/handleError";
 import ProveedorModel from "../../apiServices/proveedor/model";
 import { DaoProveedorRegister } from "../../types/form";
-import { Proveedor } from "../../types/data";
-import { ObjectId, UpdateQuery } from "mongoose";
-export const crearProveedorDao=async(fields:DaoProveedorRegister)=>{
+import { ErrorResponse, Proveedor, ResponseParent } from "../../types/data";
+import { Document, ObjectId, Types, UpdateQuery } from "mongoose";
+import { Dao } from "../../types/methods";
+import { Estado } from "../../types/data/enums";
+export const crearProveedorDao:Dao<DaoProveedorRegister,ErrorResponse|Document<any, any, Proveedor> & Proveedor & {
+    _id: Types.ObjectId}>=async(fields)=>{
     try{
         const response=await ProveedorModel.create({...fields});
         const proveedor=await response.save();
@@ -13,7 +16,8 @@ export const crearProveedorDao=async(fields:DaoProveedorRegister)=>{
         return handleError(error,"Ha ocurrido un error en la capa de datos");
     }
 }
-export const updateProveedorDao=async(fields:UpdateQuery<Partial<Proveedor>>,id:ObjectId)=>{
+export const updateProveedorDao:Dao<{fields:UpdateQuery<Partial<Proveedor>>,id:ObjectId},ErrorResponse|Document<any, any, Proveedor> & Proveedor & {
+    _id: Types.ObjectId}>=async({fields,id})=>{
     try{
         const result=await ProveedorModel.findByIdAndUpdate(id,{...fields},{new:true});
         if(!result) throw new Error("Cuenta inexistente");
@@ -23,7 +27,7 @@ export const updateProveedorDao=async(fields:UpdateQuery<Partial<Proveedor>>,id:
         return handleError(error,"Ha ocurrido un error en la capa de datos");
     }
 }
-export const verifyCorreoProveedorDao=async(correo:string)=>{
+export const verifyCorreoProveedorDao:Dao<string,ErrorResponse|ResponseParent>=async(correo)=>{
     try{
         const response=await ProveedorModel.findOne({correo});
         if(response)throw new Error("Correo ya usado");
@@ -35,7 +39,8 @@ export const verifyCorreoProveedorDao=async(correo:string)=>{
         return handleError(error,"Ha ocurrido un error al verificar el correo")
     }
 }
-export const confirmProveedorDao=async(idCode:string)=>{
+export const confirmProveedorDao:Dao<string,ErrorResponse|Document<any, any, Proveedor> & Proveedor & {
+    _id: Types.ObjectId}>=async(idCode:string)=>{
     try{
         const response=await ProveedorModel.findOneAndUpdate({
             codeToConfirm:idCode,
@@ -49,9 +54,10 @@ export const confirmProveedorDao=async(idCode:string)=>{
         return handleError(error,"Ha ocurrido un error en la actualizacion del proveedor");
     }
 }
-export const proveedorEstadoDao=async(correo:string)=>{
+export const proveedorEstadoDao:Dao<string,ErrorResponse|Document<any, any, Proveedor> & Proveedor & {
+    _id: Types.ObjectId;}>=async(correo)=>{
     try{
-        const proveedor=await ProveedorModel.findOne({correo,verified:true, estado:"offline"});
+        const proveedor=await ProveedorModel.findOne({correo,verified:true, estado:Estado.Offline});
         if(!proveedor) throw new Error("Los datos son inválidos");
         return proveedor
     }catch(err){

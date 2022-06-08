@@ -1,7 +1,10 @@
+import { ObjectId } from "mongoose";
 import CodeModel from "../../apiServices/code/model";
 import { handleError } from "../../helpers/handleError";
+import { ErrorResponse, ResponseParent } from "../../types/data";
 import { CodeUserFields } from "../../types/form";
-export const createCodeDao=async(fields:CodeUserFields)=>{
+import { Dao } from "../../types/methods";
+export const createCodeDao:Dao<CodeUserFields,ErrorResponse|ResponseParent>=async(fields)=>{
     try{
         await CodeModel.create(fields);
         return{
@@ -13,7 +16,7 @@ export const createCodeDao=async(fields:CodeUserFields)=>{
         return handleError(error,"Ha ocurrido un error en la capa de datos");
     }
 }
-export const verifyCodeDao=async(idUser:string)=>{
+export const verifyCodeDao:Dao<ObjectId,ErrorResponse|ResponseParent>=async(idUser)=>{
     try{
         const result=await CodeModel.findOne({user:idUser});
         if(!result)throw new Error("Código ya enviado");
@@ -25,7 +28,7 @@ export const verifyCodeDao=async(idUser:string)=>{
         return handleError(error,"Ha ocurrido un error en la capa de datos");
     }
 }
-export const removeCodeDao=async(idUser:string,code:string)=>{
+export const removeCodeDao:Dao<{idUser:string,code:string},ResponseParent|ErrorResponse>=async({idUser,code})=>{
     try{
         const response=await CodeModel.findOneAndDelete({user:idUser,code});
         console.log("response code ",response);

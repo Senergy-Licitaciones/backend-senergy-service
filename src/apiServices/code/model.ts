@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-const codeSchema=new mongoose.Schema({
+import { CodeUser } from "../../types/data";
+const codeSchema=new mongoose.Schema<CodeUser>({
     code:{
         type:String,
         length:6,
@@ -20,4 +21,4 @@ const codeSchema=new mongoose.Schema({
     versionKey:false,
     timestamps:true
 });
-export default mongoose.model("CodeModel",codeSchema);
+export default mongoose.model<CodeUser>("CodeModel",codeSchema);

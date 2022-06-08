@@ -2,7 +2,9 @@ import { handleError } from "../../helpers/handleError";
 import SessionProveedorModel from "../../apiServices/sessionProveedor/model";
 import ProveedorModel from "../../apiServices/proveedor/model";
 import { Estado } from "../../types/data/enums";
-import { ObjectId } from "mongoose";
+import { Document, ObjectId, Types } from "mongoose";
+import { Dao } from "../../types/methods";
+import { ErrorResponse, SessionProveedor } from "../../types/data";
 SessionProveedorModel.watch().on("change",(change)=>{
     if(change.operationType==="delete"){
         let docKey=change.documentKey as {_id:string}
@@ -13,7 +15,9 @@ SessionProveedorModel.watch().on("change",(change)=>{
     }
 });
 
-export const createSessionProveedor=async(proveedorId:string,token:string)=>{
+export const createSessionProveedor:Dao<{proveedorId:ObjectId,token:string},ErrorResponse|Document<any, any, SessionProveedor> & SessionProveedor & {
+    _id: Types.ObjectId
+}>=async({proveedorId,token})=>{
     try{
         const response=await SessionProveedorModel.create({proveedor:proveedorId,jwt:token});
         const session=await response.save();
@@ -23,7 +27,8 @@ export const createSessionProveedor=async(proveedorId:string,token:string)=>{
         return handleError(error,"Ha ocurrido un error al crear la sesión ")
     }
 }
-export const logoutProveedorDao=async(proveedorId:ObjectId)=>{
+export const logoutProveedorDao:Dao<ObjectId,ErrorResponse|Document<any, any, SessionProveedor> & SessionProveedor & {
+    _id: Types.ObjectId}>=async(proveedorId)=>{
     try{
         const proveedor=await SessionProveedorModel.findOneAndDelete({proveedor:proveedorId});
         if(!proveedor)throw new Error("La sesión no existe");

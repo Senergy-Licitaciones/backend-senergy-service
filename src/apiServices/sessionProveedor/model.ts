@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
-const sessionProveedorSchema=new mongoose.Schema({
+import { SessionProveedor } from "../../types/data";
+import { Type } from "../../types/data/enums";
+const sessionProveedorSchema=new mongoose.Schema<SessionProveedor>({
     type:{
         type:String,
-        enum:["proveedor"],
-        default:"proveedor",
+        enum:Type,
+        default:Type.Proveedor,
         required:true
     },
     jwt:{
@@ -18,7 +20,7 @@ const sessionProveedorSchema=new mongoose.Schema({
         unique:true,
         trim:true
     },
-    expiredAt:{
+    expireAt:{
         type:Date,
         default: new Date(new Date().valueOf() + 3600000),
         expires:120
@@ -27,4 +29,4 @@ const sessionProveedorSchema=new mongoose.Schema({
     versionKey:false,
     timestamps:true
 });
-export default mongoose.model("SessionProveedorModel",sessionProveedorSchema);
+export default mongoose.model<SessionProveedor>("SessionProveedorModel",sessionProveedorSchema);

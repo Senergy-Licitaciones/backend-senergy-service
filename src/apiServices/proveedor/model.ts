@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
-const proveedorSchema=new mongoose.Schema({
+import { Proveedor } from "../../types/data";
+import { Estado, Role } from "../../types/data/enums";
+const proveedorSchema=new mongoose.Schema<Proveedor>({
     razSocial:{
         type:String,
         trim:true,
@@ -13,10 +15,10 @@ const proveedorSchema=new mongoose.Schema({
     },
     role:{
         type:String,
-        enum:["basico","premium"],
+        enum:Role,
         trim:true,
         required:true,
-        default:"basico"
+        default:Role.Basico
     },
     pais:{
         type:String,
@@ -56,9 +58,9 @@ const proveedorSchema=new mongoose.Schema({
     ],
     estado:{
         type:String,
-        enum:["online","offline"],
+        enum:Estado,
         required:true,
-        default:"offline"
+        default:Estado.Offline
     },
     codeToConfirm:{
             type:String,
@@ -77,4 +79,4 @@ const proveedorSchema=new mongoose.Schema({
     versionKey:false,
     timestamps:true
 });
-export default mongoose.model("ProveedorModel",proveedorSchema);
+export default mongoose.model<Proveedor>("ProveedorModel",proveedorSchema);

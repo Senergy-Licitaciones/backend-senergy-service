@@ -6,7 +6,7 @@ export const httpError=(res:Response,error:Error)=>{
         error
     })
 }
-export const handleError=(error:Error,message:string)=>{
+export const handleError=(error:Error,message:string):{error:Error,message:string}=>{
     return{
         error,
         message

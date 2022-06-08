@@ -2,7 +2,9 @@ import { handleError } from "../../helpers/handleError";
 import ProveedorModel from "../../apiServices/proveedor/model";
 import CodeProveedorModel from "../../apiServices/codeProveedor/model";
 import { CodeProveedorFields } from "../../types/form";
-import { Proveedor } from "../../types/data";
+import { CodeProveedor, ErrorResponse, Proveedor } from "../../types/data";
+import { Dao } from "../../types/methods";
+import { Document, Types } from "mongoose";
 CodeProveedorModel.watch().on("change",(change)=>{
     if(change.operationType==="delete"){
         let docKey=change.documentKey as {_id:string}
@@ -18,7 +20,8 @@ CodeProveedorModel.watch().on("change",(change)=>{
         removeProveedorAccount();
     }
 })
-export const createCodeProveedorDao=async(fields:CodeProveedorFields)=>{
+export const createCodeProveedorDao:Dao<CodeProveedorFields,ErrorResponse|Document<any, any, CodeProveedor> & CodeProveedor & {
+    _id: Types.ObjectId}>=async(fields)=>{
     try{
         const response=await CodeProveedorModel.create(fields);
         const code=await response.save();
@@ -28,7 +31,9 @@ export const createCodeProveedorDao=async(fields:CodeProveedorFields)=>{
         return handleError(error,"Ha ocurrido un error al crear el código");
     }
 }
-export const confirmCodeDao=async(correo:string,code:string)=>{
+export const confirmCodeDao:Dao<{correo:string,code:string},ErrorResponse|Document<any, any, CodeProveedor> & CodeProveedor & {
+    _id: Types.ObjectId
+}>=async({correo,code})=>{
     try{
         const response=await CodeProveedorModel.findOne({proveedor:correo,code});
         if(!response) throw new Error("Código inválido");

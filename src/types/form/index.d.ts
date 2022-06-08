@@ -5,7 +5,7 @@ export type FieldsAdd={
     name:string
 }
 export type CodeUserFields={
-    user:string,
+    user:ObjectId,
     code:string
 }
 export type CodeProveedorFields={
@@ -37,35 +37,24 @@ export interface LicitacionRegisterFields{
     description:string,
     fechaInicioApertura:string,
     fechaFinApertura:string,
-    tipoServicio:string,
+    tipoServicio:ObjectId,
     numLicitacion:number,
     requisitos:string,
     estado:Estado,
     empresa:string,
     fechaInicio:string,
     fechaFin:string,
-    puntoSum:string,
-    brg:string,
+    puntoSum:ObjectId,
+    brg:ObjectId,
     factorPlanta:number,
     meses:EspecificacionMes[],
-    usuario:string
+    usuario:ObjectId
 }
 export type LoginFields={
     correo:string,
     password:string
 }
-export interface OfertaCreateFields{
-    potencia:number,
-    energiaHp:number,
-    energiaHfp:number,
-    potMinFacturable:number,
-    potenciaFacturar:string,
-    excesoPotencia:number,
-    formulaIndexPotencia:Types.Array<FactorIndex>, //recommended by mongoose doc
-    formulaIndexEnergia:Types.Array<FactorIndex>,
-    proveedor:ObjectId,
-    licitacion:ObjectId
-}
+
 export interface ProveedorRegisterFields{
     correo:string,
     password:string,

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { OfertaCreateFields } from "../../types/form";
+import { Oferta } from "../../types/data";
 const {ObjectId}=mongoose.Schema.Types;
-const ofertaSchema=new mongoose.Schema<OfertaCreateFields>({
+const ofertaSchema=new mongoose.Schema<Oferta>({
     potencia:{
         type:Number,
         required:true
@@ -67,4 +67,4 @@ const ofertaSchema=new mongoose.Schema<OfertaCreateFields>({
     versionKey:false,
     timestamps:true
 });
-export default mongoose.model<OfertaCreateFields>("OfertaModel",ofertaSchema);
+export default mongoose.model<Oferta>("OfertaModel",ofertaSchema);

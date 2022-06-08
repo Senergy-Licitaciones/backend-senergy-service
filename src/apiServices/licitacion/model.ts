@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
+import { Licitacion } from "../../types/data";
 const {ObjectId} =mongoose.Schema.Types;
-const licitacionSchema=new mongoose.Schema({
+const licitacionSchema=new mongoose.Schema<Licitacion>({
     title:{
         type:String,
         trim:true,
@@ -104,4 +105,4 @@ const licitacionSchema=new mongoose.Schema({
     timestamps:true,
     versionKey:false
 });
-export default mongoose.model("LicitacionModel",licitacionSchema);
+export default mongoose.model<Licitacion>("LicitacionModel",licitacionSchema);

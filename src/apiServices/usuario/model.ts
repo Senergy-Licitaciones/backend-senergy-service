@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
-const usuarioSchema=new mongoose.Schema({
+import { User } from "../../types/data";
+import { Estado, Role } from "../../types/data/enums";
+const usuarioSchema=new mongoose.Schema<User>({
     correo:{
         type:String,
         trim:true,
@@ -40,9 +42,9 @@ const usuarioSchema=new mongoose.Schema({
     },
     estado:{
         type:String,
-        enum:["online","offline","toConfirm"],
+        enum:Estado,
         trim:true,
-        default:"toConfirm"
+        default:Estado.ToConfirm
     },
     sessionId:{
         type:String,
@@ -50,13 +52,13 @@ const usuarioSchema=new mongoose.Schema({
     },
     role:{
         type:String,
-        enum:["basico","premium","admin"],
+        enum:Role,
         trim:true,
-        default:"basico"
+        default:Role.Basico
     }
 },{
     versionKey:false,
     timestamps:true
 });
 
-export default mongoose.model("UsuarioModel",usuarioSchema);
+export default mongoose.model<User>("UsuarioModel",usuarioSchema);

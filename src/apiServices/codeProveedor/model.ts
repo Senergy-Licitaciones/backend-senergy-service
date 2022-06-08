@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-const codeProveedorSchema=new mongoose.Schema({
+import { CodeProveedor } from "../../types/data";
+const codeProveedorSchema=new mongoose.Schema<CodeProveedor>({
     code:{
         type:String,
         length:6,
@@ -21,4 +22,4 @@ const codeProveedorSchema=new mongoose.Schema({
     versionKey:false,
     timestamps:true
 });
-export default mongoose.model("CodeProveedorModel",codeProveedorSchema);
+export default mongoose.model<CodeProveedor>("CodeProveedorModel",codeProveedorSchema);

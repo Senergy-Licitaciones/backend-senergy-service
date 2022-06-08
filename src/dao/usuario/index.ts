@@ -1,8 +1,11 @@
 import { handleError } from "../../helpers/handleError";
 import UsuarioModel from "../../apiServices/usuario/model";
-import { User } from "../../types/data";
+import { ErrorResponse, ResponseId, ResponseParent, User } from "../../types/data";
 import { UserRegisterFields } from "../../types/form";
-export const crearUsuarioDao=async(fields:UserRegisterFields)=>{
+import { Document, ObjectId, Types } from "mongoose";
+import { Dao } from "../../types/methods";
+import { Estado, Role } from "../../types/data/enums";
+export const crearUsuarioDao:Dao<UserRegisterFields,ErrorResponse|Document<any, any, User> & User & {_id: Types.ObjectId}>=async(fields:UserRegisterFields)=>{
     try{
         const user=await UsuarioModel.create({...fields});
         const response=await user.save();
@@ -13,7 +16,7 @@ export const crearUsuarioDao=async(fields:UserRegisterFields)=>{
         return handleError(error,"Ha ocurrido un error en la capa de datos")
     }
 }
-export const verifyCorreoDao=async(correo:string)=>{
+export const verifyCorreoDao:Dao<string,ErrorResponse|ResponseParent|ResponseId>=async(correo)=>{
     try{
         const result=await UsuarioModel.findOne({correo});
         if(result) return{message:"Correo ya usado",_id:result._id};
@@ -26,9 +29,10 @@ export const verifyCorreoDao=async(correo:string)=>{
         return handleError(error,"Ha ocurrido un error en la capa de datos");
     }
 }
-export const updateUsuarioDao=async(fields:Partial<User>,id:string)=>{
+export const updateUsuarioDao:Dao<{fields:Partial<User>,id:ObjectId},ErrorResponse|ResponseParent>=async({fields,id})=>{
     try{
         const result=await UsuarioModel.findByIdAndUpdate(id,{...fields},{new:true});
+        if(!result)throw new Error("Usuario no encontrado");
         return{
             message:`Usuario ${result.correo} actualizado correctamente`
         }
@@ -37,9 +41,9 @@ export const updateUsuarioDao=async(fields:Partial<User>,id:string)=>{
        return handleError(error,"Ha ocurrido un error en la capa de datos");
     }
 }
-export const confirmUserDao=async(idUser:string)=>{
+export const confirmUserDao:Dao<string,ErrorResponse|ResponseParent>=async(idUser)=>{
     try{
-        const response=await UsuarioModel.findByIdAndUpdate(idUser,{estado:"offline"});
+        const response=await UsuarioModel.findByIdAndUpdate(idUser,{estado:Estado.Offline});
         if(!response) throw new Error("Usuario no encontrado");
         return{
             message:"Cuenta confirmada exitosamente"
@@ -49,7 +53,8 @@ export const confirmUserDao=async(idUser:string)=>{
         return handleError(error,"Ha ocurrido un error en la capa de datos");
     }
 }
-export const getUserHashDao=async(correo:string)=>{
+export const getUserHashDao:Dao<string,ErrorResponse|Document<any, any, User> & User & {
+    _id: Types.ObjectId}>=async(correo)=>{
     try{
         const response=await UsuarioModel.findOne({correo}).select("password role correo");
         if(!response)throw new Error("Correo no registrado");
@@ -59,9 +64,10 @@ export const getUserHashDao=async(correo:string)=>{
         return handleError(error,"Ha ocurrido un error en la capa de datos");
     }
 }
-export const getUserDao=async(correo:string)=>{
+export const getUserDao:Dao<string,ErrorResponse|Document<any, any, User> & User & {
+    _id: Types.ObjectId}>=async(correo)=>{
     try{
-        const user=await UsuarioModel.findOne({correo,role:"admin"});
+        const user=await UsuarioModel.findOne({correo,role:Role.Admin});
         if(!user)throw new Error("Usuario no encontrado");
         return user
     }catch(err){

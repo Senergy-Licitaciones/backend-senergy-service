@@ -1,6 +1,8 @@
 import transporter from "../../config/mailer";
 import { handleError } from "../../helpers/handleError";
 import {config} from "dotenv";
+import { Service } from "../../types/methods";
+import { ErrorResponse, ResponseParent } from "../../types/data";
 config();
 /*export const sendEmails=async(fields)=>{
     const {proveedoresList,enlace,usuario}=fields;
@@ -23,8 +25,9 @@ config();
        return handleError(err,"Ha ocurrido un error en la capa de servicios")
     }
 }*/
-export const sendCodeVerification=async(code:string,correo:string)=>{
+export const sendCodeVerification:Service<{code:string,correo:string},ErrorResponse|ResponseParent>=async(fields)=>{
     try{
+        const {code,correo}=fields;
         let info=await transporter.sendMail({
             from: '"Senergy Soporte" <contacto@prysmosolutions.com>', // sender address
             to:correo, // list of receivers

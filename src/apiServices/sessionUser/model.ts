@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
-const sessionUserSchema=new mongoose.Schema({
+import { SessionUser } from "../../types/data";
+import { Type } from "../../types/data/enums";
+const sessionUserSchema=new mongoose.Schema<SessionUser>({
     type:{
         type:String,
-        enum:["user"],
-        default:"user",
+        enum:Type,
+        default:Type.User,
         required:true
     },
     jwt:{
@@ -18,7 +20,7 @@ const sessionUserSchema=new mongoose.Schema({
         required:true,
         unique:true
     },
-    expiredTime:{
+    expireAt:{
         type:Date,
         expires:3600
     }
@@ -26,4 +28,4 @@ const sessionUserSchema=new mongoose.Schema({
     versionKey:false,
     timestamps:true
 });
-export default mongoose.model("SessionUserModel",sessionUserSchema);
+export default mongoose.model<SessionUser>("SessionUserModel",sessionUserSchema);
