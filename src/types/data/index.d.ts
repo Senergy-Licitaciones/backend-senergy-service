@@ -1,4 +1,4 @@
-import { ObjectId, Types } from "mongoose"
+import { Document, ObjectId, Types } from "mongoose"
 import { FactorIndex, LicitacionRegisterFields, ProveedorRegisterFields, UserRegisterFields } from "../form"
 import { Estado, Role, Type } from "./enums"
 interface Code{
@@ -24,6 +24,9 @@ export type DataProveedorToken={
     correo:string,
     ruc:number,
     type:Type.Proveedor
+}
+export type DocType<Param>=Document<any, any, Param> & Param & {
+            _id: Types.ObjectId;
 }
 export interface ErrorResponse extends ResponseParent{
     error:Error

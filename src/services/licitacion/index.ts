@@ -18,8 +18,8 @@ export const mostrarLicitacionesService:ServiceWithoutParam<ErrorResponse|Array<
 }
 export const crearLicitacionService:Service<LicitacionRegisterFields,ErrorResponse|ResponseParent>=async(fields:LicitacionRegisterFields)=>{
     try{
-        const {title,description,tipoServicio,numLicitacion,requisitos,estado,empresa,fechaInicioApertura,fechaFinApertura,fechaInicio,puntoSum,brg,factorPlanta,meses,fechaFin,usuario}=fields;
-        const result=await createLicitacionDao({title,description,tipoServicio,numLicitacion,requisitos,estado,empresa,fechaInicioApertura,fechaFinApertura,fechaInicio,puntoSum,brg,factorPlanta,meses,fechaFin,usuario,participantes:new Types.Array<ObjectId>()});
+        const {title,description,tipoServicio,numLicitacion,requisitos,estado,empresa,fechaInicioApertura,fechaFinApertura,fechaInicio,puntoSum,brg,factorPlanta,meses,fechaFin,usuario,author}=fields;
+        const result=await createLicitacionDao({title,description,tipoServicio,numLicitacion,requisitos,estado,empresa,fechaInicioApertura,fechaFinApertura,fechaInicio,puntoSum,brg,factorPlanta,meses,fechaFin,usuario,author,participantes:new Types.Array<ObjectId>()});
         if("error" in result)return handleError(result.error,result.message);
         return {
             message:"Licitación creada exitosamente"

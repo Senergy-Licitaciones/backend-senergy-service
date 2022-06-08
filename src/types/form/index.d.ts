@@ -34,6 +34,7 @@ type FactorIndex={
 }
 export interface LicitacionRegisterFields{
     title:string,
+    author:string,
     description:string,
     fechaInicioApertura:string,
     fechaFinApertura:string,

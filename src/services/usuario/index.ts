@@ -1,8 +1,8 @@
 import { Document, ObjectId, Types } from "mongoose";
-import { updateLicitacionDao } from "../../dao/licitacion";
+import { getLicitacionesByUserDao, updateLicitacionDao } from "../../dao/licitacion";
 import { getUsersDao } from "../../dao/usuario";
 import { handleError } from "../../helpers/handleError";
-import { ErrorResponse, ResponseParent, User } from "../../types/data";
+import { DocType, ErrorResponse, Licitacion, ResponseParent, User } from "../../types/data";
 import { Estado } from "../../types/form/enums";
 import { Service, ServiceWithoutParam } from "../../types/methods";
 
@@ -27,5 +27,15 @@ export const getUsersService:ServiceWithoutParam<ErrorResponse|Array<Document<an
     }catch(err){
         let error=err as Error;
         return handleError(error,"Ha ocurrido un error en la capa de servicios al obtener los usuarios");
+    }
+}
+export const getLicitacionesByUser:Service<string,ErrorResponse|Array<DocType<Licitacion>>>=async(id)=>{
+    try{
+        const licitaciones=await getLicitacionesByUserDao(id);
+        if("error" in licitaciones) return handleError(licitaciones.error,licitaciones.message);
+        return licitaciones
+    }catch(err){
+        let error=err as Error;
+        return handleError(error,"Ha ocurrido un error en la capa de servicios al obtener las licitacioens");
     }
 }

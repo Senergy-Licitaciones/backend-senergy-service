@@ -1,6 +1,6 @@
 import { handleError } from "../../helpers/handleError";
 import LicitacionModel from "../../apiServices/licitacion/model";
-import { ErrorResponse, Licitacion, ResponseParent } from "../../types/data";
+import { DocType, ErrorResponse, Licitacion, ResponseParent } from "../../types/data";
 import { Document, ObjectId, Types, UpdateQuery } from "mongoose";
 import { Dao, DaoWithoutParam } from "../../types/methods";
 export const showLicitacionesDao:DaoWithoutParam<ErrorResponse|Array<Document<any, any, Licitacion> & Licitacion & {
@@ -68,5 +68,14 @@ export const getLicitacionByIdDao:Dao<ObjectId,ErrorResponse|Document<any, any, 
     }catch(err){
         let error=err as Error;
         return handleError(error,"Ha ocurrido un error en la capa de datos al mostrar la licitación ");
+    }
+}
+export const getLicitacionesByUserDao:Dao<string,ErrorResponse|Array<DocType<Licitacion>>>=async(id)=>{
+    try{
+        const licitaciones=await LicitacionModel.find({usuario:id});
+        return licitaciones;
+    }catch(err){
+        let error=err as Error;
+        return handleError(error,"Ha ocurrido un error en la capa de datos al obtener las licitaciones")
     }
 }
