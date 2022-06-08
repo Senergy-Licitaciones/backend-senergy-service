@@ -1,6 +1,11 @@
 import express from "express";
+import checkAuth from "../../middlewares/checkAuth";
+import checkUserType from "../../middlewares/checkUserType";
+import checkRoleAuth from "../../middlewares/roleAuth";
+import { Role, Type } from "../../types/data/enums";
 const router=express.Router();
-import { changeStatus, showUsers } from "./controller";
+import { changeStatus, showUsers,showLicitaciones } from "./controller";
 router.post("/changeStatus",changeStatus);
+router.get("/getLicitaciones",checkAuth,checkUserType([Type.User]),checkRoleAuth([Role.Basico,Role.Premium,Role.Admin]),showLicitaciones);
 router.get("/showUsers",showUsers);
 export default router;

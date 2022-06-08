@@ -10,7 +10,7 @@ declare global {
         proveedor?:Document<any, any, Proveedor> & Proveedor & {
             _id: Types.ObjectId;
         },
-        licitacionId?:ObjectId,
-        ofertaId?:ObjectId
+        licitacionId?:Types.ObjectId,
+        ofertaId?:Types.ObjectId
     }
 }}

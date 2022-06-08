@@ -1,5 +1,5 @@
 import { RequestHandler, RequestParamHandler } from "express";
-import { Document, ObjectId, Types } from "mongoose";
+import { Document, Types } from "mongoose";
 import { httpError } from "../../helpers/handleError";
 import { getOfertasService, getOfertaByIdService, updateOfertaService } from "../../services/oferta";
 import { Oferta, Proveedor } from "../../types/data";
@@ -19,7 +19,7 @@ export const getOfertas:RequestHandler=async(req,res)=>{
 }
 export const getOfertaById:RequestHandler=async(req,res)=>{
     try{
-        const ofertaId=req.ofertaId as ObjectId;
+        const ofertaId=req.ofertaId as Types.ObjectId;
         if(!ofertaId)throw new Error("La oferta seleccionada no es válida");
         const oferta=await getOfertaByIdService(ofertaId);
         if("error" in oferta) return res.status(400).send(oferta);
@@ -35,7 +35,7 @@ export const ofertaId:RequestParamHandler=(req,_res,next,id)=>{
 }
 export const updateOferta:RequestHandler=async(req,res)=>{
     try{
-        const ofertaId=req.ofertaId as ObjectId ,
+        const ofertaId=req.ofertaId as Types.ObjectId ,
         fields=req.body as Partial<Oferta>;
         if(!ofertaId)throw new Error("La oferta seleccionada no es válida");
         const response=await updateOfertaService({ofertaId,fields});

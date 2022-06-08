@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.showUsers = exports.changeStatus = void 0;
+exports.showLicitaciones = exports.showUsers = exports.changeStatus = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const usuario_1 = require("../../services/usuario");
 const changeStatus = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -39,3 +39,17 @@ const showUsers = (_req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.showUsers = showUsers;
+const showLicitaciones = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = req.user;
+        const licitaciones = yield (0, usuario_1.getLicitacionesByUser)(user._id);
+        if ("error" in licitaciones)
+            return res.status(400).send(licitaciones);
+        return res.status(200).send(licitaciones);
+    }
+    catch (err) {
+        let error = err;
+        return (0, handleError_1.httpError)(res, error);
+    }
+});
+exports.showLicitaciones = showLicitaciones;

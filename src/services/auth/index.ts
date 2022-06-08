@@ -11,7 +11,7 @@ import { compare, encrypt } from "../../helpers/handleBcrypt";
 import { handleError } from "../../helpers/handleError";
 import generateCode from "../../utils/generateCode";
 import { sendCodeVerification } from "../emails";
-import { ObjectId } from "mongoose";
+import { Types } from "mongoose";
 import { Service } from "../../types/methods";
 import { ErrorResponse, ResponseParent, ResponseRegisterUser } from "../../types/data";
 
@@ -164,7 +164,7 @@ export const confirmProveedorService:Service<ConfirmProveedor,ErrorResponse|Resp
         return handleError(error,"Ha ocurrido un error al intentar confirmar la cuenta");
     }
 }
-export const logoutProveedorService:Service<ObjectId,ErrorResponse|ResponseParent>=async(proveedorId)=>{
+export const logoutProveedorService:Service<Types.ObjectId,ErrorResponse|ResponseParent>=async(proveedorId)=>{
     try{
         const response=await logoutProveedorDao(proveedorId);
         if("error" in response)return handleError(response.error,response.message);

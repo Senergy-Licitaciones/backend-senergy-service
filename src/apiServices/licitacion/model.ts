@@ -76,6 +76,7 @@ const licitacionSchema=new mongoose.Schema<Licitacion>({
     },
     meses:[
         {
+            _id:false,
             mes:{
                 type:String,
                 trim:true,
@@ -100,7 +101,12 @@ const licitacionSchema=new mongoose.Schema<Licitacion>({
             type:ObjectId,
             ref:"ProveedorModel"
         }
-    ]
+    ],
+    author:{
+        type:String,
+        trim:true,
+        required:true
+    }
 },{
     timestamps:true,
     versionKey:false

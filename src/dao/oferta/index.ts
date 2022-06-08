@@ -1,10 +1,9 @@
-import { Document, ObjectId, Types } from "mongoose";
+import { Document, Types } from "mongoose";
 import OfertaModel from "../../apiServices/oferta/model";
 import { handleError } from "../../helpers/handleError";
-import { ErrorResponse, Licitacion, Oferta } from "../../types/data";
+import { DocType, ErrorResponse, Licitacion, Oferta } from "../../types/data";
 import { Dao } from "../../types/methods";
-export const crearOfertaDao:Dao<Oferta,ErrorResponse|Document<any, any, Oferta> & Oferta & {
-    _id: Types.ObjectId}>=async(fields)=>{
+export const crearOfertaDao:Dao<Oferta,ErrorResponse|DocType<Oferta>>=async(fields)=>{
     try{
         console.log("fields ",fields);
         const oferta=await OfertaModel.create(fields);
@@ -18,8 +17,7 @@ export const crearOfertaDao:Dao<Oferta,ErrorResponse|Document<any, any, Oferta> 
         return handleError(error,"Ha ocurrido un error en la capa de datos al crear la oferta");
     }
 }
-export const getOfertasDao:Dao<ObjectId,ErrorResponse|Array<Document<any, any, Oferta> & Oferta & {
-    _id: Types.ObjectId}>>=async(id)=>{
+export const getOfertasDao:Dao<Types.ObjectId,ErrorResponse|Array<DocType<Oferta>>>=async(id)=>{
     try{
         const ofertas=await OfertaModel.find({
             proveedor:id
@@ -30,8 +28,7 @@ export const getOfertasDao:Dao<ObjectId,ErrorResponse|Array<Document<any, any, O
         return handleError(error,"Ha ocurrido un error en la capa de datos al obtener las ofertas")
     }
 }
-export const getOfertaByIdDao:Dao<ObjectId,ErrorResponse|Document<any, any, Oferta> & Oferta & {
-    _id: Types.ObjectId}>=async(ofertaId)=>{
+export const getOfertaByIdDao:Dao<Types.ObjectId,ErrorResponse|DocType<Oferta>>=async(ofertaId)=>{
     try{
         const oferta=await OfertaModel.findById(ofertaId);
         if(!oferta)throw new Error("No eexiste la oferta seleccionada");
@@ -41,7 +38,7 @@ export const getOfertaByIdDao:Dao<ObjectId,ErrorResponse|Document<any, any, Ofer
         return handleError(error,"Ha ocurrido un error en la capa de datos al obtener la oferta");
     }
 }
-export const updateOfertaDao:Dao<{ofertaId:ObjectId,fields:Partial<Omit<Oferta,"licitacion">>},ErrorResponse|Document<any, any, Oferta> & Oferta & {
+export const updateOfertaDao:Dao<{ofertaId:Types.ObjectId,fields:Partial<Omit<Oferta,"licitacion">>},ErrorResponse|Document<any, any, Oferta> & Oferta & {
     _id: Types.ObjectId} & {
     licitacion: Licitacion}>=async({ofertaId,fields})=>{
     try{

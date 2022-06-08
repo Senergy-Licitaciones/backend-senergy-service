@@ -2,7 +2,7 @@ import { handleError } from "../../helpers/handleError";
 import ProveedorModel from "../../apiServices/proveedor/model";
 import { DaoProveedorRegister } from "../../types/form";
 import { ErrorResponse, Proveedor, ResponseParent } from "../../types/data";
-import { Document, ObjectId, Types, UpdateQuery } from "mongoose";
+import { Document, Types, UpdateQuery } from "mongoose";
 import { Dao, DaoWithoutParam } from "../../types/methods";
 import { Estado } from "../../types/data/enums";
 export const crearProveedorDao:Dao<DaoProveedorRegister,ErrorResponse|Document<any, any, Proveedor> & Proveedor & {
@@ -16,7 +16,7 @@ export const crearProveedorDao:Dao<DaoProveedorRegister,ErrorResponse|Document<a
         return handleError(error,"Ha ocurrido un error en la capa de datos");
     }
 }
-export const updateProveedorDao:Dao<{fields:UpdateQuery<Partial<Proveedor>>,id:ObjectId},ErrorResponse|Document<any, any, Proveedor> & Proveedor & {
+export const updateProveedorDao:Dao<{fields:UpdateQuery<Partial<Proveedor>>,id:Types.ObjectId},ErrorResponse|Document<any, any, Proveedor> & Proveedor & {
     _id: Types.ObjectId}>=async({fields,id})=>{
     try{
         const result=await ProveedorModel.findByIdAndUpdate(id,{...fields},{new:true});

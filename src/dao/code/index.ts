@@ -1,4 +1,4 @@
-import { ObjectId } from "mongoose";
+import { Types } from "mongoose";
 import CodeModel from "../../apiServices/code/model";
 import { handleError } from "../../helpers/handleError";
 import { ErrorResponse, ResponseParent } from "../../types/data";
@@ -16,7 +16,7 @@ export const createCodeDao:Dao<CodeUserFields,ErrorResponse|ResponseParent>=asyn
         return handleError(error,"Ha ocurrido un error en la capa de datos");
     }
 }
-export const verifyCodeDao:Dao<ObjectId,ErrorResponse|ResponseParent>=async(idUser)=>{
+export const verifyCodeDao:Dao<Types.ObjectId,ErrorResponse|ResponseParent>=async(idUser)=>{
     try{
         const result=await CodeModel.findOne({user:idUser});
         if(!result)throw new Error("Código ya enviado");

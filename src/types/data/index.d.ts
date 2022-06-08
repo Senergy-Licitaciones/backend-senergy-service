@@ -1,4 +1,4 @@
-import { ObjectId, Types } from "mongoose"
+import { Document, Types } from "mongoose"
 import { FactorIndex, LicitacionRegisterFields, ProveedorRegisterFields, UserRegisterFields } from "../form"
 import { Estado, Role, Type } from "./enums"
 interface Code{
@@ -25,11 +25,14 @@ export type DataProveedorToken={
     ruc:number,
     type:Type.Proveedor
 }
+export type DocType<Param>=Document<any, any, Param> & Param & {
+            _id: Types.ObjectId;
+}
 export interface ErrorResponse extends ResponseParent{
     error:Error
 }
 export interface Licitacion extends LicitacionRegisterFields{
-    participantes:Types.Array<ObjectId>
+    participantes:Types.Array<Types.ObjectId>
 }
 export interface Oferta{
     potencia:number,
@@ -40,8 +43,8 @@ export interface Oferta{
     excesoPotencia:number,
     formulaIndexPotencia:Types.Array<FactorIndex>, //recommended by mongoose doc
     formulaIndexEnergia:Types.Array<FactorIndex>,
-    proveedor:ObjectId,
-    licitacion:ObjectId
+    proveedor:Types.ObjectId,
+    licitacion:Types.ObjectId
 }
 export interface Proveedor extends ProveedorRegisterFields{
     role:Role,
@@ -49,16 +52,16 @@ export interface Proveedor extends ProveedorRegisterFields{
     codeToConfirm:string,
     verified:boolean,
     session:string,
-    licitaciones:ObjectId[]
+    licitaciones:Types.Array<Types.ObjectId>
 }
 export interface ResponseId extends ResponseParent{
-    _id:ObjectId
+    _id:Types.ObjectId
 }
 export interface ResponseParent{
     message:string
 }
 export interface ResponseRegisterUser extends ResponseParent{
-    idUser:ObjectId
+    idUser:Types.ObjectId
 }
 export interface Session{
     type:Type,

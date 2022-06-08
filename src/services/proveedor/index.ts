@@ -1,12 +1,12 @@
-import { Document, ObjectId, Types } from "mongoose";
+import { Types } from "mongoose";
 import { updateLicitacionDao } from "../../dao/licitacion";
 import { crearOfertaDao } from "../../dao/oferta";
 import { updateProveedorDao, getProveedoresDao } from "../../dao/proveedor";
 import { handleError} from "../../helpers/handleError";
-import { ErrorResponse, Oferta, Proveedor, ResponseParent } from "../../types/data";
+import { DocType, ErrorResponse, Oferta, Proveedor, ResponseParent } from "../../types/data";
 import { Service, ServiceWithoutParam } from "../../types/methods";
 
-export const participarLicitacionService:Service<{fields:Oferta,idProveedor:ObjectId},ErrorResponse|ResponseParent>=async({fields,idProveedor})=>{
+export const participarLicitacionService:Service<{fields:Oferta,idProveedor:Types.ObjectId},ErrorResponse|ResponseParent>=async({fields,idProveedor})=>{
     try{
         const {potencia,energiaHp,energiaHfp,potenciaFacturar,formulaIndexPotencia,formulaIndexEnergia,potMinFacturable,licitacion,excesoPotencia}=fields;
         const oferta=await crearOfertaDao({potencia,energiaHfp,energiaHp,potenciaFacturar,formulaIndexPotencia,formulaIndexEnergia,potMinFacturable,excesoPotencia,proveedor:idProveedor,licitacion});
@@ -23,8 +23,7 @@ export const participarLicitacionService:Service<{fields:Oferta,idProveedor:Obje
         return handleError(error,"Ha ocurrido un error en la capa de servicios");
     }
 }
-export const getProveedoresService:ServiceWithoutParam<ErrorResponse|Array<Document<any, any, Proveedor> & Proveedor & {
-    _id: Types.ObjectId}>>=async()=>{
+export const getProveedoresService:ServiceWithoutParam<ErrorResponse|Array<DocType<Proveedor>>>=async()=>{
     try{
         const proveedores=await getProveedoresDao(); 
         if("error" in proveedores)return handleError(proveedores.error,proveedores.message);
