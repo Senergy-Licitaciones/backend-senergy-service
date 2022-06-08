@@ -29,7 +29,7 @@ export const getUsersService:ServiceWithoutParam<ErrorResponse|Array<Document<an
         return handleError(error,"Ha ocurrido un error en la capa de servicios al obtener los usuarios");
     }
 }
-export const getLicitacionesByUser:Service<string,ErrorResponse|Array<DocType<Licitacion>>>=async(id)=>{
+export const getLicitacionesByUser:Service<Types.ObjectId,ErrorResponse|Array<DocType<Licitacion>>>=async(id)=>{
     try{
         const licitaciones=await getLicitacionesByUserDao(id);
         if("error" in licitaciones) return handleError(licitaciones.error,licitaciones.message);

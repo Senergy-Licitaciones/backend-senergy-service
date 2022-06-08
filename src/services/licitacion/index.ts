@@ -19,12 +19,13 @@ export const mostrarLicitacionesService:ServiceWithoutParam<ErrorResponse|Array<
 export const crearLicitacionService:Service<LicitacionRegisterFields,ErrorResponse|ResponseParent>=async(fields:LicitacionRegisterFields)=>{
     try{
         const {title,description,tipoServicio,numLicitacion,requisitos,estado,empresa,fechaInicioApertura,fechaFinApertura,fechaInicio,puntoSum,brg,factorPlanta,meses,fechaFin,usuario,author}=fields;
-        const result=await createLicitacionDao({title,description,tipoServicio,numLicitacion,requisitos,estado,empresa,fechaInicioApertura,fechaFinApertura,fechaInicio,puntoSum,brg,factorPlanta,meses,fechaFin,usuario,author,participantes:new Types.Array<ObjectId>()});
+        const result=await createLicitacionDao({title,description,tipoServicio,numLicitacion,requisitos,estado,empresa,fechaInicioApertura,fechaFinApertura,fechaInicio,puntoSum,brg,factorPlanta,meses,fechaFin,usuario,author});
         if("error" in result)return handleError(result.error,result.message);
         return {
             message:"Licitación creada exitosamente"
         }
     }catch(err){
+        console.log("error ",err);
         let error=err as Error;
         return handleError(error,"Ha ocurrido un error en la capa de servicios");
     }

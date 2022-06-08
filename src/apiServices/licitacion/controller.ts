@@ -5,7 +5,7 @@ import { mostrarLicitacionesService, crearLicitacionService, updateLicitacionSer
 //import { sendEmails } from "../../services/emails";
 import { RequestHandler, RequestParamHandler } from "express";
 import { LicitacionRegisterFields } from "../../types/form";
-import { Licitacion, Proveedor, User } from "../../types/data";
+import { DocType, Licitacion, Proveedor, User } from "../../types/data";
 import { Document, ObjectId, Types } from "mongoose";
 export const showLicitaciones:RequestHandler=async(_req,res)=>{
     try{
@@ -74,8 +74,7 @@ export const findFilename=(req,res,next,id)=>{
 }*/
 export const showLicitacionesFree:RequestHandler=async(req,res)=>{
     try{
-        const proveedor=req.proveedor as Document<any, any, Proveedor> & Proveedor & {
-    _id: Types.ObjectId};
+        const proveedor=req.proveedor as DocType<Proveedor>;
         if(!proveedor) throw new Error("Debe iniciar sesión primero");
         const licitaciones=await getLicitacionesFreeService(proveedor._id);
         if("error" in licitaciones)return res.status(400).send(licitaciones);

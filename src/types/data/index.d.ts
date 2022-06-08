@@ -32,7 +32,7 @@ export interface ErrorResponse extends ResponseParent{
     error:Error
 }
 export interface Licitacion extends LicitacionRegisterFields{
-    participantes:Types.Array<ObjectId>
+    participantes:Types.Array<Types.ObjectId>
 }
 export interface Oferta{
     potencia:number,

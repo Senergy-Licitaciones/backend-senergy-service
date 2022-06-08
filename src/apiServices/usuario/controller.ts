@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { ObjectId } from "mongoose";
+import {ObjectId, Types} from "mongoose";
 import { httpError } from "../../helpers/handleError";
 import { changeStatusService, getLicitacionesByUser, getUsersService } from "../../services/usuario";
 import { DocType, User } from "../../types/data";

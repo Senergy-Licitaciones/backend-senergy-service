@@ -13,7 +13,7 @@ export const showLicitacionesDao:DaoWithoutParam<ErrorResponse|Array<Document<an
         return handleError(error,"Ha ocurrido un error en la capa de datos")
     }
 }
-export const createLicitacionDao:Dao<Omit<Licitacion,"_id">,ErrorResponse|ResponseParent>=async(fields)=>{
+export const createLicitacionDao:Dao<Omit<Licitacion,"_id"|"participantes">,ErrorResponse|ResponseParent>=async(fields)=>{
     try{
         await LicitacionModel.create({...fields});
         return{
@@ -70,7 +70,7 @@ export const getLicitacionByIdDao:Dao<ObjectId,ErrorResponse|Document<any, any, 
         return handleError(error,"Ha ocurrido un error en la capa de datos al mostrar la licitación ");
     }
 }
-export const getLicitacionesByUserDao:Dao<string,ErrorResponse|Array<DocType<Licitacion>>>=async(id)=>{
+export const getLicitacionesByUserDao:Dao<Types.ObjectId,ErrorResponse|Array<DocType<Licitacion>>>=async(id)=>{
     try{
         const licitaciones=await LicitacionModel.find({usuario:id});
         return licitaciones;

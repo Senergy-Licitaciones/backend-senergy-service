@@ -38,18 +38,18 @@ export interface LicitacionRegisterFields{
     description:string,
     fechaInicioApertura:string,
     fechaFinApertura:string,
-    tipoServicio:ObjectId,
+    tipoServicio:Types.ObjectId,
     numLicitacion:number,
     requisitos:string,
     estado:Estado,
     empresa:string,
     fechaInicio:string,
     fechaFin:string,
-    puntoSum:ObjectId,
-    brg:ObjectId,
+    puntoSum:Types.ObjectId,
+    brg:Types.ObjectId,
     factorPlanta:number,
     meses:EspecificacionMes[],
-    usuario:ObjectId
+    usuario:Types.ObjectId
 }
 export type LoginFields={
     correo:string,
