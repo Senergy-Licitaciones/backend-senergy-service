@@ -3,7 +3,7 @@ import ProveedorModel from "../../apiServices/proveedor/model";
 import { DaoProveedorRegister } from "../../types/form";
 import { ErrorResponse, Proveedor, ResponseParent } from "../../types/data";
 import { Document, ObjectId, Types, UpdateQuery } from "mongoose";
-import { Dao } from "../../types/methods";
+import { Dao, DaoWithoutParam } from "../../types/methods";
 import { Estado } from "../../types/data/enums";
 export const crearProveedorDao:Dao<DaoProveedorRegister,ErrorResponse|Document<any, any, Proveedor> & Proveedor & {
     _id: Types.ObjectId}>=async(fields)=>{
@@ -65,7 +65,8 @@ export const proveedorEstadoDao:Dao<string,ErrorResponse|Document<any, any, Prov
         return handleError(error,"Ha ocurrido un error al verificar la cuenta")
     }
 }
-export const getProveedoresDao=async()=>{
+export const getProveedoresDao:DaoWithoutParam<ErrorResponse|Array<Document<any, any, Proveedor> & Proveedor & {
+    _id: Types.ObjectId}>>=async()=>{
     try{
         const proveedores=await ProveedorModel.find();
         return proveedores;

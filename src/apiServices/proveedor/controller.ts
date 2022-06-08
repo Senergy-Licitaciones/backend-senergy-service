@@ -1,13 +1,16 @@
 import { RequestHandler } from "express";
+import { Document, Types } from "mongoose";
 import { httpError } from "../../helpers/handleError";
 import { participarLicitacionService, getProveedoresService } from "../../services/proveedor";
+import { Oferta, Proveedor } from "../../types/data";
 
 export const participarLicitacion:RequestHandler=async(req,res)=>{
     try{
-        const proveedor=req.proveedor;
+        const proveedor=req.proveedor as Document<any, any, Proveedor> & Proveedor & {
+            _id: Types.ObjectId};
         if(!proveedor)throw new Error("Debe iniciar sesión como proveedor primero");
-        const fields=req.body;
-        const result=await participarLicitacionService(fields,proveedor._id);
+        const fields=req.body as Oferta;
+        const result=await participarLicitacionService({fields,idProveedor:proveedor._id});
         if("error" in result)return res.status(400).send(result);
         return res.status(200).send(result);
     }catch(err){

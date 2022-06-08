@@ -3,7 +3,8 @@ import OfertaModel from "../../apiServices/oferta/model";
 import { handleError } from "../../helpers/handleError";
 import { ErrorResponse, Licitacion, Oferta } from "../../types/data";
 import { Dao } from "../../types/methods";
-export const crearOfertaDao=async(fields:Oferta)=>{
+export const crearOfertaDao:Dao<Oferta,ErrorResponse|Document<any, any, Oferta> & Oferta & {
+    _id: Types.ObjectId}>=async(fields)=>{
     try{
         console.log("fields ",fields);
         const oferta=await OfertaModel.create(fields);
