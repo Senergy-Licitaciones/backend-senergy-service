@@ -1,9 +1,9 @@
-import { ObjectId } from "mongoose";
+import { Document, ObjectId, Types } from "mongoose";
 import OfertaModel from "../../apiServices/oferta/model";
 import { handleError } from "../../helpers/handleError";
-import { Licitacion } from "../../types/data";
-import { OfertaCreateFields } from "../../types/form";
-export const crearOfertaDao=async(fields:OfertaCreateFields)=>{
+import { ErrorResponse, Licitacion, Oferta } from "../../types/data";
+import { Dao } from "../../types/methods";
+export const crearOfertaDao=async(fields:Oferta)=>{
     try{
         console.log("fields ",fields);
         const oferta=await OfertaModel.create(fields);
@@ -17,7 +17,8 @@ export const crearOfertaDao=async(fields:OfertaCreateFields)=>{
         return handleError(error,"Ha ocurrido un error en la capa de datos al crear la oferta");
     }
 }
-export const getOfertasDao=async(id:ObjectId)=>{
+export const getOfertasDao:Dao<ObjectId,ErrorResponse|Array<Document<any, any, Oferta> & Oferta & {
+    _id: Types.ObjectId}>>=async(id)=>{
     try{
         const ofertas=await OfertaModel.find({
             proveedor:id
@@ -28,7 +29,8 @@ export const getOfertasDao=async(id:ObjectId)=>{
         return handleError(error,"Ha ocurrido un error en la capa de datos al obtener las ofertas")
     }
 }
-export const getOfertaByIdDao=async(ofertaId:ObjectId)=>{
+export const getOfertaByIdDao:Dao<ObjectId,ErrorResponse|Document<any, any, Oferta> & Oferta & {
+    _id: Types.ObjectId}>=async(ofertaId)=>{
     try{
         const oferta=await OfertaModel.findById(ofertaId);
         if(!oferta)throw new Error("No eexiste la oferta seleccionada");
@@ -38,7 +40,9 @@ export const getOfertaByIdDao=async(ofertaId:ObjectId)=>{
         return handleError(error,"Ha ocurrido un error en la capa de datos al obtener la oferta");
     }
 }
-export const updateOfertaDao=async(ofertaId:ObjectId,fields:Partial<Omit<OfertaCreateFields,"licitacion">>)=>{
+export const updateOfertaDao:Dao<{ofertaId:ObjectId,fields:Partial<Omit<Oferta,"licitacion">>},ErrorResponse|Document<any, any, Oferta> & Oferta & {
+    _id: Types.ObjectId} & {
+    licitacion: Licitacion}>=async({ofertaId,fields})=>{
     try{
         const date=Date.now();
         let oferta=await OfertaModel.findById(ofertaId).populate<{licitacion:Licitacion}>("licitacion");
