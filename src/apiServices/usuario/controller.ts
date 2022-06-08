@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import {ObjectId, Types} from "mongoose";
+import {Types} from "mongoose";
 import { httpError } from "../../helpers/handleError";
 import { changeStatusService, getLicitacionesByUser, getUsersService } from "../../services/usuario";
 import { DocType, User } from "../../types/data";
@@ -7,7 +7,7 @@ import { Estado } from "../../types/form/enums";
 
 export const changeStatus:RequestHandler=async(req,res)=>{
     try{
-        const {estado,idLicitacion}=req.body as {estado:Estado,idLicitacion:ObjectId};
+        const {estado,idLicitacion}=req.body as {estado:Estado,idLicitacion:Types.ObjectId};
         const result=await changeStatusService({status:estado,id:idLicitacion});
         if("error" in result)return res.send(result);
         return res.status(200).send(result)

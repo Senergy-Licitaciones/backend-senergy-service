@@ -1,4 +1,4 @@
-import { Document, ObjectId, Types } from "mongoose";
+import { Types } from "mongoose";
 import { getLicitacionesByUserDao, updateLicitacionDao } from "../../dao/licitacion";
 import { getUsersDao } from "../../dao/usuario";
 import { handleError } from "../../helpers/handleError";
@@ -6,7 +6,7 @@ import { DocType, ErrorResponse, Licitacion, ResponseParent, User } from "../../
 import { Estado } from "../../types/form/enums";
 import { Service, ServiceWithoutParam } from "../../types/methods";
 
-export const changeStatusService:Service<{status:Estado,id:ObjectId},ErrorResponse|ResponseParent>=async({status,id})=>{
+export const changeStatusService:Service<{status:Estado,id:Types.ObjectId},ErrorResponse|ResponseParent>=async({status,id})=>{
     try{
         const result=await updateLicitacionDao({fields:{status},id});
         if("error" in result)handleError(result.error,result.message);
@@ -18,8 +18,7 @@ export const changeStatusService:Service<{status:Estado,id:ObjectId},ErrorRespon
         return handleError(error,"Error en la capa de servicios");
     }
 }
-export const getUsersService:ServiceWithoutParam<ErrorResponse|Array<Document<any, any, User> & User & {
-    _id: Types.ObjectId}>>=async()=>{
+export const getUsersService:ServiceWithoutParam<ErrorResponse|Array<DocType<User>>>=async()=>{
     try{
         const users=await getUsersDao();
         if("error" in users)return handleError(users.error,users.message);

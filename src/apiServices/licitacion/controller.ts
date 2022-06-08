@@ -6,7 +6,7 @@ import { mostrarLicitacionesService, crearLicitacionService, updateLicitacionSer
 import { RequestHandler, RequestParamHandler } from "express";
 import { LicitacionRegisterFields } from "../../types/form";
 import { DocType, Licitacion, Proveedor, User } from "../../types/data";
-import { Document, ObjectId, Types } from "mongoose";
+import { Document, Types } from "mongoose";
 export const showLicitaciones:RequestHandler=async(_req,res)=>{
     try{
         const result=await mostrarLicitacionesService();
@@ -30,7 +30,7 @@ export const createLicitacion:RequestHandler=async(req,res)=>{
 }
 export const updateLicitacion:RequestHandler=async(req,res)=>{
     try{
-        const {fields,id}=req.body as {fields:Partial<Licitacion>,id:ObjectId} ;
+        const {fields,id}=req.body as {fields:Partial<Licitacion>,id:Types.ObjectId} ;
         const result=await updateLicitacionService({fields,id});
         if("error" in result)return res.status(400).send(result);
         return res.status(200).send(result);
@@ -86,7 +86,7 @@ export const showLicitacionesFree:RequestHandler=async(req,res)=>{
 }
 export const showLicitacionById:RequestHandler=async(req,res)=>{
     try{
-        const licitacionId=req.licitacionId as ObjectId;
+        const licitacionId=req.licitacionId as Types.ObjectId;
         if(!licitacionId) throw new Error("Licitación no seleccionada");
         const licitacion=await getLicitacionByIdService(licitacionId);
         if("error" in licitacion)return res.status(400).send(licitacion);

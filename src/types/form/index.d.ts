@@ -1,11 +1,11 @@
-import { ObjectId, Types } from "mongoose"
+import { Types } from "mongoose"
 import { Estado } from "../enums"
 
 export type FieldsAdd={
     name:string
 }
 export type CodeUserFields={
-    user:ObjectId,
+    user:Types.ObjectId,
     code:string
 }
 export type CodeProveedorFields={
