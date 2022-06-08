@@ -54,7 +54,7 @@ const updateOferta = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         const ofertaId = req.ofertaId, fields = req.body;
         if (!ofertaId)
             throw new Error("La oferta seleccionada no es válida");
-        const response = yield (0, oferta_1.updateOfertaService)(ofertaId, fields);
+        const response = yield (0, oferta_1.updateOfertaService)({ ofertaId, fields });
         if ("error" in response)
             return res.status(400).send(response);
         return res.status(200).send(response);

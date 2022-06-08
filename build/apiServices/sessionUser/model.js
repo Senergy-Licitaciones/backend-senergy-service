@@ -4,11 +4,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
+const enums_1 = require("../../types/data/enums");
 const sessionUserSchema = new mongoose_1.default.Schema({
     type: {
         type: String,
-        enum: ["user"],
-        default: "user",
+        enum: enums_1.Type,
+        default: enums_1.Type.User,
         required: true
     },
     jwt: {
@@ -23,7 +24,7 @@ const sessionUserSchema = new mongoose_1.default.Schema({
         required: true,
         unique: true
     },
-    expiredTime: {
+    expireAt: {
         type: Date,
         expires: 3600
     }

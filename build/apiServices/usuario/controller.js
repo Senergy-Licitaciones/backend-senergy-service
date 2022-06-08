@@ -15,7 +15,7 @@ const usuario_1 = require("../../services/usuario");
 const changeStatus = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { estado, idLicitacion } = req.body;
-        const result = yield (0, usuario_1.changeStatusService)(estado, idLicitacion);
+        const result = yield (0, usuario_1.changeStatusService)({ status: estado, id: idLicitacion });
         if ("error" in result)
             return res.send(result);
         return res.status(200).send(result);

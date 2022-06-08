@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const generateToken_1 = require("../helpers/generateToken");
-const data_1 = require("../types/data");
+const enums_1 = require("../types/data/enums");
 const model_1 = __importDefault(require("../apiServices/usuario/model"));
 const model_2 = __importDefault(require("../apiServices/proveedor/model"));
 const checkUserType = (types) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -32,7 +32,7 @@ const checkUserType = (types) => (req, res, next) => __awaiter(void 0, void 0, v
             });
         const initialArray = [];
         if (initialArray.concat(types).includes(tokenData.type)) {
-            if (tokenData.type === data_1.Type.User) {
+            if (tokenData.type === enums_1.Type.User) {
                 const user = yield model_1.default.findById(tokenData._id);
                 if (!user)
                     return res.status(400).send({ message: "Usuario sin permisos", error: true });

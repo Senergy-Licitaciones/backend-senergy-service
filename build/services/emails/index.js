@@ -38,8 +38,9 @@ const dotenv_1 = require("dotenv");
        return handleError(err,"Ha ocurrido un error en la capa de servicios")
     }
 }*/
-const sendCodeVerification = (code, correo) => __awaiter(void 0, void 0, void 0, function* () {
+const sendCodeVerification = (fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { code, correo } = fields;
         let info = yield mailer_1.default.sendMail({
             from: '"Senergy Soporte" <contacto@prysmosolutions.com>',
             to: correo,

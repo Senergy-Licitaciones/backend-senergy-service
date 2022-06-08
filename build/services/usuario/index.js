@@ -13,10 +13,10 @@ exports.getUsersService = exports.changeStatusService = void 0;
 const licitacion_1 = require("../../dao/licitacion");
 const usuario_1 = require("../../dao/usuario");
 const handleError_1 = require("../../helpers/handleError");
-const changeStatusService = (status, id) => __awaiter(void 0, void 0, void 0, function* () {
+const changeStatusService = ({ status, id }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, licitacion_1.updateLicitacionDao)({ status }, id);
-        if (result.error)
+        const result = yield (0, licitacion_1.updateLicitacionDao)({ fields: { status }, id });
+        if ("error" in result)
             (0, handleError_1.handleError)(result.error, result.message);
         return {
             message: "Estado de la licitación actualizado"

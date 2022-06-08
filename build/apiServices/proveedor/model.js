@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
+const enums_1 = require("../../types/data/enums");
 const proveedorSchema = new mongoose_1.default.Schema({
     razSocial: {
         type: String,
@@ -18,10 +19,10 @@ const proveedorSchema = new mongoose_1.default.Schema({
     },
     role: {
         type: String,
-        enum: ["basico", "premium"],
+        enum: enums_1.Role,
         trim: true,
         required: true,
-        default: "basico"
+        default: enums_1.Role.Basico
     },
     pais: {
         type: String,
@@ -61,9 +62,9 @@ const proveedorSchema = new mongoose_1.default.Schema({
     ],
     estado: {
         type: String,
-        enum: ["online", "offline"],
+        enum: enums_1.Estado,
         required: true,
-        default: "offline"
+        default: enums_1.Estado.Offline
     },
     codeToConfirm: {
         type: String,

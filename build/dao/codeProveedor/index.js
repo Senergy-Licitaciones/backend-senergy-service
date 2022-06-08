@@ -45,7 +45,7 @@ const createCodeProveedorDao = (fields) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.createCodeProveedorDao = createCodeProveedorDao;
-const confirmCodeDao = (correo, code) => __awaiter(void 0, void 0, void 0, function* () {
+const confirmCodeDao = ({ correo, code }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield model_2.default.findOne({ proveedor: correo, code });
         if (!response)

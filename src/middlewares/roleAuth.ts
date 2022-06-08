@@ -1,4 +1,4 @@
-import { Role} from "../types/data";
+import { Role} from "../types/data/enums";
 import { CheckRoleAuth } from "../types/methods";
 
 const checkRoleAuth:CheckRoleAuth=(roles)=>async(req,res,next)=>{

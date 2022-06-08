@@ -6,13 +6,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyToken = exports.tokenSignProveedor = exports.tokenSignUser = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = require("dotenv");
+const enums_1 = require("../types/data/enums");
 (0, dotenv_1.config)();
 const tokenSignUser = (user) => {
+    const usuario = user;
     return jsonwebtoken_1.default.sign({
-        _id: user._id,
-        correo: user.correo,
-        role: user.role,
-        type: "user"
+        _id: usuario._id,
+        correo: usuario.correo,
+        role: usuario.role,
+        type: enums_1.Type.User
     }, process.env.JWT_SECRET, {
         expiresIn: "1h"
     });
@@ -25,7 +27,7 @@ const tokenSignProveedor = (proveedor) => {
         razSocial: provider.razSocial,
         correo: provider.correo,
         ruc: provider.ruc,
-        type: "proveedor"
+        type: enums_1.Type.Proveedor
     }, process.env.JWT_SECRET, {
         expiresIn: "1h"
     });

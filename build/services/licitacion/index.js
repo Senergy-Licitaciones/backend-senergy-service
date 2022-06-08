@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getLicitacionByIdService = exports.getLicitacionesFreeService = exports.getTiposService = exports.updateLicitacionService = exports.crearLicitacionService = exports.mostrarLicitacionesService = void 0;
+const mongoose_1 = require("mongoose");
 const licitacion_1 = require("../../dao/licitacion");
 const handleError_1 = require("../../helpers/handleError");
 const mostrarLicitacionesService = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -28,7 +29,7 @@ exports.mostrarLicitacionesService = mostrarLicitacionesService;
 const crearLicitacionService = (fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { title, description, tipoServicio, numLicitacion, requisitos, estado, empresa, fechaInicioApertura, fechaFinApertura, fechaInicio, puntoSum, brg, factorPlanta, meses, fechaFin, usuario } = fields;
-        const result = yield (0, licitacion_1.createLicitacionDao)({ title, description, tipoServicio, numLicitacion, requisitos, estado, empresa, fechaInicioApertura, fechaFinApertura, fechaInicio, puntoSum, brg, factorPlanta, meses, fechaFin, usuario, participantes: [] });
+        const result = yield (0, licitacion_1.createLicitacionDao)({ title, description, tipoServicio, numLicitacion, requisitos, estado, empresa, fechaInicioApertura, fechaFinApertura, fechaInicio, puntoSum, brg, factorPlanta, meses, fechaFin, usuario, participantes: new mongoose_1.Types.Array() });
         if ("error" in result)
             return (0, handleError_1.handleError)(result.error, result.message);
         return {
@@ -41,10 +42,10 @@ const crearLicitacionService = (fields) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.crearLicitacionService = crearLicitacionService;
-const updateLicitacionService = (fields, id) => __awaiter(void 0, void 0, void 0, function* () {
+const updateLicitacionService = ({ fields, id }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, licitacion_1.updateLicitacionDao)(fields, id);
-        if (result.error)
+        const result = yield (0, licitacion_1.updateLicitacionDao)({ fields, id });
+        if ("error" in result)
             (0, handleError_1.handleError)(result.error, result.message);
         return {
             message: result.message
@@ -85,7 +86,7 @@ exports.getLicitacionesFreeService = getLicitacionesFreeService;
 const getLicitacionByIdService = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const licitacion = yield (0, licitacion_1.getLicitacionByIdDao)(id);
-        if (licitacion.error)
+        if ("error" in licitacion)
             return (0, handleError_1.handleError)(licitacion.error, licitacion.message);
         return licitacion;
     }

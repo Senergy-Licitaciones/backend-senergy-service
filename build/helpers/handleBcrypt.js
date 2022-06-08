@@ -26,8 +26,9 @@ const encrypt = (password) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.encrypt = encrypt;
-const compare = (password, hash) => __awaiter(void 0, void 0, void 0, function* () {
+const compare = (fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const { password, hash } = fields;
         const res = yield bcryptjs_1.default.compare(password, hash);
         return res;
     }

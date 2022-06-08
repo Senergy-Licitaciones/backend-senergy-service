@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
+const enums_1 = require("../../types/data/enums");
 const usuarioSchema = new mongoose_1.default.Schema({
     correo: {
         type: String,
@@ -45,9 +46,9 @@ const usuarioSchema = new mongoose_1.default.Schema({
     },
     estado: {
         type: String,
-        enum: ["online", "offline", "toConfirm"],
+        enum: enums_1.Estado,
         trim: true,
-        default: "toConfirm"
+        default: enums_1.Estado.ToConfirm
     },
     sessionId: {
         type: String,
@@ -55,9 +56,9 @@ const usuarioSchema = new mongoose_1.default.Schema({
     },
     role: {
         type: String,
-        enum: ["basico", "premium", "admin"],
+        enum: enums_1.Role,
         trim: true,
-        default: "basico"
+        default: enums_1.Role.Basico
     }
 }, {
     versionKey: false,

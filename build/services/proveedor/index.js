@@ -14,17 +14,17 @@ const licitacion_1 = require("../../dao/licitacion");
 const oferta_1 = require("../../dao/oferta");
 const proveedor_1 = require("../../dao/proveedor");
 const handleError_1 = require("../../helpers/handleError");
-const participarLicitacionService = (fields, idProveedor) => __awaiter(void 0, void 0, void 0, function* () {
+const participarLicitacionService = ({ fields, idProveedor }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { potencia, energiaHp, energiaHfp, potenciaFacturar, formulaIndexPotencia, formulaIndexEnergia, potMinFacturable, licitacion, excesoPotencia } = fields;
         const oferta = yield (0, oferta_1.crearOfertaDao)({ potencia, energiaHfp, energiaHp, potenciaFacturar, formulaIndexPotencia, formulaIndexEnergia, potMinFacturable, excesoPotencia, proveedor: idProveedor, licitacion });
         if ("error" in oferta)
             return (0, handleError_1.handleError)(oferta.error, oferta.message);
-        const result = yield (0, licitacion_1.updateLicitacionDao)({ $push: { participantes: idProveedor } }, licitacion);
-        if (result.error)
+        const result = yield (0, licitacion_1.updateLicitacionDao)({ fields: { $push: { participantes: idProveedor } }, id: licitacion });
+        if ("error" in result)
             return (0, handleError_1.handleError)(result.error, result.message);
-        const proveedor = yield (0, proveedor_1.updateProveedorDao)({ $push: { licitaciones: licitacion } }, idProveedor);
-        if (proveedor.error)
+        const proveedor = yield (0, proveedor_1.updateProveedorDao)({ fields: { $push: { licitaciones: licitacion } }, id: idProveedor });
+        if ("error" in proveedor)
             return (0, handleError_1.handleError)(proveedor.error, proveedor.message);
         return {
             message: "Se ha inscrito en la licitación exitosamente"

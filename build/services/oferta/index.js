@@ -38,9 +38,9 @@ const getOfertaByIdService = (ofertaId) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.getOfertaByIdService = getOfertaByIdService;
-const updateOfertaService = (ofertaId, fields) => __awaiter(void 0, void 0, void 0, function* () {
+const updateOfertaService = ({ ofertaId, fields }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const oferta = yield (0, oferta_1.updateOfertaDao)(ofertaId, fields);
+        const oferta = yield (0, oferta_1.updateOfertaDao)({ ofertaId, fields });
         if ("error" in oferta)
             return (0, handleError_1.handleError)(oferta.error, oferta.message);
         return {

@@ -57,7 +57,7 @@ const getOfertaByIdDao = (ofertaId) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.getOfertaByIdDao = getOfertaByIdDao;
-const updateOfertaDao = (ofertaId, fields) => __awaiter(void 0, void 0, void 0, function* () {
+const updateOfertaDao = ({ ofertaId, fields }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const date = Date.now();
         let oferta = yield model_1.default.findById(ofertaId).populate("licitacion");

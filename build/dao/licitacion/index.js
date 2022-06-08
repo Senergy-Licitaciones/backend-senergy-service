@@ -39,12 +39,14 @@ const createLicitacionDao = (fields) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.createLicitacionDao = createLicitacionDao;
-const updateLicitacionDao = (fields, id) => __awaiter(void 0, void 0, void 0, function* () {
+const updateLicitacionDao = ({ fields, id }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield model_1.default.findByIdAndUpdate(id, Object.assign({}, fields), { new: true });
         if (!result)
             throw new Error("No se encontró la licitación");
-        return result;
+        return {
+            message: "Licitación actualizada exitosamente"
+        };
     }
     catch (err) {
         let error = err;

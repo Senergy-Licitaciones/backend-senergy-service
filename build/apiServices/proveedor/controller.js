@@ -18,7 +18,7 @@ const participarLicitacion = (req, res) => __awaiter(void 0, void 0, void 0, fun
         if (!proveedor)
             throw new Error("Debe iniciar sesión como proveedor primero");
         const fields = req.body;
-        const result = yield (0, proveedor_1.participarLicitacionService)(fields, proveedor._id);
+        const result = yield (0, proveedor_1.participarLicitacionService)({ fields, idProveedor: proveedor._id });
         if ("error" in result)
             return res.status(400).send(result);
         return res.status(200).send(result);

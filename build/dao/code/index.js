@@ -44,7 +44,7 @@ const verifyCodeDao = (idUser) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.verifyCodeDao = verifyCodeDao;
-const removeCodeDao = (idUser, code) => __awaiter(void 0, void 0, void 0, function* () {
+const removeCodeDao = ({ idUser, code }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield model_1.default.findOneAndDelete({ user: idUser, code });
         console.log("response code ", response);

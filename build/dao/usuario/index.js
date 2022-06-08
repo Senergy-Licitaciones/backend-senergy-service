@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUsersDao = exports.getUserDao = exports.getUserHashDao = exports.confirmUserDao = exports.updateUsuarioDao = exports.verifyCorreoDao = exports.crearUsuarioDao = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const model_1 = __importDefault(require("../../apiServices/usuario/model"));
+const enums_1 = require("../../types/data/enums");
 const crearUsuarioDao = (fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield model_1.default.create(Object.assign({}, fields));
@@ -44,9 +45,11 @@ const verifyCorreoDao = (correo) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.verifyCorreoDao = verifyCorreoDao;
-const updateUsuarioDao = (fields, id) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUsuarioDao = ({ fields, id }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield model_1.default.findByIdAndUpdate(id, Object.assign({}, fields), { new: true });
+        if (!result)
+            throw new Error("Usuario no encontrado");
         return {
             message: `Usuario ${result.correo} actualizado correctamente`
         };
@@ -59,7 +62,7 @@ const updateUsuarioDao = (fields, id) => __awaiter(void 0, void 0, void 0, funct
 exports.updateUsuarioDao = updateUsuarioDao;
 const confirmUserDao = (idUser) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const response = yield model_1.default.findByIdAndUpdate(idUser, { estado: "offline" });
+        const response = yield model_1.default.findByIdAndUpdate(idUser, { estado: enums_1.Estado.Offline });
         if (!response)
             throw new Error("Usuario no encontrado");
         return {
@@ -87,7 +90,7 @@ const getUserHashDao = (correo) => __awaiter(void 0, void 0, void 0, function* (
 exports.getUserHashDao = getUserHashDao;
 const getUserDao = (correo) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const user = yield model_1.default.findOne({ correo, role: "admin" });
+        const user = yield model_1.default.findOne({ correo, role: enums_1.Role.Admin });
         if (!user)
             throw new Error("Usuario no encontrado");
         return user;

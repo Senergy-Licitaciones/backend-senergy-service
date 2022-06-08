@@ -42,7 +42,7 @@ exports.createLicitacion = createLicitacion;
 const updateLicitacion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { fields, id } = req.body;
-        const result = yield (0, licitacion_1.updateLicitacionService)(fields, id);
+        const result = yield (0, licitacion_1.updateLicitacionService)({ fields, id });
         if ("error" in result)
             return res.status(400).send(result);
         return res.status(200).send(result);
@@ -111,7 +111,7 @@ const showLicitacionById = (req, res) => __awaiter(void 0, void 0, void 0, funct
         if (!licitacionId)
             throw new Error("Licitación no seleccionada");
         const licitacion = yield (0, licitacion_1.getLicitacionByIdService)(licitacionId);
-        if (licitacion.error)
+        if ("error" in licitacion)
             return res.status(400).send(licitacion);
         return res.status(200).send(licitacion);
     }
