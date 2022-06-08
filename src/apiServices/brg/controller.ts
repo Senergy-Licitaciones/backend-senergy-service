@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import { httpError } from "../../helpers/handleError";
 import { getBrgService, addBrgService } from "../../services/brg";
+import { FieldsAdd } from "../../types/form";
 
 export const getBrg:RequestHandler=async(_req,res)=>{
     try{
@@ -14,7 +15,7 @@ export const getBrg:RequestHandler=async(_req,res)=>{
 }
 export const addBrg:RequestHandler=async(req,res)=>{
     try{
-        const fields=req.body;
+        const fields=req.body as FieldsAdd ;
         const response=await addBrgService(fields);
         if("error" in response)return res.status(400).send(response);
         return res.status(200).send(response);
