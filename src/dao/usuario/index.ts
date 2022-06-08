@@ -3,7 +3,7 @@ import UsuarioModel from "../../apiServices/usuario/model";
 import { ErrorResponse, ResponseId, ResponseParent, User } from "../../types/data";
 import { UserRegisterFields } from "../../types/form";
 import { Document, ObjectId, Types } from "mongoose";
-import { Dao } from "../../types/methods";
+import { Dao, DaoWithoutParam } from "../../types/methods";
 import { Estado, Role } from "../../types/data/enums";
 export const crearUsuarioDao:Dao<UserRegisterFields,ErrorResponse|Document<any, any, User> & User & {_id: Types.ObjectId}>=async(fields:UserRegisterFields)=>{
     try{
@@ -75,7 +75,8 @@ export const getUserDao:Dao<string,ErrorResponse|Document<any, any, User> & User
         return handleError(error,"Ha ocurrido un error en la capa de datos al encontrar el usuario");
     }
 }
-export const getUsersDao=async()=>{
+export const getUsersDao:DaoWithoutParam<ErrorResponse|Array<Document<any, any, User> & User & {
+    _id: Types.ObjectId}>>=async()=>{
     try{
         const users=await UsuarioModel.find({
             $nor:[{role:"admin"}]
