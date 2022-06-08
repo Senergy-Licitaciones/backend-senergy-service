@@ -1,0 +1,30 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const morgan_1 = __importDefault(require("morgan"));
+const cors_1 = __importDefault(require("cors"));
+const route_1 = __importDefault(require("./apiServices/auth/route"));
+const route_2 = __importDefault(require("./apiServices/licitacion/route"));
+const route_3 = __importDefault(require("./apiServices/proveedor/route"));
+const route_4 = __importDefault(require("./apiServices/usuario/route"));
+const route_5 = __importDefault(require("./apiServices/brg/route"));
+const route_6 = __importDefault(require("./apiServices/puntoSum/route"));
+const route_7 = __importDefault(require("./apiServices/servicio/route"));
+const route_8 = __importDefault(require("./apiServices/oferta/route"));
+const app = (0, express_1.default)();
+app.use((0, morgan_1.default)("dev"));
+app.use(express_1.default.json());
+app.use((0, cors_1.default)());
+//routes
+app.use("/api/auth", route_1.default);
+app.use("/api/licitacion", route_2.default);
+app.use("/api/proveedor", route_3.default);
+app.use("/api/user", route_4.default);
+app.use("/api/brg", route_5.default);
+app.use("/api/puntoSum", route_6.default);
+app.use("/api/servicio", route_7.default);
+app.use("/api/oferta", route_8.default);
+exports.default = app;
