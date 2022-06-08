@@ -1,9 +1,12 @@
+import { Document, Types } from "mongoose";
 import { getPuntoSumDao, createPuntoSumDao } from "../../dao/puntoSum";
 import { handleError } from "../../helpers/handleError";
-import { ErrorResponse } from "../../types/data";
+import { ErrorResponse, ResponseParent } from "../../types/data";
 import { FieldsAdd } from "../../types/form";
+import { Service, ServiceWithoutParam } from "../../types/methods";
 
-export const getPuntoSumService=async()=>{
+export const getPuntoSumService:ServiceWithoutParam<ErrorResponse|Array<Document<any, any, FieldsAdd> & FieldsAdd & {
+    _id: Types.ObjectId}>>=async()=>{
     try{
         const result=await getPuntoSumDao();
         if("error" in result)return handleError(result.error,result.message);
@@ -13,7 +16,7 @@ export const getPuntoSumService=async()=>{
         return handleError(error,"Ha ocurrido un error en la capa de servicios");
     }
 }
-export const addPuntoSumService=async(fields:FieldsAdd):Promise<ErrorResponse|Pick<ErrorResponse,"message">>=>{
+export const addPuntoSumService:Service<FieldsAdd,ErrorResponse|ResponseParent>=async(fields)=>{
     try{
         const response=await createPuntoSumDao(fields);
         return response;
