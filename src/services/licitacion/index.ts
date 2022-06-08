@@ -1,10 +1,12 @@
-import { ObjectId } from "mongoose";
+import { Document, ObjectId, Types } from "mongoose";
 import { showLicitacionesDao, createLicitacionDao, updateLicitacionDao, getTiposDao, getLicitacionesFreeDao, getLicitacionByIdDao } from "../../dao/licitacion";
 import { handleError } from "../../helpers/handleError";
-import { Licitacion } from "../../types/data";
+import { ErrorResponse, Licitacion, ResponseParent } from "../../types/data";
 import { LicitacionRegisterFields } from "../../types/form";
+import { Service, ServiceWithoutParam } from "../../types/methods";
 
-export const mostrarLicitacionesService=async()=>{
+export const mostrarLicitacionesService:ServiceWithoutParam<ErrorResponse|Array<Document<any, any, Licitacion> & Licitacion & {
+    _id: Types.ObjectId}>>=async()=>{
     try{
         const result=await showLicitacionesDao();
         if("error" in result)return handleError(result.error,result.message);
@@ -14,10 +16,10 @@ export const mostrarLicitacionesService=async()=>{
         return handleError(error,"Ha ocurrido un error en la capa de servicios");
     }
 }
-export const crearLicitacionService=async(fields:LicitacionRegisterFields)=>{
+export const crearLicitacionService:Service<LicitacionRegisterFields,ErrorResponse|ResponseParent>=async(fields:LicitacionRegisterFields)=>{
     try{
         const {title,description,tipoServicio,numLicitacion,requisitos,estado,empresa,fechaInicioApertura,fechaFinApertura,fechaInicio,puntoSum,brg,factorPlanta,meses,fechaFin,usuario}=fields;
-        const result=await createLicitacionDao({title,description,tipoServicio,numLicitacion,requisitos,estado,empresa,fechaInicioApertura,fechaFinApertura,fechaInicio,puntoSum,brg,factorPlanta,meses,fechaFin,usuario,participantes:[]});
+        const result=await createLicitacionDao({title,description,tipoServicio,numLicitacion,requisitos,estado,empresa,fechaInicioApertura,fechaFinApertura,fechaInicio,puntoSum,brg,factorPlanta,meses,fechaFin,usuario,participantes:new Types.Array<ObjectId>()});
         if("error" in result)return handleError(result.error,result.message);
         return {
             message:"Licitación creada exitosamente"
@@ -27,10 +29,10 @@ export const crearLicitacionService=async(fields:LicitacionRegisterFields)=>{
         return handleError(error,"Ha ocurrido un error en la capa de servicios");
     }
 }
-export const updateLicitacionService=async(fields:Partial<Licitacion>,id:ObjectId)=>{
+export const updateLicitacionService:Service<{fields:Partial<Licitacion>,id:ObjectId},ErrorResponse|ResponseParent>=async({fields,id})=>{
     try{
-        const result=await updateLicitacionDao(fields,id);
-        if(result.error)handleError(result.error,result.message);
+        const result=await updateLicitacionDao({fields,id});
+        if("error" in result)handleError(result.error,result.message);
         return{
             message:result.message
         }
@@ -39,7 +41,8 @@ export const updateLicitacionService=async(fields:Partial<Licitacion>,id:ObjectI
         return handleError(error,"Ha ocurrido un error en la capa de servicios")
     }
 }
-export const getTiposService=async(id:string)=>{
+export const getTiposService:Service<string,ErrorResponse|Array<Document<any, any, Licitacion> & Licitacion & {
+    _id: Types.ObjectId}>>=async(id)=>{
     try{
         const result=await getTiposDao(id);
         if("error" in result)return handleError(result.error,result.message);
@@ -49,7 +52,8 @@ export const getTiposService=async(id:string)=>{
         return handleError(error,"Ha ocurrido un error en la capa de servicios");
     }
 }
-export const getLicitacionesFreeService=async(proveedorId:ObjectId)=>{
+export const getLicitacionesFreeService:Service<ObjectId,ErrorResponse|Array<Document<any, any, Licitacion> & Licitacion & {
+    _id: Types.ObjectId}>>=async(proveedorId)=>{
     try{
         const licitaciones=await getLicitacionesFreeDao(proveedorId);
         if("error" in licitaciones)return handleError(licitaciones.error,licitaciones.message);
@@ -59,10 +63,11 @@ export const getLicitacionesFreeService=async(proveedorId:ObjectId)=>{
         return handleError(error,"Ha ocurrido un error en la capa de servicios al mostrar licitaciones libres");
     }
 }
-export const getLicitacionByIdService=async(id:ObjectId)=>{
+export const getLicitacionByIdService:Service<ObjectId,ErrorResponse|Document<any, any, Licitacion> & Licitacion & {
+    _id: Types.ObjectId}>=async(id)=>{
     try{
         const licitacion=await getLicitacionByIdDao(id);
-        if(licitacion.error)return handleError(licitacion.error,licitacion.message);
+        if("error" in licitacion)return handleError(licitacion.error,licitacion.message);
         return licitacion;
     }catch(err){
         let error=err as Error;

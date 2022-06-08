@@ -4,6 +4,9 @@ import { mostrarLicitacionesService, crearLicitacionService, updateLicitacionSer
 //import fs from "fs";
 //import { sendEmails } from "../../services/emails";
 import { RequestHandler, RequestParamHandler } from "express";
+import { LicitacionRegisterFields } from "../../types/form";
+import { Licitacion, Proveedor, User } from "../../types/data";
+import { Document, ObjectId, Types } from "mongoose";
 export const showLicitaciones:RequestHandler=async(_req,res)=>{
     try{
         const result=await mostrarLicitacionesService();
@@ -16,7 +19,7 @@ export const showLicitaciones:RequestHandler=async(_req,res)=>{
 }
 export const createLicitacion:RequestHandler=async(req,res)=>{
     try{
-        const fields=req.body;
+        const fields=req.body as LicitacionRegisterFields;
         const result=await crearLicitacionService(fields);
         if("error" in result)return res.status(400).send(result);
         return res.status(200).send(result)
@@ -27,8 +30,8 @@ export const createLicitacion:RequestHandler=async(req,res)=>{
 }
 export const updateLicitacion:RequestHandler=async(req,res)=>{
     try{
-        const {fields,id}=req.body;
-        const result=await updateLicitacionService(fields,id);
+        const {fields,id}=req.body as {fields:Partial<Licitacion>,id:ObjectId} ;
+        const result=await updateLicitacionService({fields,id});
         if("error" in result)return res.status(400).send(result);
         return res.status(200).send(result);
     }catch(err){
@@ -38,7 +41,8 @@ export const updateLicitacion:RequestHandler=async(req,res)=>{
 }
 export const getTipos:RequestHandler=async(req,res)=>{
     try{
-        const user=req.user;
+        const user=req.user as Document<any, any, User> & User & {
+            _id: Types.ObjectId};
         if(!user)throw new Error("Debe iniciar sesión como usuario primero")
         const result=await getTiposService(user._id);
         if("error" in result) return res.status(400).send(result);
@@ -70,7 +74,8 @@ export const findFilename=(req,res,next,id)=>{
 }*/
 export const showLicitacionesFree:RequestHandler=async(req,res)=>{
     try{
-        const proveedor=req.proveedor;
+        const proveedor=req.proveedor as Document<any, any, Proveedor> & Proveedor & {
+    _id: Types.ObjectId};
         if(!proveedor) throw new Error("Debe iniciar sesión primero");
         const licitaciones=await getLicitacionesFreeService(proveedor._id);
         if("error" in licitaciones)return res.status(400).send(licitaciones);
@@ -82,10 +87,10 @@ export const showLicitacionesFree:RequestHandler=async(req,res)=>{
 }
 export const showLicitacionById:RequestHandler=async(req,res)=>{
     try{
-        const licitacionId=req.licitacionId;
+        const licitacionId=req.licitacionId as ObjectId;
         if(!licitacionId) throw new Error("Licitación no seleccionada");
         const licitacion=await getLicitacionByIdService(licitacionId);
-        if(licitacion.error)return res.status(400).send(licitacion);
+        if("error" in licitacion)return res.status(400).send(licitacion);
         return res.status(200).send(licitacion);
     }catch(err){
         let error=err as Error;
