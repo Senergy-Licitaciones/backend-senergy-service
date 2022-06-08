@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLicitacionByIdDao = exports.getLicitacionesFreeDao = exports.getTiposDao = exports.updateLicitacionDao = exports.createLicitacionDao = exports.showLicitacionesDao = void 0;
+exports.getLicitacionesByUserDao = exports.getLicitacionByIdDao = exports.getLicitacionesFreeDao = exports.getTiposDao = exports.updateLicitacionDao = exports.createLicitacionDao = exports.showLicitacionesDao = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const model_1 = __importDefault(require("../../apiServices/licitacion/model"));
 const showLicitacionesDao = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -92,3 +92,14 @@ const getLicitacionByIdDao = (id) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.getLicitacionByIdDao = getLicitacionByIdDao;
+const getLicitacionesByUserDao = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const licitaciones = yield model_1.default.find({ usuario: id });
+        return licitaciones;
+    }
+    catch (err) {
+        let error = err;
+        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos al obtener las licitaciones");
+    }
+});
+exports.getLicitacionesByUserDao = getLicitacionesByUserDao;

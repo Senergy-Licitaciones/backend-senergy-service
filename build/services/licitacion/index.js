@@ -10,7 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getLicitacionByIdService = exports.getLicitacionesFreeService = exports.getTiposService = exports.updateLicitacionService = exports.crearLicitacionService = exports.mostrarLicitacionesService = void 0;
-const mongoose_1 = require("mongoose");
 const licitacion_1 = require("../../dao/licitacion");
 const handleError_1 = require("../../helpers/handleError");
 const mostrarLicitacionesService = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -28,8 +27,8 @@ const mostrarLicitacionesService = () => __awaiter(void 0, void 0, void 0, funct
 exports.mostrarLicitacionesService = mostrarLicitacionesService;
 const crearLicitacionService = (fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { title, description, tipoServicio, numLicitacion, requisitos, estado, empresa, fechaInicioApertura, fechaFinApertura, fechaInicio, puntoSum, brg, factorPlanta, meses, fechaFin, usuario } = fields;
-        const result = yield (0, licitacion_1.createLicitacionDao)({ title, description, tipoServicio, numLicitacion, requisitos, estado, empresa, fechaInicioApertura, fechaFinApertura, fechaInicio, puntoSum, brg, factorPlanta, meses, fechaFin, usuario, participantes: new mongoose_1.Types.Array() });
+        const { title, description, tipoServicio, numLicitacion, requisitos, estado, empresa, fechaInicioApertura, fechaFinApertura, fechaInicio, puntoSum, brg, factorPlanta, meses, fechaFin, usuario, author } = fields;
+        const result = yield (0, licitacion_1.createLicitacionDao)({ title, description, tipoServicio, numLicitacion, requisitos, estado, empresa, fechaInicioApertura, fechaFinApertura, fechaInicio, puntoSum, brg, factorPlanta, meses, fechaFin, usuario, author });
         if ("error" in result)
             return (0, handleError_1.handleError)(result.error, result.message);
         return {
@@ -37,6 +36,7 @@ const crearLicitacionService = (fields) => __awaiter(void 0, void 0, void 0, fun
         };
     }
     catch (err) {
+        console.log("error ", err);
         let error = err;
         return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de servicios");
     }

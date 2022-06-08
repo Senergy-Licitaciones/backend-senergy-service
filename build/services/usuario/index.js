@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUsersService = exports.changeStatusService = void 0;
+exports.getLicitacionesByUser = exports.getUsersService = exports.changeStatusService = void 0;
 const licitacion_1 = require("../../dao/licitacion");
 const usuario_1 = require("../../dao/usuario");
 const handleError_1 = require("../../helpers/handleError");
@@ -41,3 +41,16 @@ const getUsersService = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getUsersService = getUsersService;
+const getLicitacionesByUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const licitaciones = yield (0, licitacion_1.getLicitacionesByUserDao)(id);
+        if ("error" in licitaciones)
+            return (0, handleError_1.handleError)(licitaciones.error, licitaciones.message);
+        return licitaciones;
+    }
+    catch (err) {
+        let error = err;
+        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de servicios al obtener las licitacioens");
+    }
+});
+exports.getLicitacionesByUser = getLicitacionesByUser;
