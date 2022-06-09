@@ -1,16 +1,13 @@
-import { ObjectId } from "mongoose";
-import {Proveedor, User } from "../data";
+import { Types } from "mongoose";
+import express from "express";
+import {DocType, Proveedor, User } from "../data";
 
 declare global {
     namespace Express{
     interface Request{
-        user?:Document<any, any, User> & User & {
-            _id: Types.ObjectId;
-        },
-        proveedor?:Document<any, any, Proveedor> & Proveedor & {
-            _id: Types.ObjectId;
-        },
+        user?:DocType<User>,
+        proveedor?:DocType<Proveedor>,
         licitacionId?:Types.ObjectId,
-        ofertaId?:Types.ObjectId
+        ofertaId?:Types.ObjectId,
     }
 }}

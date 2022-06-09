@@ -11,8 +11,10 @@ const checkAuth:RequestHandler=async(req,res,next)=>{
         if(!token) throw new Error("Token inválido");
         const tokenData=verifyToken(token) as DataToken ;
         if(!tokenData._id) return res.status(409).send({message:"No ha iniciado sesión",error:true});
+        console.log("antes del next en check auth");
         return next();
     }catch(err){
+        console.log("error catch checkauth ",err);
         return res.status(409).send({
             message:"Ha ocurrido un error en el proceso de autenticación",
             error:err
