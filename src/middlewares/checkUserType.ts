@@ -28,6 +28,7 @@ const checkUserType:CheckUserType=(types)=>async(req,res,next)=>{
                 if(!proveedor) return res.status(400).send({message:"Usuario sin permisos",error:true})
                 req.proveedor=proveedor;
             }
+            console.log("antes del next en user type");
             return next();
         }else{
             return res.status(400).send({
@@ -36,6 +37,7 @@ const checkUserType:CheckUserType=(types)=>async(req,res,next)=>{
             })
         }
     }catch(err){
+        console.log("error catch user type ",err);
         return res.status(500).send("Ha ocurrido un error en la autenticación");
     }
 }
