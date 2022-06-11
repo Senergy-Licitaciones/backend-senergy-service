@@ -3,10 +3,10 @@ import { DataProveedorToken, DataUserToken, ErrorResponse, Proveedor, ResponseRe
 import { Role, Type } from "../data/enums";
 import { UserRegisterFields } from "../form";
 
-export type Dao<Param,Return>=(fields:Param)=>Promise<Return>
-export type Service<Param,Return>=(fields:Param)=>Promise<Return>
-export type ServiceWithoutParam<Return>=()=>Promis<Return>
-export type DaoWithoutParam<Return>=()=>Promise<Return>
+export type Dao<Param,Return> =(fields:Param)=>Promise<Return>
+export type Service<Param,Return> =(fields:Param)=>Promise<Return>
+export type ServiceWithoutParam<Return> =()=>Promis<Return>
+export type DaoWithoutParam<Return> =()=>Promise<Return>
 export type RegisterUsuarioService=(fields:UserRegisterFields)=>Promise<ErrorResponse|ResponseRegisterUser>
 export type SignToken=(user:User|Proveedor)=>string
 export type VerifyToken=(token:string)=>null|DataUserToken|DataProveedorToken
