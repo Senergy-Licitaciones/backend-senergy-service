@@ -12,7 +12,7 @@ const enums_1 = require("../../types/data/enums");
 const controller_1 = require("./controller");
 const router = express_1.default.Router();
 router.get("/licitaciones", controller_1.showLicitaciones);
-router.get("/licitacionId/:id", checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Proveedor]), (0, roleAuth_1.default)([enums_1.Role.Basico, enums_1.Role.Premium, enums_1.Role.Admin]), controller_1.showLicitacionById);
+router.get("/licitacionId/:id", checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Proveedor, enums_1.Type.User]), (0, roleAuth_1.default)([enums_1.Role.Basico, enums_1.Role.Premium, enums_1.Role.Admin]), controller_1.showLicitacionById);
 router.get("/licitacionesLibres", checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Proveedor]), (0, roleAuth_1.default)([enums_1.Role.Basico, enums_1.Role.Premium, enums_1.Role.Admin]), controller_1.showLicitacionesFree);
 router.post("/crearLicitacion", checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.User]), (0, roleAuth_1.default)([enums_1.Role.Basico, enums_1.Role.Premium, enums_1.Role.Admin]), controller_1.createLicitacion);
 router.put("/actualizarLicitacion", controller_1.updateLicitacion);
