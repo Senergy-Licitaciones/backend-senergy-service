@@ -15,7 +15,8 @@ const checkUserType:CheckUserType=(types)=>async(req,res,next)=>{
             error:true,
             message:"Token inválido"
         });
-        const initialArray:Type[]=[]
+        const initialArray:Type[]=[];
+        console.log("type token ",tokenData.type," ",types.toString());
         if(initialArray.concat(types).includes(tokenData.type)){
             if(tokenData.type===Type.User){
                 const user=await UsuarioModel.findById(tokenData._id);
