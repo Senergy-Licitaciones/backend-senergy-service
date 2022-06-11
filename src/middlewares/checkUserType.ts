@@ -37,7 +37,7 @@ const checkUserType:CheckUserType=(types)=>async(req,res,next)=>{
             console.log("antes del next en user type");
             return next();
         }
-        console.log("else antes del res status ");
+        console.log("else antes del res status en checkuser type");
         return res.status(400).send({
                 error:true,
                 message:"No tiene permisos para realizar esta acción"
