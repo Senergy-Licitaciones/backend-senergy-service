@@ -1,5 +1,5 @@
 export enum Estado{
-    Abierto="abierto",
-    Proceso="en proceso",
-    Cerrado="cerrado"
+  Abierto='abierto',
+  Proceso='en proceso',
+  Cerrado='cerrado'
 }
