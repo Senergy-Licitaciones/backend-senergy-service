@@ -14,14 +14,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectionDB = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 const connectionDB = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const URL_DB = process.env.URL_DB;
         yield mongoose_1.default.connect(URL_DB);
-        return console.log('Conectado a la DB');
+        console.log('Conectado a la DB');
     }
     catch (err) {
-        return console.log('Ha ocurrido un error al conectarse a la DB ', err);
+        console.log('Ha ocurrido un error al conectarse a la DB ', err);
     }
 });
 exports.connectionDB = connectionDB;

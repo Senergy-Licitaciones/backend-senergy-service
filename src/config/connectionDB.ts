@@ -1,11 +1,12 @@
 import mongoose from 'mongoose'
 
-export const connectionDB = async (): Promise<void> => {
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+export const connectionDB = async () => {
   try {
     const URL_DB = process.env.URL_DB as string
     await mongoose.connect(URL_DB)
-    return console.log('Conectado a la DB')
+    console.log('Conectado a la DB')
   } catch (err) {
-    return console.log('Ha ocurrido un error al conectarse a la DB ', err)
+    console.log('Ha ocurrido un error al conectarse a la DB ', err)
   }
 }
