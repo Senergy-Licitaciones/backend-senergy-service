@@ -16,17 +16,19 @@ export const getInfoUserService: Service<DocType<User>, Info|ErrorResponse> = as
     const lastLicitacion = licitaciones.reduce((prev, current) => {
       return current.createdAt > prev.createdAt ? current : prev
     })
-    const oneParticipante = licitaciones.filter((li) => li.participantes.length === 1)
+    const oneParticipante = licitaciones.filter((li) => li.participantes.length === 1 && li.estado === Estado.Cerrado)
     let lastProvider = ''
     let idLastProvider = new Types.ObjectId()
     if (oneParticipante.length > 1) {
       idLastProvider = oneParticipante.reduce((prev, current) => current.createdAt > prev.createdAt ? current : prev).participantes[0]._id
     } else {
-      oneParticipante.length === 1 ? idLastProvider = oneParticipante[0].participantes[0]._id : lastProvider = 'Sin Proveedor Actualmente'
+      if (oneParticipante.length === 1) {
+        idLastProvider = oneParticipante[0].participantes[0]._id
+        const response = await getProveedorNameByIdDao(idLastProvider)
+        if ('error' in response) return handleError(response.error, response.message)
+        lastProvider = response.razSocial
+      } else { lastProvider = 'Sin Proveedor Actualmente' }
     }
-    const response = await getProveedorNameByIdDao(idLastProvider)
-    if ('error' in response) return handleError(response.error, response.message)
-    lastProvider = response.razSocial
     return {
       address: user.address,
       correo: user.correo,
@@ -38,7 +40,7 @@ export const getInfoUserService: Service<DocType<User>, Info|ErrorResponse> = as
         fechaFinApertura: lastLicitacion.fechaFinApertura,
         fechaInicioapertura: lastLicitacion.fechaInicioApertura,
         participantes: lastLicitacion.participantes.length,
-        ruc: response.ruc
+        ruc: user.ruc
       },
       lastProvider,
       phone: user.phone
