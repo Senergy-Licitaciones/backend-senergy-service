@@ -16,8 +16,9 @@ const app_1 = __importDefault(require("./app"));
 const connectionDB_1 = require("./config/connectionDB");
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)();
-const PORT = process.env.PORT || 4000;
+const PORT = (process.env.PORT != null) || 4000;
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
 app_1.default.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     yield (0, connectionDB_1.connectionDB)();
-    console.log("Conectado en el puerto ", PORT);
+    console.log('Conectado en el puerto ', PORT);
 }));

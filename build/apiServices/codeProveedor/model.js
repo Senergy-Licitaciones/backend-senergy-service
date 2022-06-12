@@ -26,4 +26,4 @@ const codeProveedorSchema = new mongoose_1.default.Schema({
     versionKey: false,
     timestamps: true
 });
-exports.default = mongoose_1.default.model("CodeProveedorModel", codeProveedorSchema);
+exports.default = mongoose_1.default.model('CodeProveedorModel', codeProveedorSchema);

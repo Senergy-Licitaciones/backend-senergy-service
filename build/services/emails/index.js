@@ -17,7 +17,7 @@ const mailer_1 = __importDefault(require("../../config/mailer"));
 const handleError_1 = require("../../helpers/handleError");
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)();
-/*export const sendEmails=async(fields)=>{
+/* export const sendEmails=async(fields)=>{
     const {proveedoresList,enlace,usuario}=fields;
     try{
         let info=await transporter.sendMail({
@@ -37,28 +37,28 @@ const dotenv_1 = require("dotenv");
     }catch(err){
        return handleError(err,"Ha ocurrido un error en la capa de servicios")
     }
-}*/
+} */
 const sendCodeVerification = (fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { code, correo } = fields;
-        let info = yield mailer_1.default.sendMail({
+        const info = yield mailer_1.default.sendMail({
             from: '"Senergy Soporte" <contacto@prysmosolutions.com>',
             to: correo,
-            subject: `Código de verificación para registro `,
+            subject: 'Código de verificación para registro ',
             html: `<b> Código de verificación. Expira en 4 minutos</b>
             <br/> 
             <h1> ${code} </h1>
              <br/>
-             <h2>Si no solicitaste esta acción repórtalo en: ${process.env.CORREO_SOPORTE}</h2>`,
+             <h2>Si no solicitaste esta acción repórtalo en: ${(process.env.CORREO_SOPORTE != null) ? process.env.CORREO_SOPORTE : 'En Mantenimiento'}</h2>`
         });
-        console.log("info ", info);
+        console.log('info ', info);
         return {
-            message: "Email enviado exitosamente"
+            message: 'Email enviado exitosamente'
         };
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error al intentar enviar el email");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al intentar enviar el email');
     }
 });
 exports.sendCodeVerification = sendCodeVerification;

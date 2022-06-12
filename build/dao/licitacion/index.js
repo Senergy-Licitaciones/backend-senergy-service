@@ -17,12 +17,12 @@ const handleError_1 = require("../../helpers/handleError");
 const model_1 = __importDefault(require("../../apiServices/licitacion/model"));
 const showLicitacionesDao = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const licitaciones = yield model_1.default.find().populate("tipoServicio");
+        const licitaciones = yield model_1.default.find().populate('tipoServicio');
         return licitaciones;
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
     }
 });
 exports.showLicitacionesDao = showLicitacionesDao;
@@ -30,65 +30,64 @@ const createLicitacionDao = (fields) => __awaiter(void 0, void 0, void 0, functi
     try {
         yield model_1.default.create(Object.assign({}, fields));
         return {
-            message: "Licitacion creada exitosamente"
+            message: 'Licitacion creada exitosamente'
         };
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
     }
 });
 exports.createLicitacionDao = createLicitacionDao;
 const updateLicitacionDao = ({ fields, id }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield model_1.default.findByIdAndUpdate(id, Object.assign({}, fields), { new: true });
-        if (!result)
-            throw new Error("No se encontró la licitación");
+        if (result == null)
+            throw new Error('No se encontró la licitación');
         return {
-            message: "Licitación actualizada exitosamente"
+            message: 'Licitación actualizada exitosamente'
         };
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
     }
 });
 exports.updateLicitacionDao = updateLicitacionDao;
 const getTiposDao = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield model_1.default.find({ usuario: id }).select("-participantes -usuario -puntoSum -brg -meses -tipoServicio");
+        const result = yield model_1.default.find({ usuario: id }).select('-participantes -usuario -puntoSum -brg -meses -tipoServicio');
         return result;
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
     }
 });
 exports.getTiposDao = getTiposDao;
 const getLicitacionesFreeDao = (proveedorId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const licitaciones = yield model_1.default.find({
-            $nor: [{ "participantes": proveedorId }]
-        }).populate("tipoServicio");
+            $nor: [{ participantes: proveedorId }]
+        }).populate('tipoServicio');
         return licitaciones;
     }
     catch (err) {
-        console.log("error ", err);
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos al obtener licitaciones libres");
+        console.log('error ', err);
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al obtener licitaciones libres');
     }
 });
 exports.getLicitacionesFreeDao = getLicitacionesFreeDao;
 const getLicitacionByIdDao = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const licitacion = yield model_1.default.findById(id).select("-usuario -participantes").populate("tipoServicio puntoSum brg");
-        if (!licitacion)
-            throw new Error("La licitación no existe");
+        const licitacion = yield model_1.default.findById(id).select('-usuario -participantes').populate('tipoServicio puntoSum brg');
+        // if (!licitacion) throw new Error('La licitación no existe')
         return licitacion;
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos al mostrar la licitación ");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al mostrar la licitación ');
     }
 });
 exports.getLicitacionByIdDao = getLicitacionByIdDao;
@@ -98,8 +97,8 @@ const getLicitacionesByUserDao = (id) => __awaiter(void 0, void 0, void 0, funct
         return licitaciones;
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos al obtener las licitaciones");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al obtener las licitaciones');
     }
 });
 exports.getLicitacionesByUserDao = getLicitacionesByUserDao;

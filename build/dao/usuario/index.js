@@ -23,94 +23,94 @@ const crearUsuarioDao = (fields) => __awaiter(void 0, void 0, void 0, function* 
         return response;
     }
     catch (err) {
-        console.log("error crear user dao ", err);
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos");
+        console.log('error crear user dao ', err);
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
     }
 });
 exports.crearUsuarioDao = crearUsuarioDao;
 const verifyCorreoDao = (correo) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield model_1.default.findOne({ correo });
-        if (result)
-            return { message: "Correo ya usado", _id: result._id };
+        if (result != null)
+            return { message: 'Correo ya usado', _id: result._id };
         return {
-            message: "Correo disponible"
+            message: 'Correo disponible'
         };
     }
     catch (err) {
-        console.log("usuario dao ", err);
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos");
+        console.log('usuario dao ', err);
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
     }
 });
 exports.verifyCorreoDao = verifyCorreoDao;
 const updateUsuarioDao = ({ fields, id }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield model_1.default.findByIdAndUpdate(id, Object.assign({}, fields), { new: true });
-        if (!result)
-            throw new Error("Usuario no encontrado");
+        if (result == null)
+            throw new Error('Usuario no encontrado');
         return {
             message: `Usuario ${result.correo} actualizado correctamente`
         };
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
     }
 });
 exports.updateUsuarioDao = updateUsuarioDao;
 const confirmUserDao = (idUser) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield model_1.default.findByIdAndUpdate(idUser, { estado: enums_1.Estado.Offline });
-        if (!response)
-            throw new Error("Usuario no encontrado");
+        if (response == null)
+            throw new Error('Usuario no encontrado');
         return {
-            message: "Cuenta confirmada exitosamente"
+            message: 'Cuenta confirmada exitosamente'
         };
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
     }
 });
 exports.confirmUserDao = confirmUserDao;
 const getUserHashDao = (correo) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const response = yield model_1.default.findOne({ correo }).select("password role correo");
-        if (!response)
-            throw new Error("Correo no registrado");
+        const response = yield model_1.default.findOne({ correo }).select('password role correo');
+        if (response == null)
+            throw new Error('Correo no registrado');
         return response;
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
     }
 });
 exports.getUserHashDao = getUserHashDao;
 const getUserDao = (correo) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield model_1.default.findOne({ correo, role: enums_1.Role.Admin });
-        if (!user)
-            throw new Error("Usuario no encontrado");
+        if (user == null)
+            throw new Error('Usuario no encontrado');
         return user;
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos al encontrar el usuario");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al encontrar el usuario');
     }
 });
 exports.getUserDao = getUserDao;
 const getUsersDao = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const users = yield model_1.default.find({
-            $nor: [{ role: "admin" }]
+            $nor: [{ role: 'admin' }]
         });
         return users;
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos al obtener la lista de usuarios");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al obtener la lista de usuarios');
     }
 });
 exports.getUsersDao = getUsersDao;

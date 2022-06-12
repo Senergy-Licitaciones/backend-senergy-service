@@ -15,15 +15,13 @@ const oferta_1 = require("../../services/oferta");
 const getOfertas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const proveedor = req.proveedor;
-        if (!proveedor)
-            throw new Error("Debe iniciar sesión primero");
         const ofertas = yield (0, oferta_1.getOfertasService)(proveedor._id);
-        if ("error" in ofertas)
+        if ('error' in ofertas)
             return res.status(400).send(ofertas);
         return res.status(200).send(ofertas);
     }
     catch (err) {
-        let error = err;
+        const error = err;
         return (0, handleError_1.httpError)(res, error);
     }
 });
@@ -31,15 +29,13 @@ exports.getOfertas = getOfertas;
 const getOfertaById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const ofertaId = req.ofertaId;
-        if (!ofertaId)
-            throw new Error("La oferta seleccionada no es válida");
         const oferta = yield (0, oferta_1.getOfertaByIdService)(ofertaId);
-        if ("error" in oferta)
+        if ('error' in oferta)
             return res.status(400).send(oferta);
         return res.status(200).send(oferta);
     }
     catch (err) {
-        let error = err;
+        const error = err;
         return (0, handleError_1.httpError)(res, error);
     }
 });
@@ -51,16 +47,15 @@ const ofertaId = (req, _res, next, id) => {
 exports.ofertaId = ofertaId;
 const updateOferta = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const ofertaId = req.ofertaId, fields = req.body;
-        if (!ofertaId)
-            throw new Error("La oferta seleccionada no es válida");
+        const ofertaId = req.ofertaId;
+        const fields = req.body;
         const response = yield (0, oferta_1.updateOfertaService)({ ofertaId, fields });
-        if ("error" in response)
+        if ('error' in response)
             return res.status(400).send(response);
         return res.status(200).send(response);
     }
     catch (err) {
-        let error = err;
+        const error = err;
         return (0, handleError_1.httpError)(res, error);
     }
 });

@@ -18,51 +18,52 @@ const model_1 = __importDefault(require("../apiServices/usuario/model"));
 const model_2 = __importDefault(require("../apiServices/proveedor/model"));
 const checkUserType = (types) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("iniciando check user type");
+        console.log('iniciando check user type');
         const auth = req.headers.authorization;
-        if (!auth)
-            throw new Error("Token no proporcionado");
-        console.log("spliteando token");
-        const token = auth.split(" ").pop();
-        if (!token)
-            throw new Error("Token inválido");
-        console.log("verificando token");
+        if (auth == null)
+            throw new Error('Token no proporcionado');
+        console.log('spliteando token');
+        const token = auth.split(' ').pop();
+        if (token == null)
+            throw new Error('Token inválido');
+        console.log('verificando token');
         const tokenData = (0, generateToken_1.verifyToken)(token);
-        if (!tokenData)
+        if (tokenData == null) {
             return res.status(400).send({
                 error: true,
-                message: "Token inválido"
+                message: 'Token inválido'
             });
-        console.log("definiendo array");
+        }
+        console.log('definiendo array');
         const initialArray = [];
-        console.log("type token ", tokenData.type, " ", types.toString());
+        console.log('type token ', tokenData.type, ' ', types.toString());
         if (initialArray.concat(types).includes(tokenData.type)) {
             if (tokenData.type === enums_1.Type.User) {
                 const user = yield model_1.default.findById(tokenData._id);
-                if (!user)
-                    return res.status(400).send({ message: "Usuario sin permisos", error: true });
-                if (user.estado === "offline")
-                    return res.status(400).send({ message: "Debe iniciar sesión", error: true });
+                if (user == null)
+                    return res.status(400).send({ message: 'Usuario sin permisos', error: true });
+                if (user.estado === 'offline')
+                    return res.status(400).send({ message: 'Debe iniciar sesión', error: true });
                 req.user = user;
             }
             if (tokenData.type === enums_1.Type.Proveedor) {
                 const proveedor = yield model_2.default.findById(tokenData._id);
-                if (!proveedor)
-                    return res.status(400).send({ message: "Usuario sin permisos", error: true });
+                if (proveedor == null)
+                    return res.status(400).send({ message: 'Usuario sin permisos', error: true });
                 req.proveedor = proveedor;
             }
-            console.log("antes del next en user type");
+            console.log('antes del next en user type');
             return next();
         }
-        console.log("else antes del res status en checkuser type");
+        console.log('else antes del res status en checkuser type');
         return res.status(400).send({
             error: true,
-            message: "No tiene permisos para realizar esta acción"
+            message: 'No tiene permisos para realizar esta acción'
         });
     }
     catch (err) {
-        console.log("error catch user type ", err);
-        return res.status(500).send("Ha ocurrido un error en la autenticación");
+        console.log('error catch user type ', err);
+        return res.status(500).send('Ha ocurrido un error en la autenticación');
     }
 });
 exports.default = checkUserType;

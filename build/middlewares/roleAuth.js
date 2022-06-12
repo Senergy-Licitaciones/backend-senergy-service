@@ -13,21 +13,21 @@ const checkRoleAuth = (roles) => (req, res, next) => __awaiter(void 0, void 0, v
     try {
         const proveedor = req.proveedor;
         const user = req.user;
-        let arrayInit = [];
-        if (proveedor) {
-            return (arrayInit.concat(roles).includes(proveedor.role)) ? next() : res.status(409).send({ message: "Usuario sin permisos", error: true });
+        const arrayInit = [];
+        if (proveedor != null) {
+            return (arrayInit.concat(roles).includes(proveedor.role)) ? next() : res.status(409).send({ message: 'Usuario sin permisos', error: true });
         }
         ;
-        if (user) {
-            return arrayInit.concat(roles).includes(user.role) ? next() : res.status(409).send({ message: "Proveedor sin permisos", error: true });
+        if (user != null) {
+            return arrayInit.concat(roles).includes(user.role) ? next() : res.status(409).send({ message: 'Proveedor sin permisos', error: true });
         }
         ;
-        throw new Error("No tiene acceso a este recurso");
+        throw new Error('No tiene acceso a este recurso');
     }
     catch (err) {
-        console.log("error role auth ", err);
+        console.log('error role auth ', err);
         return res.status(500).send({
-            message: "Ha ocurrido un error en la autenticación",
+            message: 'Ha ocurrido un error en la autenticación',
             error: err
         });
     }

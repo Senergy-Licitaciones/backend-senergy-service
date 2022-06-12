@@ -16,7 +16,7 @@ const tokenSignUser = (user) => {
         role: usuario.role,
         type: enums_1.Type.User
     }, process.env.JWT_SECRET, {
-        expiresIn: "1h"
+        expiresIn: '1h'
     });
 };
 exports.tokenSignUser = tokenSignUser;
@@ -29,7 +29,7 @@ const tokenSignProveedor = (proveedor) => {
         ruc: provider.ruc,
         type: enums_1.Type.Proveedor
     }, process.env.JWT_SECRET, {
-        expiresIn: "1h"
+        expiresIn: '1h'
     });
 };
 exports.tokenSignProveedor = tokenSignProveedor;
