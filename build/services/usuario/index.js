@@ -22,10 +22,21 @@ const getInfoUserService = (user) => __awaiter(void 0, void 0, void 0, function*
         if ('error' in licitaciones)
             return (0, handleError_1.handleError)(licitaciones.error, licitaciones.message);
         const numLicitaciones = licitaciones.length;
-        const numParticipantes = licitaciones.map((li) => li.participantes.length).reduce((prev, current) => prev + current);
-        const lastLicitacion = licitaciones.reduce((prev, current) => {
-            return current.createdAt > prev.createdAt ? current : prev;
-        });
+        const numParticipantes = licitaciones.length > 1 ? licitaciones.map((li) => li.participantes.length).reduce((prev, current) => prev + current) : 0;
+        const lastLicitacion = licitaciones.length > 0
+            ? licitaciones.reduce((prev, current) => {
+                return current.createdAt > prev.createdAt ? current : prev;
+            })
+            : 'Ninguna Licitación generada hasta el momento';
+        const responseLastLicitacion = typeof lastLicitacion === 'string'
+            ? { message: lastLicitacion }
+            : {
+                _id: lastLicitacion._id,
+                fechaFinApertura: lastLicitacion.fechaFinApertura,
+                fechaInicioapertura: lastLicitacion.fechaInicioApertura,
+                participantes: lastLicitacion.participantes.length,
+                ruc: user.ruc
+            };
         const oneParticipante = licitaciones.filter((li) => li.participantes.length === 1 && li.estado === enums_1.Estado.Cerrado);
         let lastProvider = '';
         let idLastProvider = new mongoose_1.Types.ObjectId();
@@ -50,13 +61,7 @@ const getInfoUserService = (user) => __awaiter(void 0, void 0, void 0, function*
             empresa: user.empresa,
             numLicitaciones,
             numParticipantes,
-            lastLicitacion: {
-                _id: lastLicitacion._id,
-                fechaFinApertura: lastLicitacion.fechaFinApertura,
-                fechaInicioapertura: lastLicitacion.fechaInicioApertura,
-                participantes: lastLicitacion.participantes.length,
-                ruc: user.ruc
-            },
+            lastLicitacion: responseLastLicitacion,
             lastProvider,
             phone: user.phone
         };

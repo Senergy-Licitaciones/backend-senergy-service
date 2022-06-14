@@ -45,7 +45,7 @@ export interface Info {
     participantes: number
     fechaInicioapertura: string
     fechaFinApertura: string
-  }
+  }|ResponseParent
 }
 export interface Licitacion extends LicitacionRegisterFields{
   participantes: Types.Array<Types.ObjectId>
