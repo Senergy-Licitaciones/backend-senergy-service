@@ -14,15 +14,13 @@ export interface CodeProveedor extends Code{
 export type DataToken=DataProveedorToken|DataUserToken
 export interface DataUserToken {
   _id: string
-  correo: string
+  empresa: string
   role: Role
   type: Type.User
 }
 export interface DataProveedorToken {
   _id: string
   razSocial: string
-  correo: string
-  ruc: number
   type: Type.Proveedor
 }
 export type DocType<Param>=Document<any, any, Param> & Param & {

@@ -10,7 +10,7 @@ export const tokenSignUser: SignToken = (user) => {
     _id: Types.ObjectId}
   return jwt.sign({
     _id: usuario._id,
-    correo: usuario.correo,
+    empresa: usuario.empresa,
     role: usuario.role,
     type: Type.User
   },
@@ -25,8 +25,6 @@ export const tokenSignProveedor: SignToken = (proveedor) => {
   return jwt.sign({
     _id: provider._id,
     razSocial: provider.razSocial,
-    correo: provider.correo,
-    ruc: provider.ruc,
     type: Type.Proveedor
   }, process.env.JWT_SECRET as Secret, {
     expiresIn: '1h'

@@ -12,7 +12,7 @@ const tokenSignUser = (user) => {
     const usuario = user;
     return jsonwebtoken_1.default.sign({
         _id: usuario._id,
-        correo: usuario.correo,
+        empresa: usuario.empresa,
         role: usuario.role,
         type: enums_1.Type.User
     }, process.env.JWT_SECRET, {
@@ -25,8 +25,6 @@ const tokenSignProveedor = (proveedor) => {
     return jsonwebtoken_1.default.sign({
         _id: provider._id,
         razSocial: provider.razSocial,
-        correo: provider.correo,
-        ruc: provider.ruc,
         type: enums_1.Type.Proveedor
     }, process.env.JWT_SECRET, {
         expiresIn: '1h'
