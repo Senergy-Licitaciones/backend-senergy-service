@@ -46,6 +46,7 @@ export const getInfoUserService: Service<DocType<User>, Info|ErrorResponse> = as
       phone: user.phone
     }
   } catch (err) {
+    console.log('error ', err)
     const error = err as Error
     return handleError(error, 'Ha ocurrido un error en la capa de servicios al obtener la información')
   }
