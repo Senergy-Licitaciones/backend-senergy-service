@@ -62,6 +62,7 @@ const getInfoUserService = (user) => __awaiter(void 0, void 0, void 0, function*
         };
     }
     catch (err) {
+        console.log('error ', err);
         const error = err;
         return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al obtener la información');
     }
