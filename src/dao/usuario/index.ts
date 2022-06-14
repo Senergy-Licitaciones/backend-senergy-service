@@ -55,7 +55,7 @@ export const confirmUserDao: Dao<string, ErrorResponse|ResponseParent> = async (
 }
 export const getUserHashDao: Dao<string, ErrorResponse|DocType<User>> = async (correo) => {
   try {
-    const response = await UsuarioModel.findOne({ correo }).select('password role correo')
+    const response = await UsuarioModel.findOne({ correo }).select('password role correo empresa')
     if (response == null) throw new Error('Correo no registrado')
     return response
   } catch (err) {

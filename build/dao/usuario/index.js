@@ -77,7 +77,7 @@ const confirmUserDao = (idUser) => __awaiter(void 0, void 0, void 0, function* (
 exports.confirmUserDao = confirmUserDao;
 const getUserHashDao = (correo) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const response = yield model_1.default.findOne({ correo }).select('password role correo');
+        const response = yield model_1.default.findOne({ correo }).select('password role correo empresa');
         if (response == null)
             throw new Error('Correo no registrado');
         return response;
