@@ -30,7 +30,8 @@ export const createLicitacion: RequestHandler = async (req, res) => {
 }
 export const updateLicitacion: RequestHandler = async (req, res) => {
   try {
-    const { fields, id } = req.body as {fields: Partial<Licitacion>, id: Types.ObjectId}
+    const fields = req.body as Partial<Licitacion>
+    const id = req.licitacionId as Types.ObjectId
     const result = await updateLicitacionService({ fields, id })
     if ('error' in result) return res.status(400).send(result)
     return res.status(200).send(result)

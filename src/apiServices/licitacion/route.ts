@@ -11,7 +11,7 @@ router.get('/licitaciones', showLicitaciones)
 router.get('/licitacionId/:id', checkAuth, checkUserType([Type.Proveedor, Type.User]), checkRoleAuth([Role.Basico, Role.Premium, Role.Admin]), showLicitacionById)
 router.get('/licitacionesLibres', checkAuth, checkUserType([Type.Proveedor]), checkRoleAuth([Role.Basico, Role.Premium, Role.Admin]), showLicitacionesFree)
 router.post('/crearLicitacion', checkAuth, checkUserType([Type.User]), checkRoleAuth([Role.Basico, Role.Premium, Role.Admin]), createLicitacion)
-router.put('/actualizarLicitacion', updateLicitacion)
+router.put('/actualizarLicitacion/:id', checkAuth, checkUserType([Type.User]), checkRoleAuth([Role.Basico, Role.Premium, Role.Admin]), updateLicitacion)
 router.get('/tipoLicitaciones', checkAuth, checkUserType([Type.User]), checkRoleAuth([Role.Basico, Role.Premium, Role.Admin]), getTipos)
 // router.get("/file/:filename",showFile);
 // router.param("filename",findFilename);

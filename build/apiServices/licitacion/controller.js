@@ -41,7 +41,8 @@ const createLicitacion = (req, res) => __awaiter(void 0, void 0, void 0, functio
 exports.createLicitacion = createLicitacion;
 const updateLicitacion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { fields, id } = req.body;
+        const fields = req.body;
+        const id = req.licitacionId;
         const result = yield (0, licitacion_1.updateLicitacionService)({ fields, id });
         if ('error' in result)
             return res.status(400).send(result);
