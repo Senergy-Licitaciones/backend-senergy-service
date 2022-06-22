@@ -58,7 +58,7 @@ const getInfoUserService = (user) => __awaiter(void 0, void 0, void 0, function*
         return {
             address: user.address,
             correo: user.correo,
-            empresa: user.empresa,
+            empresa: typeof lastLicitacion !== 'string' ? lastLicitacion.empresa : user.empresa,
             numLicitaciones,
             numParticipantes,
             lastLicitacion: responseLastLicitacion,

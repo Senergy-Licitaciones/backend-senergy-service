@@ -43,7 +43,7 @@ export const getInfoUserService: Service<DocType<User>, Info|ErrorResponse> = as
     return {
       address: user.address,
       correo: user.correo,
-      empresa: user.empresa,
+      empresa: typeof lastLicitacion !== 'string' ? lastLicitacion.empresa : user.empresa,
       numLicitaciones,
       numParticipantes,
       lastLicitacion: responseLastLicitacion,
