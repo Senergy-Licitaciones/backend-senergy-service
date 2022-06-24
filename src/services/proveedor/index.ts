@@ -1,11 +1,21 @@
 import { Types } from 'mongoose'
 import { updateLicitacionDao } from '../../dao/licitacion'
 import { crearOfertaDao } from '../../dao/oferta'
-import { updateProveedorDao, getProveedoresDao } from '../../dao/proveedor'
+import { updateProveedorDao, getProveedoresDao, getProveedoresToUserDao } from '../../dao/proveedor'
 import { handleError } from '../../helpers/handleError'
 import { DocType, ErrorResponse, Oferta, Proveedor, ResponseParent } from '../../types/data'
+import { InfoBasicaProveedor } from '../../types/form'
 import { Service, ServiceWithoutParam } from '../../types/methods'
-
+export const getProveedoresToUserService: ServiceWithoutParam<ErrorResponse|InfoBasicaProveedor[]> = async () => {
+  try {
+    const proveedores = await getProveedoresToUserDao()
+    if ('error' in proveedores) return handleError(proveedores.error, proveedores.message)
+    return proveedores
+  } catch (err) {
+    const error = err as Error
+    return handleError(error, 'Ha ocurrido un error al obtener los proveedores en la capa de servicios')
+  }
+}
 export const participarLicitacionService: Service<{fields: Oferta, idProveedor: Types.ObjectId}, ErrorResponse|ResponseParent> = async ({ fields, idProveedor }) => {
   try {
     const { potencia, energiaHp, energiaHfp, potenciaFacturar, formulaIndexPotencia, formulaIndexEnergia, potMinFacturable, licitacion, excesoPotencia } = fields

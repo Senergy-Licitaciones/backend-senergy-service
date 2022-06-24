@@ -66,6 +66,7 @@ export interface ProveedorRegisterFields{
   address: string
   phone: number
 }
+export type InfoBasicaProveedor=DocType<Pick<Proveedor, 'correo'|'address'|'phone'|'razSocial'|'ruc'|'web'|'createdAt'|'updatedAt'>>
 export interface UserRegisterFields{
   correo: string
   password: string

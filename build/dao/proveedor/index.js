@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProveedoresDao = exports.proveedorEstadoDao = exports.confirmProveedorDao = exports.verifyCorreoProveedorDao = exports.updateProveedorDao = exports.getProveedorNameByIdDao = exports.crearProveedorDao = void 0;
+exports.getProveedoresToUserDao = exports.getProveedoresDao = exports.proveedorEstadoDao = exports.confirmProveedorDao = exports.verifyCorreoProveedorDao = exports.updateProveedorDao = exports.getProveedorNameByIdDao = exports.crearProveedorDao = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const model_1 = __importDefault(require("../../apiServices/proveedor/model"));
 const enums_1 = require("../../types/data/enums");
@@ -115,3 +115,14 @@ const getProveedoresDao = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getProveedoresDao = getProveedoresDao;
+const getProveedoresToUserDao = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const proveedores = yield model_1.default.find().select('correo address phone razSocial ruc web');
+        return proveedores;
+    }
+    catch (err) {
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al obtener los proveedores en la capa de datos');
+    }
+});
+exports.getProveedoresToUserDao = getProveedoresToUserDao;

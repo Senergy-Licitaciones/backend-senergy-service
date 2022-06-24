@@ -1,8 +1,17 @@
 import { RequestHandler } from 'express'
 import { httpError } from '../../helpers/handleError'
-import { participarLicitacionService, getProveedoresService } from '../../services/proveedor'
+import { participarLicitacionService, getProveedoresService, getProveedoresToUserService } from '../../services/proveedor'
 import { DocType, Oferta, Proveedor } from '../../types/data'
-
+export const getProveedoresToUser: RequestHandler = async (_req, res) => {
+  try {
+    const proveedores = await getProveedoresToUserService()
+    if ('error' in proveedores) return res.status(400).send(proveedores)
+    return res.status(200).send(proveedores)
+  } catch (err) {
+    const error = err as Error
+    return httpError(res, error)
+  }
+}
 export const participarLicitacion: RequestHandler = async (req, res) => {
   try {
     const proveedor = req.proveedor as DocType<Proveedor>

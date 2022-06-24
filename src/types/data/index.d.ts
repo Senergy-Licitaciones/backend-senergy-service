@@ -23,7 +23,7 @@ export interface DataProveedorToken {
   razSocial: string
   type: Type.Proveedor
 }
-export type DocType<Param>=Document<any, any, Param> & Param & {
+export type DocType<Param> = Document<any, any, Param> & Param & {
   _id: Types.ObjectId
 }
 export interface ErrorResponse extends ResponseParent{
@@ -69,6 +69,8 @@ export interface Proveedor extends ProveedorRegisterFields{
   verified: boolean
   session: string
   licitaciones: Types.Array<Types.ObjectId>
+  createdAt: Date
+  updatedAt: Date
 }
 export interface ResponseId extends ResponseParent{
   _id: Types.ObjectId

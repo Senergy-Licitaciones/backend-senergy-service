@@ -9,11 +9,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProveedoresService = exports.participarLicitacionService = void 0;
+exports.getProveedoresService = exports.participarLicitacionService = exports.getProveedoresToUserService = void 0;
 const licitacion_1 = require("../../dao/licitacion");
 const oferta_1 = require("../../dao/oferta");
 const proveedor_1 = require("../../dao/proveedor");
 const handleError_1 = require("../../helpers/handleError");
+const getProveedoresToUserService = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const proveedores = yield (0, proveedor_1.getProveedoresToUserDao)();
+        if ('error' in proveedores)
+            return (0, handleError_1.handleError)(proveedores.error, proveedores.message);
+        return proveedores;
+    }
+    catch (err) {
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al obtener los proveedores en la capa de servicios');
+    }
+});
+exports.getProveedoresToUserService = getProveedoresToUserService;
 const participarLicitacionService = ({ fields, idProveedor }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { potencia, energiaHp, energiaHfp, potenciaFacturar, formulaIndexPotencia, formulaIndexEnergia, potMinFacturable, licitacion, excesoPotencia } = fields;

@@ -1,6 +1,6 @@
 import { handleError } from '../../helpers/handleError'
 import ProveedorModel from '../../apiServices/proveedor/model'
-import { DaoProveedorRegister } from '../../types/form'
+import { DaoProveedorRegister, InfoBasicaProveedor } from '../../types/form'
 import { DocType, ErrorResponse, Proveedor, ResponseParent } from '../../types/data'
 import { Document, Types, UpdateQuery } from 'mongoose'
 import { Dao, DaoWithoutParam } from '../../types/methods'
@@ -87,5 +87,14 @@ export const getProveedoresDao: DaoWithoutParam<ErrorResponse|Array<Document<any
   } catch (err) {
     const error = err as Error
     return handleError(error, 'Ha ocurrido un error en la capa de datos al listar los proveedores')
+  }
+}
+export const getProveedoresToUserDao: DaoWithoutParam<ErrorResponse|InfoBasicaProveedor[]> = async () => {
+  try {
+    const proveedores = await ProveedorModel.find().select('correo address phone razSocial ruc web') as InfoBasicaProveedor[]
+    return proveedores
+  } catch (err) {
+    const error = err as Error
+    return handleError(error, 'Ha ocurrido un error al obtener los proveedores en la capa de datos')
   }
 }
