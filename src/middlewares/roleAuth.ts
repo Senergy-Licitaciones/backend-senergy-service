@@ -1,22 +1,24 @@
-import { Role} from "../types/data/enums";
-import { CheckRoleAuth } from "../types/methods";
+import { Role } from '../types/data/enums'
+import { CheckRoleAuth } from '../types/methods'
 
-const checkRoleAuth:CheckRoleAuth=(roles)=>async(req,res,next)=>{
-    try{
-        const proveedor=req.proveedor;
-        const user=req.user;
-        let arrayInit:Role[]=[]
-        if(proveedor){
-            return (arrayInit.concat(roles).includes(proveedor.role))?next():res.status(409).send({message:"Usuario sin permisos",error:true})};
-        if(user){
-            return arrayInit.concat(roles).includes(user.role)?next():res.status(409).send({message:"Proveedor sin permisos",error:true})};
-        throw new Error("No tiene acceso a este recurso");
-    }catch(err){
-        console.log("error role auth ",err);
-        return res.status(500).send({
-            message:"Ha ocurrido un error en la autenticación",
-            error:err
-        })
-    }
+const checkRoleAuth: CheckRoleAuth = (roles) => async (req, res, next) => {
+  try {
+    const proveedor = req.proveedor
+    const user = req.user
+    const arrayInit: Role[] = []
+    if (proveedor != null) {
+      return (arrayInit.concat(roles).includes(proveedor.role)) ? next() : res.status(409).send({ message: 'Usuario sin permisos', error: true })
+    };
+    if (user != null) {
+      return arrayInit.concat(roles).includes(user.role) ? next() : res.status(409).send({ message: 'Proveedor sin permisos', error: true })
+    };
+    throw new Error('No tiene acceso a este recurso')
+  } catch (err) {
+    console.log('error role auth ', err)
+    return res.status(500).send({
+      message: 'Ha ocurrido un error en la autenticación',
+      error: err
+    })
+  }
 }
-export default checkRoleAuth;
+export default checkRoleAuth

@@ -19,44 +19,44 @@ const createCodeDao = (fields) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         yield model_1.default.create(fields);
         return {
-            message: "Código creado exitosamente"
+            message: 'Código creado exitosamente'
         };
     }
     catch (err) {
-        console.log("error code dao ", err);
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos");
+        console.log('error code dao ', err);
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
     }
 });
 exports.createCodeDao = createCodeDao;
 const verifyCodeDao = (idUser) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield model_1.default.findOne({ user: idUser });
-        if (!result)
-            throw new Error("Código ya enviado");
+        if (result == null)
+            throw new Error('Código ya enviado');
         return {
-            message: "Código por crear y enviar"
+            message: 'Código por crear y enviar'
         };
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
     }
 });
 exports.verifyCodeDao = verifyCodeDao;
 const removeCodeDao = ({ idUser, code }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield model_1.default.findOneAndDelete({ user: idUser, code });
-        console.log("response code ", response);
-        if (!response)
-            throw new Error("Código inválido");
+        console.log('response code ', response);
+        if (response == null)
+            throw new Error('Código inválido');
         return {
-            message: "Código validado exitosamente"
+            message: 'Código validado exitosamente'
         };
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
     }
 });
 exports.removeCodeDao = removeCodeDao;

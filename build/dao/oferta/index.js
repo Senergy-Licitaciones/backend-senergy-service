@@ -17,17 +17,17 @@ const model_1 = __importDefault(require("../../apiServices/oferta/model"));
 const handleError_1 = require("../../helpers/handleError");
 const crearOfertaDao = (fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        console.log("fields ", fields);
+        console.log('fields ', fields);
         const oferta = yield model_1.default.create(fields);
         const result = yield oferta.save();
-        console.log("oferta: ", oferta);
-        console.log("result ", result);
+        console.log('oferta: ', oferta);
+        console.log('result ', result);
         return result;
     }
     catch (err) {
-        console.log("error ", err);
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos al crear la oferta");
+        console.log('error ', err);
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al crear la oferta');
     }
 });
 exports.crearOfertaDao = crearOfertaDao;
@@ -35,43 +35,42 @@ const getOfertasDao = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const ofertas = yield model_1.default.find({
             proveedor: id
-        }).populate("licitacion");
+        }).populate('licitacion');
         return ofertas;
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos al obtener las ofertas");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al obtener las ofertas');
     }
 });
 exports.getOfertasDao = getOfertasDao;
 const getOfertaByIdDao = (ofertaId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const oferta = yield model_1.default.findById(ofertaId);
-        if (!oferta)
-            throw new Error("No eexiste la oferta seleccionada");
+        if (oferta == null)
+            throw new Error('No eexiste la oferta seleccionada');
         return oferta;
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos al obtener la oferta");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al obtener la oferta');
     }
 });
 exports.getOfertaByIdDao = getOfertaByIdDao;
 const updateOfertaDao = ({ ofertaId, fields }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const date = Date.now();
-        let oferta = yield model_1.default.findById(ofertaId).populate("licitacion");
-        if (!oferta)
-            throw new Error("La oferta seleccionada no existe");
+        const oferta = yield model_1.default.findById(ofertaId).populate('licitacion');
+        // if (!oferta) throw new Error('La oferta seleccionada no existe')
         if (new Date(oferta.licitacion.fechaFinApertura).getMilliseconds() > date)
-            throw new Error("El plazo de tiempo para modificar esta oferta ya culminó");
+            throw new Error('El plazo de tiempo para modificar esta oferta ya culminó');
         const result = yield oferta.update(fields);
-        console.log("Result update ", result);
+        console.log('Result update ', result);
         return oferta;
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error en la capa de datos al actualizar la oferta");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al actualizar la oferta');
     }
 });
 exports.updateOfertaDao = updateOfertaDao;

@@ -14,4 +14,4 @@ const brgSchema = new mongoose_1.default.Schema({
     versionKey: false,
     timestamps: true
 });
-exports.default = mongoose_1.default.model("BrgModel", brgSchema);
+exports.default = mongoose_1.default.model('BrgModel', brgSchema);

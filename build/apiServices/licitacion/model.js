@@ -27,7 +27,7 @@ const licitacionSchema = new mongoose_1.default.Schema({
     },
     tipoServicio: {
         type: ObjectId,
-        ref: "ServicioModel",
+        ref: 'ServicioModel',
         required: true,
         trim: true
     },
@@ -42,10 +42,10 @@ const licitacionSchema = new mongoose_1.default.Schema({
     },
     estado: {
         type: String,
-        enum: ["cerrado", "abierto"],
+        enum: ['cerrado', 'abierto'],
         trim: true,
         required: true,
-        default: "cerrado"
+        default: 'cerrado'
     },
     empresa: {
         type: String,
@@ -64,13 +64,13 @@ const licitacionSchema = new mongoose_1.default.Schema({
     },
     puntoSum: {
         type: ObjectId,
-        ref: "PuntoSumModel",
+        ref: 'PuntoSumModel',
         trim: true,
         required: true
     },
     brg: {
         type: ObjectId,
-        ref: "BrgModel",
+        ref: 'BrgModel',
         trim: true,
         required: true
     },
@@ -98,12 +98,12 @@ const licitacionSchema = new mongoose_1.default.Schema({
     ],
     usuario: {
         type: ObjectId,
-        ref: "UsuarioModel"
+        ref: 'UsuarioModel'
     },
     participantes: [
         {
             type: ObjectId,
-            ref: "ProveedorModel"
+            ref: 'ProveedorModel'
         }
     ],
     author: {
@@ -115,4 +115,4 @@ const licitacionSchema = new mongoose_1.default.Schema({
     timestamps: true,
     versionKey: false
 });
-exports.default = mongoose_1.default.model("LicitacionModel", licitacionSchema);
+exports.default = mongoose_1.default.model('LicitacionModel', licitacionSchema);

@@ -1,13 +1,15 @@
-import { Types } from "mongoose";
-import express from "express";
-import {DocType, Proveedor, User } from "../data";
+import { Types } from 'mongoose'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import express from 'express'
+import { DocType, Proveedor, User } from '../data'
 
 declare global {
-    namespace Express{
+  namespace Express{
     interface Request{
-        user?:DocType<User>,
-        proveedor?:DocType<Proveedor>,
-        licitacionId?:Types.ObjectId,
-        ofertaId?:Types.ObjectId,
+      user?: DocType<User>
+      proveedor?: DocType<Proveedor>
+      licitacionId?: Types.ObjectId
+      ofertaId?: Types.ObjectId
     }
-}}
+  }
+}

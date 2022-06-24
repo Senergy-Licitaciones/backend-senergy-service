@@ -57,7 +57,7 @@ const proveedorSchema = new mongoose_1.default.Schema({
     licitaciones: [
         {
             type: mongoose_1.default.Schema.Types.ObjectId,
-            ref: "LicitacionModel"
+            ref: 'LicitacionModel'
         }
     ],
     estado: {
@@ -83,4 +83,4 @@ const proveedorSchema = new mongoose_1.default.Schema({
     versionKey: false,
     timestamps: true
 });
-exports.default = mongoose_1.default.model("ProveedorModel", proveedorSchema);
+exports.default = mongoose_1.default.model('ProveedorModel', proveedorSchema);
