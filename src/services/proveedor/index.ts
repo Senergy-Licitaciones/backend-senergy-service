@@ -18,8 +18,8 @@ export const getProveedoresToUserService: ServiceWithoutParam<ErrorResponse|Info
 }
 export const participarLicitacionService: Service<{fields: Oferta, idProveedor: Types.ObjectId}, ErrorResponse|ResponseParent> = async ({ fields, idProveedor }) => {
   try {
-    const { potencia, energiaHp, energiaHfp, potenciaFacturar, formulaIndexPotencia, formulaIndexEnergia, potMinFacturable, licitacion, excesoPotencia } = fields
-    const oferta = await crearOfertaDao({ potencia, energiaHfp, energiaHp, potenciaFacturar, formulaIndexPotencia, formulaIndexEnergia, potMinFacturable, excesoPotencia, proveedor: idProveedor, licitacion })
+    const { potencia, energiaHp, energiaHfp, potenciaFacturar, formulaIndexPotencia, formulaIndexEnergia, potMinFacturable, licitacion, excesoPotencia, excesoEnergiaHp, excesoEnergiaHfp } = fields
+    const oferta = await crearOfertaDao({ potencia, energiaHfp, energiaHp, potenciaFacturar, formulaIndexPotencia, formulaIndexEnergia, potMinFacturable, excesoPotencia, proveedor: idProveedor, licitacion, excesoEnergiaHp, excesoEnergiaHfp })
     if ('error' in oferta) return handleError(oferta.error, oferta.message)
     const result = await updateLicitacionDao({ fields: { $push: { participantes: idProveedor } }, id: licitacion })
     if ('error' in result) return handleError(result.error, result.message)

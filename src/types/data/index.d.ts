@@ -61,6 +61,8 @@ export interface Oferta{
   formulaIndexEnergia: Types.Array<FactorIndex>
   proveedor: Types.ObjectId
   licitacion: Types.ObjectId
+  excesoEnergiaHp?: number
+  excesoEnergiaHfp?: number
 }
 export interface Proveedor extends ProveedorRegisterFields{
   role: Role

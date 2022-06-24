@@ -62,6 +62,12 @@ const ofertaSchema = new mongoose.Schema<Oferta>({
     type: ObjectId,
     ref: 'LicitacionModel',
     required: true
+  },
+  excesoEnergiaHp: {
+    type: Number
+  },
+  excesoEnergiaHfp: {
+    type: Number
   }
 }, {
   versionKey: false,
