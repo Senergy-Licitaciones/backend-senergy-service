@@ -15,12 +15,12 @@ const puntoSum_1 = require("../../services/puntoSum");
 const getPuntoSum = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, puntoSum_1.getPuntoSumService)();
-        if ("error" in result)
+        if ('error' in result)
             return res.status(400).send(result);
         return res.status(200).send(result);
     }
     catch (err) {
-        let error = err;
+        const error = err;
         return (0, handleError_1.httpError)(res, error);
     }
 });
@@ -29,12 +29,12 @@ const addPuntoSum = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const fields = req.body;
         const response = yield (0, puntoSum_1.addPuntoSumService)(fields);
-        if ("error" in response)
+        if ('error' in response)
             return res.status(400).send({ message: response.message, error: response.error });
         return res.status(200).send(response);
     }
     catch (err) {
-        let error = err;
+        const error = err;
         return (0, handleError_1.httpError)(res, error);
     }
 });

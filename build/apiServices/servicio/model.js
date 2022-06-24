@@ -14,4 +14,4 @@ const servicioSchema = new mongoose_1.default.Schema({
     versionKey: false,
     timestamps: true
 });
-exports.default = mongoose_1.default.model("ServicioModel", servicioSchema);
+exports.default = mongoose_1.default.model('ServicioModel', servicioSchema);

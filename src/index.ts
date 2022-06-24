@@ -1,11 +1,11 @@
-import app from "./app";
-import { connectionDB } from "./config/connectionDB";
-import {config} from "dotenv"
-config();
-const PORT=process.env.PORT || 4000;
+import app from './app'
+import { connectionDB } from './config/connectionDB'
+import { config } from 'dotenv'
+config()
+const PORT = process.env.PORT as string
 
-app.listen(PORT,async()=>{
-    await connectionDB();
-    console.log("Conectado en el puerto ",PORT);
-    
+// eslint-disable-next-line @typescript-eslint/no-misused-promises
+app.listen(PORT, async () => {
+  await connectionDB()
+  console.log('Conectado en el puerto ', PORT)
 })

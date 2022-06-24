@@ -15,12 +15,12 @@ const licitacion_1 = require("../../services/licitacion");
 const showLicitaciones = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, licitacion_1.mostrarLicitacionesService)();
-        if ("error" in result)
+        if ('error' in result)
             return res.status(400).send(result);
         return res.status(200).send(result);
     }
     catch (err) {
-        let error = err;
+        const error = err;
         return (0, handleError_1.httpError)(res, error);
     }
 });
@@ -29,26 +29,27 @@ const createLicitacion = (req, res) => __awaiter(void 0, void 0, void 0, functio
     try {
         const fields = req.body;
         const result = yield (0, licitacion_1.crearLicitacionService)(fields);
-        if ("error" in result)
+        if ('error' in result)
             return res.status(400).send(result);
         return res.status(200).send(result);
     }
     catch (err) {
-        let error = err;
+        const error = err;
         return (0, handleError_1.httpError)(res, error);
     }
 });
 exports.createLicitacion = createLicitacion;
 const updateLicitacion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { fields, id } = req.body;
+        const fields = req.body;
+        const id = req.licitacionId;
         const result = yield (0, licitacion_1.updateLicitacionService)({ fields, id });
-        if ("error" in result)
+        if ('error' in result)
             return res.status(400).send(result);
         return res.status(200).send(result);
     }
     catch (err) {
-        let error = err;
+        const error = err;
         return (0, handleError_1.httpError)(res, error);
     }
 });
@@ -56,20 +57,18 @@ exports.updateLicitacion = updateLicitacion;
 const getTipos = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = req.user;
-        if (!user)
-            throw new Error("Debe iniciar sesión como usuario primero");
         const result = yield (0, licitacion_1.getTiposService)(user._id);
-        if ("error" in result)
+        if ('error' in result)
             return res.status(400).send(result);
         return res.status(200).send(result);
     }
     catch (err) {
-        let error = err;
+        const error = err;
         return (0, handleError_1.httpError)(res, error);
     }
 });
 exports.getTipos = getTipos;
-/*export const showFile=(req,res)=>{
+/* export const showFile=(req,res)=>{
     try{
         const path=req.pathFilename;
         if(fs.readFileSync(path)){
@@ -88,19 +87,17 @@ exports.getTipos = getTipos;
 export const findFilename=(req,res,next,id)=>{
     req.pathFilename=`uploads/pdfs/${id}`;
     next();
-}*/
+} */
 const showLicitacionesFree = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const proveedor = req.proveedor;
-        if (!proveedor)
-            throw new Error("Debe iniciar sesión primero");
         const licitaciones = yield (0, licitacion_1.getLicitacionesFreeService)(proveedor._id);
-        if ("error" in licitaciones)
+        if ('error' in licitaciones)
             return res.status(400).send(licitaciones);
         return res.status(200).send(licitaciones);
     }
     catch (err) {
-        let error = err;
+        const error = err;
         return (0, handleError_1.httpError)(res, error);
     }
 });
@@ -108,15 +105,13 @@ exports.showLicitacionesFree = showLicitacionesFree;
 const showLicitacionById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const licitacionId = req.licitacionId;
-        if (!licitacionId)
-            throw new Error("Licitación no seleccionada");
         const licitacion = yield (0, licitacion_1.getLicitacionByIdService)(licitacionId);
-        if ("error" in licitacion)
+        if ('error' in licitacion)
             return res.status(400).send(licitacion);
         return res.status(200).send(licitacion);
     }
     catch (err) {
-        let error = err;
+        const error = err;
         return (0, handleError_1.httpError)(res, error);
     }
 });

@@ -25,4 +25,4 @@ const codeSchema = new mongoose_1.default.Schema({
     versionKey: false,
     timestamps: true
 });
-exports.default = mongoose_1.default.model("CodeModel", codeSchema);
+exports.default = mongoose_1.default.model('CodeModel', codeSchema);

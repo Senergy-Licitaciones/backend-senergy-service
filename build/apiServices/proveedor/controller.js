@@ -9,22 +9,33 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.showProveedores = exports.participarLicitacion = void 0;
+exports.showProveedores = exports.participarLicitacion = exports.getProveedoresToUser = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const proveedor_1 = require("../../services/proveedor");
+const getProveedoresToUser = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const proveedores = yield (0, proveedor_1.getProveedoresToUserService)();
+        if ('error' in proveedores)
+            return res.status(400).send(proveedores);
+        return res.status(200).send(proveedores);
+    }
+    catch (err) {
+        const error = err;
+        return (0, handleError_1.httpError)(res, error);
+    }
+});
+exports.getProveedoresToUser = getProveedoresToUser;
 const participarLicitacion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const proveedor = req.proveedor;
-        if (!proveedor)
-            throw new Error("Debe iniciar sesión como proveedor primero");
         const fields = req.body;
         const result = yield (0, proveedor_1.participarLicitacionService)({ fields, idProveedor: proveedor._id });
-        if ("error" in result)
+        if ('error' in result)
             return res.status(400).send(result);
         return res.status(200).send(result);
     }
     catch (err) {
-        let error = err;
+        const error = err;
         return (0, handleError_1.httpError)(res, error);
     }
 });
@@ -32,12 +43,12 @@ exports.participarLicitacion = participarLicitacion;
 const showProveedores = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const proveedores = yield (0, proveedor_1.getProveedoresService)();
-        if ("error" in proveedores)
+        if ('error' in proveedores)
             return res.status(400).send(proveedores);
         return res.status(200).send(proveedores);
     }
     catch (err) {
-        let error = err;
+        const error = err;
         return (0, handleError_1.httpError)(res, error);
     }
 });

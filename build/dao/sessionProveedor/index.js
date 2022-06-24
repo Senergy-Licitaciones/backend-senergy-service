@@ -17,13 +17,13 @@ const handleError_1 = require("../../helpers/handleError");
 const model_1 = __importDefault(require("../../apiServices/sessionProveedor/model"));
 const model_2 = __importDefault(require("../../apiServices/proveedor/model"));
 const enums_1 = require("../../types/data/enums");
-model_1.default.watch().on("change", (change) => {
-    if (change.operationType === "delete") {
-        let docKey = change.documentKey;
+model_1.default.watch().on('change', (change) => {
+    if (change.operationType === 'delete') {
+        const docKey = change.documentKey;
         const closeSession = () => __awaiter(void 0, void 0, void 0, function* () {
-            yield model_2.default.findOneAndUpdate({ session: docKey._id }, { estado: enums_1.Estado.Offline, session: "" });
+            yield model_2.default.findOneAndUpdate({ session: docKey._id }, { estado: enums_1.Estado.Offline, session: '' });
         });
-        closeSession();
+        void closeSession();
     }
 });
 const createSessionProveedor = ({ proveedorId, token }) => __awaiter(void 0, void 0, void 0, function* () {
@@ -33,22 +33,22 @@ const createSessionProveedor = ({ proveedorId, token }) => __awaiter(void 0, voi
         return session;
     }
     catch (err) {
-        let error = err;
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error al crear la sesión ");
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al crear la sesión ');
     }
 });
 exports.createSessionProveedor = createSessionProveedor;
 const logoutProveedorDao = (proveedorId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const proveedor = yield model_1.default.findOneAndDelete({ proveedor: proveedorId });
-        if (!proveedor)
-            throw new Error("La sesión no existe");
+        if (proveedor == null)
+            throw new Error('La sesión no existe');
         return proveedor;
     }
     catch (err) {
-        let error = err;
-        console.log("error ", err);
-        return (0, handleError_1.handleError)(error, "Ha ocurrido un error al eliminar la sesión");
+        const error = err;
+        console.log('error ', err);
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al eliminar la sesión');
     }
 });
 exports.logoutProveedorDao = logoutProveedorDao;

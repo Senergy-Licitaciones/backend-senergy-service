@@ -7,7 +7,7 @@ const nodemailer_1 = __importDefault(require("nodemailer"));
 const dotenv_1 = require("dotenv");
 (0, dotenv_1.config)();
 const transporter = nodemailer_1.default.createTransport({
-    host: "smtp.titan.email",
+    host: 'smtp.titan.email',
     port: 465,
     secure: true,
     auth: {
@@ -16,8 +16,8 @@ const transporter = nodemailer_1.default.createTransport({
     }
 });
 transporter.verify().then(() => {
-    console.log("Listo para enviar email");
+    console.log('Listo para enviar email');
 }).catch((err) => {
-    console.log("Error al iniciar nodemailer", err);
+    console.log('Error al iniciar nodemailer', err);
 });
 exports.default = transporter;

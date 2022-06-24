@@ -59,16 +59,16 @@ const ofertaSchema = new mongoose_1.default.Schema({
     ],
     proveedor: {
         type: ObjectId,
-        ref: "ProveedorModel",
+        ref: 'ProveedorModel',
         required: true
     },
     licitacion: {
         type: ObjectId,
-        ref: "LicitacionModel",
+        ref: 'LicitacionModel',
         required: true
     }
 }, {
     versionKey: false,
     timestamps: true
 });
-exports.default = mongoose_1.default.model("OfertaModel", ofertaSchema);
+exports.default = mongoose_1.default.model('OfertaModel', ofertaSchema);
