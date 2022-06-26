@@ -37,7 +37,7 @@ export const participarLicitacionService: Service<{fields: Oferta, idProveedor: 
 }
 export const getInfoDashboardProveedorService: Service<DocType<Proveedor>, ErrorResponse|InfoDashboardProveedor> = async (proveedor) => {
   try {
-    const licitaciones = await getLicitacionesToProveedorDashboardDao()
+    const licitaciones = await getLicitacionesToProveedorDashboardDao(proveedor._id)
     if ('error' in licitaciones) throw new Error(licitaciones.message)
     const fechaActual = new Date(Date.now())
     const licitacionToExpire = licitaciones.reduce((prev, current) => {
@@ -53,8 +53,8 @@ export const getInfoDashboardProveedorService: Service<DocType<Proveedor>, Error
       numLicitaciones: licitaciones.length,
       plan: proveedor.role,
       timeToExpireLic: calcTime(formatFromStringToDate(licitacionToExpire.fechaFinApertura), fechaActual),
-      ofertas: ofertas.map((el) => ({ fechaInicio: el.createdAt, fechaFin: formatFromStringToDate(el.licitacion.fechaInicio), empresa: el.licitacion.empresa })),
-      licitaciones
+      ofertas: ofertas.map((el) => ({ participantes: el.licitacion.participantes.length, fechaInicio: el.createdAt, fechaFin: formatFromStringToDate(el.licitacion.fechaInicio), empresa: el.licitacion.empresa })),
+      licitaciones: licitaciones.map((li) => ({ fechaInicioApertura: formatFromStringToDate(li.fechaInicioApertura), fechaFinApertura: formatFromStringToDate(li.fechaFinApertura), empresa: li.empresa, participantes: li.participantes.length }))
     }
   } catch (err) {
     const error = err as Error

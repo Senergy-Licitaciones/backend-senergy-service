@@ -56,7 +56,7 @@ const participarLicitacionService = ({ fields, idProveedor }) => __awaiter(void 
 exports.participarLicitacionService = participarLicitacionService;
 const getInfoDashboardProveedorService = (proveedor) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const licitaciones = yield (0, licitacion_1.getLicitacionesToProveedorDashboardDao)();
+        const licitaciones = yield (0, licitacion_1.getLicitacionesToProveedorDashboardDao)(proveedor._id);
         if ('error' in licitaciones)
             throw new Error(licitaciones.message);
         const fechaActual = new Date(Date.now());
@@ -74,8 +74,8 @@ const getInfoDashboardProveedorService = (proveedor) => __awaiter(void 0, void 0
             numLicitaciones: licitaciones.length,
             plan: proveedor.role,
             timeToExpireLic: (0, calcTime_1.default)((0, dateFormat_1.formatFromStringToDate)(licitacionToExpire.fechaFinApertura), fechaActual),
-            ofertas: ofertas.map((el) => ({ fechaInicio: el.createdAt, fechaFin: (0, dateFormat_1.formatFromStringToDate)(el.licitacion.fechaInicio), empresa: el.licitacion.empresa })),
-            licitaciones
+            ofertas: ofertas.map((el) => ({ participantes: el.licitacion.participantes.length, fechaInicio: el.createdAt, fechaFin: (0, dateFormat_1.formatFromStringToDate)(el.licitacion.fechaInicio), empresa: el.licitacion.empresa })),
+            licitaciones: licitaciones.map((li) => ({ fechaInicioApertura: (0, dateFormat_1.formatFromStringToDate)(li.fechaInicioApertura), fechaFinApertura: (0, dateFormat_1.formatFromStringToDate)(li.fechaFinApertura), empresa: li.empresa, participantes: li.participantes.length }))
         };
     }
     catch (err) {

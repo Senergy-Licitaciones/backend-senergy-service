@@ -50,8 +50,8 @@ export interface InfoDashboardProveedor{
   numLicitaciones: number
   plan: Role
   timeToExpireLic: string
-  ofertas: Array<{fechaInicio: Date, fechaFin: Date, empresa: string}>
-  licitaciones: Array<DocType<Pick<Licitacion, 'empresa'|'fechaInicioApertura'|'fechaFinApertura'|'createdAt'|'updatedAt'>>>
+  ofertas: Array<{fechaInicio: Date, fechaFin: Date, participantes: number, empresa: string}>
+  licitaciones: Array<{fechaInicioApertura: Date, fechaFinApertura: Date, empresa: string, participantes: number}>
 }
 export interface Licitacion extends LicitacionRegisterFields{
   participantes: Types.Array<Types.ObjectId>

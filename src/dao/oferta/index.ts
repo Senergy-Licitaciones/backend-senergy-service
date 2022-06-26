@@ -53,9 +53,9 @@ export const updateOfertaDao: Dao<{ofertaId: Types.ObjectId, fields: Partial<Omi
     return handleError(error, 'Ha ocurrido un error en la capa de datos al actualizar la oferta')
   }
 }
-export const getOfertasToProveedorDashboardDao: Dao<Types.ObjectId, ErrorResponse|Array<DocType<Pick<Oferta, 'licitacion' | 'createdAt' | 'updatedAt'>> & {licitacion: Pick<Licitacion, 'empresa'|'fechaInicio'>}>> = async (idProveedor) => {
+export const getOfertasToProveedorDashboardDao: Dao<Types.ObjectId, ErrorResponse|Array<DocType<Pick<Oferta, 'licitacion' | 'createdAt' | 'updatedAt'>> & {licitacion: Pick<Licitacion, 'participantes'| 'empresa'|'fechaInicio'>}>> = async (idProveedor) => {
   try {
-    const ofertas = await OfertaModel.find({ proveedor: idProveedor }).select('licitacion createdAt updatedAt').populate<{licitacion: Pick<Licitacion, 'empresa'|'fechaInicio'>}>('licitacion').select('fechaInicio empresa') as Array<DocType<Pick<Oferta, 'licitacion' | 'createdAt' | 'updatedAt'>> & {licitacion: Pick<Licitacion, 'empresa'|'fechaInicio'>}>
+    const ofertas = await OfertaModel.find({ proveedor: idProveedor }).select('licitacion createdAt updatedAt').populate<{licitacion: Pick<Licitacion, 'participantes'| 'empresa'|'fechaInicio'>}>('licitacion').select('fechaInicio empresa') as Array<DocType<Pick<Oferta, 'licitacion' | 'createdAt' | 'updatedAt'>> & {licitacion: Pick<Licitacion, 'participantes'| 'empresa'|'fechaInicio'>}>
     console.log('ofertas', ofertas)
     return ofertas
   } catch (err) {

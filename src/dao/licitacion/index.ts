@@ -79,9 +79,9 @@ export const getLicitacionesByUserDao: Dao<Types.ObjectId, ErrorResponse|Array<D
     return handleError(error, 'Ha ocurrido un error en la capa de datos al obtener las licitaciones')
   }
 }
-export const getLicitacionesToProveedorDashboardDao: DaoWithoutParam<ErrorResponse|Array<DocType<Pick<Licitacion, 'empresa'|'fechaInicioApertura'|'fechaFinApertura'|'createdAt'|'updatedAt'>>>> = async () => {
+export const getLicitacionesToProveedorDashboardDao: Dao<Types.ObjectId, ErrorResponse|Array<DocType<Pick<Licitacion, 'empresa'|'fechaInicioApertura'|'fechaFinApertura'|'createdAt'|'updatedAt'|'participantes'>>>> = async (proveedorId) => {
   try {
-    const licitaciones = await LicitacionModel.find({ estado: Estado.Abierto }).select('empresa fechaInicioApertura fechaFinApertura createdAt updatedAt') as Array<DocType<Pick<Licitacion, 'empresa'|'fechaInicioApertura'|'fechaFinApertura'|'createdAt'|'updatedAt'>>>
+    const licitaciones = await LicitacionModel.find({ $nor: [{ participantes: proveedorId }], estado: Estado.Abierto }).select('empresa fechaInicioApertura fechaFinApertura participantes createdAt updatedAt') as Array<DocType<Pick<Licitacion, 'participantes'|'empresa'|'fechaInicioApertura'|'fechaFinApertura'|'createdAt'|'updatedAt'>>>
     console.log('licitaciones', licitaciones)
     return licitaciones
   } catch (err) {

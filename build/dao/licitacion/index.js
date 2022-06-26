@@ -103,9 +103,9 @@ const getLicitacionesByUserDao = (id) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.getLicitacionesByUserDao = getLicitacionesByUserDao;
-const getLicitacionesToProveedorDashboardDao = () => __awaiter(void 0, void 0, void 0, function* () {
+const getLicitacionesToProveedorDashboardDao = (proveedorId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const licitaciones = yield model_1.default.find({ estado: enums_1.Estado.Abierto }).select('empresa fechaInicioApertura fechaFinApertura createdAt updatedAt');
+        const licitaciones = yield model_1.default.find({ $nor: [{ participantes: proveedorId }], estado: enums_1.Estado.Abierto }).select('empresa fechaInicioApertura fechaFinApertura participantes createdAt updatedAt');
         console.log('licitaciones', licitaciones);
         return licitaciones;
     }
