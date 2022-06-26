@@ -3,6 +3,7 @@ import LicitacionModel from '../../apiServices/licitacion/model'
 import { DocType, ErrorResponse, Licitacion, ResponseParent } from '../../types/data'
 import { Document, Types, UpdateQuery } from 'mongoose'
 import { Dao, DaoWithoutParam } from '../../types/methods'
+import { Estado } from '../../types/form/enums'
 export const showLicitacionesDao: DaoWithoutParam<ErrorResponse|Array<Document<any, any, Licitacion> & Licitacion & {
   _id: Types.ObjectId}>> = async () => {
   try {
@@ -76,5 +77,15 @@ export const getLicitacionesByUserDao: Dao<Types.ObjectId, ErrorResponse|Array<D
   } catch (err) {
     const error = err as Error
     return handleError(error, 'Ha ocurrido un error en la capa de datos al obtener las licitaciones')
+  }
+}
+export const getLicitacionesToProveedorDashboardDao: DaoWithoutParam<ErrorResponse|Array<DocType<Pick<Licitacion, 'empresa'|'fechaInicioApertura'|'fechaFinApertura'|'createdAt'|'updatedAt'>>>> = async () => {
+  try {
+    const licitaciones = await LicitacionModel.find({ estado: Estado.Abierto }).select('empresa fechaInicioApertura fechaFinApertura createdAt updatedAt') as Array<DocType<Pick<Licitacion, 'empresa'|'fechaInicioApertura'|'fechaFinApertura'|'createdAt'|'updatedAt'>>>
+    console.log('licitaciones', licitaciones)
+    return licitaciones
+  } catch (err) {
+    const error = err as Error
+    return handleError(error, 'Ha ocurrido un error al obtener la información en la capa de datos')
   }
 }

@@ -8,12 +8,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProveedoresService = exports.participarLicitacionService = exports.getProveedoresToUserService = void 0;
+exports.getProveedoresService = exports.getInfoDashboardProveedorService = exports.participarLicitacionService = exports.getProveedoresToUserService = void 0;
 const licitacion_1 = require("../../dao/licitacion");
 const oferta_1 = require("../../dao/oferta");
 const proveedor_1 = require("../../dao/proveedor");
 const handleError_1 = require("../../helpers/handleError");
+const calcTime_1 = __importDefault(require("../../utils/calcTime"));
+const dateFormat_1 = require("../../utils/dateFormat");
 const getProveedoresToUserService = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const proveedores = yield (0, proveedor_1.getProveedoresToUserDao)();
@@ -49,6 +54,36 @@ const participarLicitacionService = ({ fields, idProveedor }) => __awaiter(void 
     }
 });
 exports.participarLicitacionService = participarLicitacionService;
+const getInfoDashboardProveedorService = (proveedor) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const licitaciones = yield (0, licitacion_1.getLicitacionesToProveedorDashboardDao)();
+        if ('error' in licitaciones)
+            throw new Error(licitaciones.message);
+        const fechaActual = new Date(Date.now());
+        const licitacionToExpire = licitaciones.reduce((prev, current) => {
+            const currentDate = (0, dateFormat_1.formatFromStringToDate)(current.fechaFinApertura);
+            const prevDate = (0, dateFormat_1.formatFromStringToDate)(prev.fechaFinApertura);
+            return currentDate.getTime() - fechaActual.getTime() < prevDate.getTime() - fechaActual.getTime() ? current : prev;
+        });
+        console.log('licitacionToExpire', licitacionToExpire);
+        const ofertas = yield (0, oferta_1.getOfertasToProveedorDashboardDao)(proveedor._id);
+        if ('error' in ofertas)
+            throw new Error(ofertas.message);
+        return {
+            numOfertas: proveedor.licitaciones.length,
+            numLicitaciones: licitaciones.length,
+            plan: proveedor.role,
+            timeToExpireLic: (0, calcTime_1.default)((0, dateFormat_1.formatFromStringToDate)(licitacionToExpire.fechaFinApertura), fechaActual),
+            ofertas: ofertas.map((el) => ({ fechaInicio: el.createdAt, fechaFin: (0, dateFormat_1.formatFromStringToDate)(el.licitacion.fechaInicio), empresa: el.licitacion.empresa })),
+            licitaciones
+        };
+    }
+    catch (err) {
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al obtener la información en la capa de servicios');
+    }
+});
+exports.getInfoDashboardProveedorService = getInfoDashboardProveedorService;
 const getProveedoresService = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const proveedores = yield (0, proveedor_1.getProveedoresDao)();

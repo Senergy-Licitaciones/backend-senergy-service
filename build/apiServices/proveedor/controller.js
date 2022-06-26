@@ -9,9 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.showProveedores = exports.participarLicitacion = exports.getProveedoresToUser = void 0;
+exports.showProveedores = exports.participarLicitacion = exports.getProveedoresToUser = exports.getInfoDashboardProveedor = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const proveedor_1 = require("../../services/proveedor");
+const getInfoDashboardProveedor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const proveedor = req.proveedor;
+        const info = yield (0, proveedor_1.getInfoDashboardProveedorService)(proveedor);
+        if ('error' in info)
+            return res.status(400).send(info);
+        return res.status(200).send(info);
+    }
+    catch (err) {
+        const error = err;
+        return (0, handleError_1.httpError)(res, error);
+    }
+});
+exports.getInfoDashboardProveedor = getInfoDashboardProveedor;
 const getProveedoresToUser = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const proveedores = yield (0, proveedor_1.getProveedoresToUserService)();

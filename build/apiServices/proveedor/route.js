@@ -12,5 +12,6 @@ const controller_1 = require("./controller");
 const router = express_1.default.Router();
 router.post('/crearOferta', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Proveedor]), (0, roleAuth_1.default)([enums_1.Role.Basico, enums_1.Role.Premium, enums_1.Role.Admin]), controller_1.participarLicitacion);
 router.get('/showProveedores', controller_1.showProveedores);
+router.get('/infoDashboardProveedor', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Proveedor]), (0, roleAuth_1.default)([enums_1.Role.Basico, enums_1.Role.Premium, enums_1.Role.Premium]), controller_1.getInfoDashboardProveedor);
 router.get('/getProveedoresToUser', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.User]), (0, roleAuth_1.default)([enums_1.Role.Basico, enums_1.Role.Premium, enums_1.Role.Admin]), controller_1.getProveedoresToUser);
 exports.default = router;

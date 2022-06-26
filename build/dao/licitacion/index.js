@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLicitacionesByUserDao = exports.getLicitacionByIdDao = exports.getLicitacionesFreeDao = exports.getTiposDao = exports.updateLicitacionDao = exports.createLicitacionDao = exports.showLicitacionesDao = void 0;
+exports.getLicitacionesToProveedorDashboardDao = exports.getLicitacionesByUserDao = exports.getLicitacionByIdDao = exports.getLicitacionesFreeDao = exports.getTiposDao = exports.updateLicitacionDao = exports.createLicitacionDao = exports.showLicitacionesDao = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const model_1 = __importDefault(require("../../apiServices/licitacion/model"));
+const enums_1 = require("../../types/form/enums");
 const showLicitacionesDao = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const licitaciones = yield model_1.default.find().populate('tipoServicio');
@@ -102,3 +103,15 @@ const getLicitacionesByUserDao = (id) => __awaiter(void 0, void 0, void 0, funct
     }
 });
 exports.getLicitacionesByUserDao = getLicitacionesByUserDao;
+const getLicitacionesToProveedorDashboardDao = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const licitaciones = yield model_1.default.find({ estado: enums_1.Estado.Abierto }).select('empresa fechaInicioApertura fechaFinApertura createdAt updatedAt');
+        console.log('licitaciones', licitaciones);
+        return licitaciones;
+    }
+    catch (err) {
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al obtener la información en la capa de datos');
+    }
+});
+exports.getLicitacionesToProveedorDashboardDao = getLicitacionesToProveedorDashboardDao;

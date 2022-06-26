@@ -45,6 +45,14 @@ export interface Info {
     fechaFinApertura: string
   }|ResponseParent
 }
+export interface InfoDashboardProveedor{
+  numOfertas: number
+  numLicitaciones: number
+  plan: Role
+  timeToExpireLic: string
+  ofertas: Array<{fechaInicio: Date, fechaFin: Date, empresa: string}>
+  licitaciones: Array<DocType<Pick<Licitacion, 'empresa'|'fechaInicioApertura'|'fechaFinApertura'|'createdAt'|'updatedAt'>>>
+}
 export interface Licitacion extends LicitacionRegisterFields{
   participantes: Types.Array<Types.ObjectId>
   createdAt: Date
@@ -63,6 +71,8 @@ export interface Oferta{
   licitacion: Types.ObjectId
   excesoEnergiaHp?: number
   excesoEnergiaHfp?: number
+  createdAt: Date
+  updatedAt: Date
 }
 export interface Proveedor extends ProveedorRegisterFields{
   role: Role
