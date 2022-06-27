@@ -25,6 +25,7 @@ const handleBcrypt_1 = require("../../helpers/handleBcrypt");
 const handleError_1 = require("../../helpers/handleError");
 const generateCode_1 = __importDefault(require("../../utils/generateCode"));
 const emails_1 = require("../emails");
+const admin_1 = require("../../dao/admin");
 const registrarUsuarioService = (fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { correo, password, empresa, ruc, web = 'Sin Página Web', phone, address } = fields;
@@ -232,19 +233,13 @@ exports.logoutProveedorService = logoutProveedorService;
 const loginAdminService = (fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { correo, password } = fields;
-        const user = yield (0, usuario_1.getUserDao)(correo);
-        if ('error' in user)
-            return (0, handleError_1.handleError)(user.error, user.message);
-        const isCorrect = yield (0, handleBcrypt_1.compare)({ password, hash: user.password });
+        const admin = yield (0, admin_1.getAccountDao)(correo);
+        if ('error' in admin)
+            return (0, handleError_1.handleError)(admin.error, admin.message);
+        const isCorrect = yield (0, handleBcrypt_1.compare)({ password, hash: admin.password });
         if (isCorrect === false || typeof isCorrect !== 'boolean')
             throw new Error('Contraseña incorrecta');
-        const token = (0, generateToken_1.tokenSignUser)(user);
-        const result = yield (0, sessionUser_1.createSessionUser)({ idUser: user._id, token });
-        if ('error' in result)
-            return (0, handleError_1.handleError)(result.error, result.message);
-        const response = yield (0, usuario_1.updateUsuarioDao)({ fields: { estado: enums_1.Estado.Online, sessionId: result._id.toString() }, id: user._id });
-        if ('error' in response)
-            return (0, handleError_1.handleError)(response.error, response.message);
+        const token = (0, generateToken_1.tokenSignAdmin)(admin);
         return {
             message: 'Usuario admin logeado exitosamente',
             token

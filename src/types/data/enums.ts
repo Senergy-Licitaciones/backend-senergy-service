@@ -5,7 +5,8 @@ export enum Role{
 }
 export enum Type{
   User='user',
-  Proveedor='proveedor'
+  Proveedor='proveedor',
+  Admin='admin'
 }
 export enum Estado{
   Online='online',

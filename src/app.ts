@@ -9,12 +9,14 @@ import routerBrg from './apiServices/brg/route'
 import routerPuntoSum from './apiServices/puntoSum/route'
 import routerServicio from './apiServices/servicio/route'
 import routerOferta from './apiServices/oferta/route'
+import routerAdmin from './apiServices/admin/route'
 const app = express()
 
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(cors())
 // routes
+app.use('/api/admin', routerAdmin)
 app.use('/api/auth', routerAuth)
 app.use('/api/licitacion', routerLicitacion)
 app.use('/api/proveedor', routerProveedor)

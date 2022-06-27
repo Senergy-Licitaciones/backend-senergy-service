@@ -1,10 +1,21 @@
 import jwt, { Secret } from 'jsonwebtoken'
 import { config } from 'dotenv'
 import { SignToken, VerifyToken } from '../types/methods'
-import { DataToken, Proveedor, User } from '../types/data'
+import { Admin, DataToken, DocType, Proveedor, User } from '../types/data'
 import { Document, Types } from 'mongoose'
 import { Type } from '../types/data/enums'
 config()
+export const tokenSignAdmin: SignToken = (admin) => {
+  const administrador = admin as DocType<Admin>
+  return jwt.sign({
+    _id: administrador._id,
+    name: administrador.name,
+    correo: administrador.correo,
+    type: Type.Admin
+  }, process.env.JWT_SECRET as Secret, {
+    expiresIn: '1h'
+  })
+}
 export const tokenSignUser: SignToken = (user) => {
   const usuario = user as Document<any, any, User> & User & {
     _id: Types.ObjectId}

@@ -11,6 +11,7 @@ var Type;
 (function (Type) {
     Type["User"] = "user";
     Type["Proveedor"] = "proveedor";
+    Type["Admin"] = "admin";
 })(Type = exports.Type || (exports.Type = {}));
 var Estado;
 (function (Estado) {

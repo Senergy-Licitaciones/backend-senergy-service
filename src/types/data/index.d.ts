@@ -1,6 +1,13 @@
 import { Document, Types } from 'mongoose'
 import { FactorIndex, LicitacionRegisterFields, ProveedorRegisterFields, UserRegisterFields } from '../form'
 import { Estado, Role, Type } from './enums'
+export interface Admin{
+  correo: string
+  name: string
+  password: string
+  createdAt: Date
+  updatedAt: Date
+}
 interface Code{
   code: string
   expiredTime: Date
