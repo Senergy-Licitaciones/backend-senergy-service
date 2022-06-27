@@ -11,10 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createAdminService = void 0;
 const admin_1 = require("../../dao/admin");
+const handleBcrypt_1 = require("../../helpers/handleBcrypt");
 const handleError_1 = require("../../helpers/handleError");
 const createAdminService = (fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const admin = yield (0, admin_1.createAdminDao)(fields);
+        const hash = yield (0, handleBcrypt_1.encrypt)(fields.password);
+        if (typeof hash !== 'string')
+            throw new Error(hash.message);
+        const admin = yield (0, admin_1.createAdminDao)(Object.assign(Object.assign({}, fields), { password: hash }));
         if ('error' in admin)
             throw new Error(admin.message);
         return {
