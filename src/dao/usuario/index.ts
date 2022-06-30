@@ -4,7 +4,7 @@ import { DocType, ErrorResponse, ResponseId, ResponseParent, User } from '../../
 import { UserRegisterFields } from '../../types/form'
 import { Types } from 'mongoose'
 import { Dao, DaoWithoutParam } from '../../types/methods'
-import { Estado, Role } from '../../types/data/enums'
+import { Estado } from '../../types/data/enums'
 export const crearUsuarioDao: Dao<UserRegisterFields, ErrorResponse|DocType<User>> = async (fields) => {
   try {
     const user = await UsuarioModel.create({ ...fields })
@@ -63,7 +63,7 @@ export const getUserHashDao: Dao<string, ErrorResponse|DocType<User>> = async (c
     return handleError(error, 'Ha ocurrido un error en la capa de datos')
   }
 }
-export const getUserDao: Dao<string, ErrorResponse|DocType<User>> = async (correo) => {
+/* export const getUserDao: Dao<string, ErrorResponse|DocType<User>> = async (correo) => {
   try {
     const user = await UsuarioModel.findOne({ correo, role: Role.Admin })
     if (user == null) throw new Error('Usuario no encontrado')
@@ -72,12 +72,10 @@ export const getUserDao: Dao<string, ErrorResponse|DocType<User>> = async (corre
     const error = err as Error
     return handleError(error, 'Ha ocurrido un error en la capa de datos al encontrar el usuario')
   }
-}
+} */
 export const getUsersDao: DaoWithoutParam<ErrorResponse|Array<DocType<User>>> = async () => {
   try {
-    const users = await UsuarioModel.find({
-      $nor: [{ role: 'admin' }]
-    })
+    const users = await UsuarioModel.find()
     return users
   } catch (err) {
     const error = err as Error

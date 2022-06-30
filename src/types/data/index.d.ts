@@ -1,10 +1,11 @@
 import { Document, Types } from 'mongoose'
 import { FactorIndex, LicitacionRegisterFields, ProveedorRegisterFields, UserRegisterFields } from '../form'
-import { Estado, Role, Type } from './enums'
+import { Estado, Role, RoleAdmin, Type } from './enums'
 export interface Admin{
   correo: string
   name: string
   password: string
+  role: RoleAdmin
   createdAt: Date
   updatedAt: Date
 }
@@ -18,7 +19,7 @@ export interface CodeUser extends Code{
 export interface CodeProveedor extends Code{
   proveedor: string
 }
-export type DataToken=DataProveedorToken|DataUserToken
+export type DataToken=DataProveedorToken|DataUserToken | DataAdminToken
 export interface DataUserToken {
   _id: string
   empresa: string
@@ -29,6 +30,12 @@ export interface DataProveedorToken {
   _id: string
   razSocial: string
   type: Type.Proveedor
+}
+export interface DataAdminToken{
+  _id: string
+  type: Type.Admin
+  name: string
+  correo: string
 }
 export type DocType<Param> = Document<any, any, Param> & Param & {
   _id: Types.ObjectId

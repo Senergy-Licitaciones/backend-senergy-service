@@ -1,7 +1,6 @@
 export enum Role{
   Basico='basico',
-  Premium='premium',
-  Admin='admin'
+  Premium='premium'
 }
 export enum Type{
   User='user',
@@ -12,4 +11,8 @@ export enum Estado{
   Online='online',
   Offline='offline',
   ToConfirm='toConfirm'
+}
+export enum RoleAdmin{
+  Employee='Empleado',
+  Boss='Jefe'
 }

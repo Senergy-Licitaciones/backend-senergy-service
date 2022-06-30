@@ -7,7 +7,7 @@ import { getBrg, addBrg } from './controller'
 
 const router = express.Router()
 
-router.get('/getBrgs', checkAuth, checkUserType([Type.User]), checkRoleAuth([Role.Basico, Role.Premium, Role.Admin]), getBrg)
+router.get('/getBrgs', checkAuth, checkUserType([Type.User]), checkRoleAuth([Role.Basico, Role.Premium]), getBrg)
 router.post('/addBrg', addBrg)
 
 export default router

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUsersDao = exports.getUserDao = exports.getUserHashDao = exports.confirmUserDao = exports.updateUsuarioDao = exports.verifyCorreoDao = exports.crearUsuarioDao = void 0;
+exports.getUsersDao = exports.getUserHashDao = exports.confirmUserDao = exports.updateUsuarioDao = exports.verifyCorreoDao = exports.crearUsuarioDao = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const model_1 = __importDefault(require("../../apiServices/usuario/model"));
 const enums_1 = require("../../types/data/enums");
@@ -88,24 +88,19 @@ const getUserHashDao = (correo) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.getUserHashDao = getUserHashDao;
-const getUserDao = (correo) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const user = yield model_1.default.findOne({ correo, role: enums_1.Role.Admin });
-        if (user == null)
-            throw new Error('Usuario no encontrado');
-        return user;
-    }
-    catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al encontrar el usuario');
-    }
-});
-exports.getUserDao = getUserDao;
+/* export const getUserDao: Dao<string, ErrorResponse|DocType<User>> = async (correo) => {
+  try {
+    const user = await UsuarioModel.findOne({ correo, role: Role.Admin })
+    if (user == null) throw new Error('Usuario no encontrado')
+    return user
+  } catch (err) {
+    const error = err as Error
+    return handleError(error, 'Ha ocurrido un error en la capa de datos al encontrar el usuario')
+  }
+} */
 const getUsersDao = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const users = yield model_1.default.find({
-            $nor: [{ role: 'admin' }]
-        });
+        const users = yield model_1.default.find();
         return users;
     }
     catch (err) {

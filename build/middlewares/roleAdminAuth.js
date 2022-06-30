@@ -9,26 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const checkRoleAuth = (roles) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+exports.checkRoleAdminAuth = void 0;
+const checkRoleAdminAuth = (roles) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const proveedor = req.proveedor;
-        const user = req.user;
-        if (proveedor != null) {
-            return roles.includes(proveedor.role) ? next() : res.status(409).send({ message: 'Usuario sin permisos', error: true });
+        const admin = req.admin;
+        if (admin != null) {
+            return roles.includes(admin.role) ? next() : res.status(409).send({ message: 'No cuenta con los permisos necesarios para realizar esta acción', error: true });
         }
-        ;
-        if (user != null) {
-            return roles.includes(user.role) ? next() : res.status(409).send({ message: 'Proveedor sin permisos', error: true });
-        }
-        ;
-        throw new Error('No tiene acceso a este recurso');
+        throw new Error('No cuentas con los permisos para acceder a este recurso');
     }
     catch (err) {
-        console.log('error role auth ', err);
+        const error = err;
         return res.status(500).send({
-            message: 'Ha ocurrido un error en la autenticación',
+            message: error.message,
             error: err
         });
     }
 });
-exports.default = checkRoleAuth;
+exports.checkRoleAdminAuth = checkRoleAdminAuth;

@@ -1,7 +1,7 @@
 import { verifyToken } from '../helpers/generateToken'
 import { Type } from '../types/data/enums'
 import { CheckUserType } from '../types/methods'
-
+import AdminModel from '../apiServices/admin/model'
 import UsuarioModel from '../apiServices/usuario/model'
 import ProveedorModel from '../apiServices/proveedor/model'
 const checkUserType: CheckUserType = (types) => async (req, res, next) => {
@@ -20,10 +20,8 @@ const checkUserType: CheckUserType = (types) => async (req, res, next) => {
         message: 'Token inválido'
       })
     }
-    console.log('definiendo array')
-    const initialArray: Type[] = []
     console.log('type token ', tokenData.type, ' ', types.toString())
-    if (initialArray.concat(types).includes(tokenData.type)) {
+    if (types.includes(tokenData.type)) {
       if (tokenData.type === Type.User) {
         const user = await UsuarioModel.findById(tokenData._id)
         if (user == null) return res.status(400).send({ message: 'Usuario sin permisos', error: true })
@@ -34,6 +32,11 @@ const checkUserType: CheckUserType = (types) => async (req, res, next) => {
         const proveedor = await ProveedorModel.findById(tokenData._id)
         if (proveedor == null) return res.status(400).send({ message: 'Usuario sin permisos', error: true })
         req.proveedor = proveedor
+      }
+      if (tokenData.type === Type.Admin) {
+        const admin = await AdminModel.findById(tokenData._id)
+        if (admin == null) return res.status(400).send({ message: 'Cuenta no encontrada', error: true })
+        req.admin = admin
       }
       console.log('antes del next en user type')
       return next()
