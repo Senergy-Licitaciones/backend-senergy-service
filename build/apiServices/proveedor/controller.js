@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.showProveedores = exports.participarLicitacion = exports.getProveedoresToUser = exports.getInfoDashboardProveedor = void 0;
+exports.createProveedor = exports.showProveedores = exports.participarLicitacion = exports.getProveedoresToUser = exports.getInfoDashboardProveedor = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const proveedor_1 = require("../../services/proveedor");
 const getInfoDashboardProveedor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -67,3 +67,17 @@ const showProveedores = (_req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.showProveedores = showProveedores;
+const createProveedor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const fields = req.body;
+        const response = yield (0, proveedor_1.createProveedorService)(fields);
+        if ('error' in response)
+            return res.status(400).send(response);
+        return res.status(200).send(response);
+    }
+    catch (err) {
+        const error = err;
+        return (0, handleError_1.httpError)(res, error);
+    }
+});
+exports.createProveedor = createProveedor;

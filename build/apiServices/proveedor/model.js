@@ -24,10 +24,6 @@ const proveedorSchema = new mongoose_1.default.Schema({
         required: true,
         default: enums_1.Role.Basico
     },
-    pais: {
-        type: String,
-        trim: true
-    },
     web: {
         type: String,
         trim: true
@@ -43,10 +39,19 @@ const proveedorSchema = new mongoose_1.default.Schema({
         trim: true,
         required: true
     },
-    phone: {
+    phone1: {
         type: Number,
         required: true,
         length: 9,
+        trim: true
+    },
+    phone2: {
+        type: Number,
+        length: 9,
+        trim: true
+    },
+    correo2: {
+        type: String,
         trim: true
     },
     password: {
@@ -65,15 +70,6 @@ const proveedorSchema = new mongoose_1.default.Schema({
         enum: enums_1.Estado,
         required: true,
         default: enums_1.Estado.Offline
-    },
-    codeToConfirm: {
-        type: String,
-        trim: true
-    },
-    verified: {
-        type: Boolean,
-        required: true,
-        default: false
     },
     session: {
         type: String,

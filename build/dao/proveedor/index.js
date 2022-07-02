@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProveedoresToUserDao = exports.getProveedoresDao = exports.proveedorEstadoDao = exports.confirmProveedorDao = exports.verifyCorreoProveedorDao = exports.updateProveedorDao = exports.getProveedorNameByIdDao = exports.crearProveedorDao = void 0;
+exports.createProveedorDao = exports.getProveedoresToUserDao = exports.getProveedoresDao = exports.proveedorEstadoDao = exports.confirmProveedorDao = exports.verifyCorreoProveedorDao = exports.updateProveedorDao = exports.getProveedorNameByIdDao = exports.crearProveedorDao = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const model_1 = __importDefault(require("../../apiServices/proveedor/model"));
 const enums_1 = require("../../types/data/enums");
@@ -126,3 +126,15 @@ const getProveedoresToUserDao = () => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.getProveedoresToUserDao = getProveedoresToUserDao;
+const createProveedorDao = (fields) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const proveedor = yield model_1.default.create(fields);
+        const response = yield proveedor.save();
+        return response;
+    }
+    catch (err) {
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al crear el proveedor de energía eléctrica en la capa de datos');
+    }
+});
+exports.createProveedorDao = createProveedorDao;
