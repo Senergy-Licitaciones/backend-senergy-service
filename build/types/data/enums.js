@@ -20,6 +20,6 @@ var Estado;
 })(Estado = exports.Estado || (exports.Estado = {}));
 var RoleAdmin;
 (function (RoleAdmin) {
-    RoleAdmin["Employee"] = "Empleado";
-    RoleAdmin["Boss"] = "Jefe";
+    RoleAdmin["Employee"] = "empleado";
+    RoleAdmin["Boss"] = "jefe";
 })(RoleAdmin = exports.RoleAdmin || (exports.RoleAdmin = {}));

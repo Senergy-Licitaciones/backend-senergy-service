@@ -13,6 +13,6 @@ export enum Estado{
   ToConfirm='toConfirm'
 }
 export enum RoleAdmin{
-  Employee='Empleado',
-  Boss='Jefe'
+  Employee='empleado',
+  Boss='jefe'
 }
