@@ -91,8 +91,6 @@ export interface Oferta{
 export interface Proveedor extends ProveedorRegisterFields{
   role: Role
   estado: Estado
-  codeToConfirm: string
-  verified: boolean
   session: string
   licitaciones: Types.Array<Types.ObjectId>
   createdAt: Date

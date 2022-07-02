@@ -1,6 +1,6 @@
 import { handleError } from '../../helpers/handleError'
 import ProveedorModel from '../../apiServices/proveedor/model'
-import { DaoProveedorRegister, InfoBasicaProveedor } from '../../types/form'
+import { DaoProveedorRegister, InfoBasicaProveedor, ProveedorRegisterFields } from '../../types/form'
 import { DocType, ErrorResponse, Proveedor, ResponseParent } from '../../types/data'
 import { Document, Types, UpdateQuery } from 'mongoose'
 import { Dao, DaoWithoutParam } from '../../types/methods'
@@ -96,5 +96,15 @@ export const getProveedoresToUserDao: DaoWithoutParam<ErrorResponse|InfoBasicaPr
   } catch (err) {
     const error = err as Error
     return handleError(error, 'Ha ocurrido un error al obtener los proveedores en la capa de datos')
+  }
+}
+export const createProveedorDao: Dao<ProveedorRegisterFields, ErrorResponse|DocType<Proveedor>> = async (fields) => {
+  try {
+    const proveedor = await ProveedorModel.create(fields)
+    const response = await proveedor.save()
+    return response
+  } catch (err) {
+    const error = err as Error
+    return handleError(error, 'Ha ocurrido un error al crear el proveedor de energía eléctrica en la capa de datos')
   }
 }
