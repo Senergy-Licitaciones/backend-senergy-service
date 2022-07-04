@@ -1,4 +1,5 @@
 import { Types } from 'mongoose'
+import { Proveedor } from '../data'
 import { Estado } from '../enums'
 
 export interface FieldsAdd {
@@ -67,7 +68,7 @@ export interface ProveedorRegisterFields{
   phone1: number
   phone2: number
 }
-export type InfoBasicaProveedor=DocType<Pick<Proveedor, 'correo'|'address'|'phone'|'razSocial'|'ruc'|'web'|'createdAt'|'updatedAt'>>
+export type InfoBasicaProveedor=DocType<Pick<Proveedor, 'correo'|'address'|'phone1'|'razSocial'|'ruc'|'web'|'createdAt'|'updatedAt'>>
 export interface UserRegisterFields{
   correo: string
   password: string
