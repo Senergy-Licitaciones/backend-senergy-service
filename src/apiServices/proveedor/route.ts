@@ -8,7 +8,7 @@ import { participarLicitacion, showProveedores, getProveedoresToUser, getInfoDas
 const router = express.Router()
 
 router.post('/crearOferta', checkAuth, checkUserType([Type.Proveedor]), checkRoleAuth([Role.Basico, Role.Premium]), participarLicitacion)
-router.get('/showProveedores', showProveedores)
+router.get('/proveedores', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), showProveedores)
 router.post('/createProveedor', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), createProveedor)
 router.get('/infoDashboardProveedor', checkAuth, checkUserType([Type.Proveedor]), checkRoleAuth([Role.Basico, Role.Premium]), getInfoDashboardProveedor)
 router.get('/getProveedoresToUser', checkAuth, checkUserType([Type.User]), checkRoleAuth([Role.Basico, Role.Premium]), getProveedoresToUser)

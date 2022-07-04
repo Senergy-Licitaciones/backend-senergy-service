@@ -79,10 +79,9 @@ export const proveedorEstadoDao: Dao<string, ErrorResponse|DocType<Proveedor>> =
     return handleError(error, 'Ha ocurrido un error al verificar la cuenta')
   }
 }
-export const getProveedoresDao: DaoWithoutParam<ErrorResponse|Array<Document<any, any, Proveedor> & Proveedor & {
-  _id: Types.ObjectId}>> = async () => {
+export const getProveedoresDao: DaoWithoutParam<ErrorResponse|Array<DocType<Pick<Proveedor, 'razSocial'|'ruc'|'role'|'estado'|'correo'>>>> = async () => {
   try {
-    const proveedores = await ProveedorModel.find()
+    const proveedores = await ProveedorModel.find().select('razSocial ruc role estado correo') as Array<DocType<Pick<Proveedor, 'razSocial'|'ruc'|'role'|'estado'|'correo'>>>
     return proveedores
   } catch (err) {
     const error = err as Error

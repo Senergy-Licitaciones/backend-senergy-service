@@ -61,10 +61,10 @@ export const getInfoDashboardProveedorService: Service<DocType<Proveedor>, Error
     return handleError(error, 'Ha ocurrido un error al obtener la información en la capa de servicios')
   }
 }
-export const getProveedoresService: ServiceWithoutParam<ErrorResponse|Array<DocType<Proveedor>>> = async () => {
+export const getProveedoresService: ServiceWithoutParam<ErrorResponse|Array<DocType<Pick<Proveedor, 'razSocial'|'ruc'|'role'|'estado'|'correo'>>>> = async () => {
   try {
     const proveedores = await getProveedoresDao()
-    if ('error' in proveedores) return handleError(proveedores.error, proveedores.message)
+    if ('error' in proveedores) throw new Error(proveedores.message)
     return proveedores
   } catch (err) {
     const error = err as Error

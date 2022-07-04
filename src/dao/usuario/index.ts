@@ -73,9 +73,9 @@ export const getUserHashDao: Dao<string, ErrorResponse|DocType<User>> = async (c
     return handleError(error, 'Ha ocurrido un error en la capa de datos al encontrar el usuario')
   }
 } */
-export const getUsersDao: DaoWithoutParam<ErrorResponse|Array<DocType<User>>> = async () => {
+export const getUsersDao: DaoWithoutParam<ErrorResponse|Array<DocType<Pick<User, 'correo'| 'empresa' |'ruc' |'estado'| 'role'>>>> = async () => {
   try {
-    const users = await UsuarioModel.find()
+    const users = await UsuarioModel.find().select('correo empresa ruc estado role') as Array<DocType<Pick<User, 'correo'| 'empresa'| 'ruc' |'estado'| 'role'>>>
     return users
   } catch (err) {
     const error = err as Error
