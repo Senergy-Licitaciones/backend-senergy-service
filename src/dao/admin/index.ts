@@ -1,7 +1,7 @@
 import { handleError } from '../../helpers/handleError'
 import { Admin, DocType, ErrorResponse } from '../../types/data'
 import AdminModel from '../../apiServices/admin/model'
-import { Dao } from '../../types/methods'
+import { Dao, DaoWithoutParam } from '../../types/methods'
 export const getAccountDao: Dao<string, ErrorResponse|DocType<Admin>> = async (correo) => {
   try {
     const admin = await AdminModel.findOne({ correo })
@@ -20,5 +20,14 @@ export const createAdminDao: Dao<Omit<Admin, 'createdAt'|'updatedAt'>, ErrorResp
   } catch (err) {
     const error = err as Error
     return handleError(error, 'Ha ocurrido un error al crear un Administrador en la capa de datos')
+  }
+}
+export const getAdminsDao: DaoWithoutParam<ErrorResponse|Array<DocType<Admin>>> = async () => {
+  try {
+    const admins = await AdminModel.find()
+    return admins
+  } catch (err) {
+    const error = err as Error
+    return handleError(error, 'Ha ocurrido un error en la capa de datos al obtener la lista de administradores')
   }
 }

@@ -1,10 +1,10 @@
 import { Types } from 'mongoose'
 import { getLicitacionesToProveedorDashboardDao, updateLicitacionDao } from '../../dao/licitacion'
 import { crearOfertaDao, getOfertasToProveedorDashboardDao } from '../../dao/oferta'
-import { updateProveedorDao, getProveedoresDao, getProveedoresToUserDao } from '../../dao/proveedor'
+import { updateProveedorDao, getProveedoresDao, getProveedoresToUserDao, createProveedorDao } from '../../dao/proveedor'
 import { handleError } from '../../helpers/handleError'
 import { DocType, ErrorResponse, InfoDashboardProveedor, Oferta, Proveedor, ResponseParent } from '../../types/data'
-import { InfoBasicaProveedor } from '../../types/form'
+import { InfoBasicaProveedor, ProveedorRegisterFields } from '../../types/form'
 import { Service, ServiceWithoutParam } from '../../types/methods'
 import calcTime from '../../utils/calcTime'
 import { formatFromStringToDate } from '../../utils/dateFormat'
@@ -61,13 +61,25 @@ export const getInfoDashboardProveedorService: Service<DocType<Proveedor>, Error
     return handleError(error, 'Ha ocurrido un error al obtener la información en la capa de servicios')
   }
 }
-export const getProveedoresService: ServiceWithoutParam<ErrorResponse|Array<DocType<Proveedor>>> = async () => {
+export const getProveedoresService: ServiceWithoutParam<ErrorResponse|Array<DocType<Pick<Proveedor, 'razSocial'|'ruc'|'role'|'estado'|'correo'>>>> = async () => {
   try {
     const proveedores = await getProveedoresDao()
-    if ('error' in proveedores) return handleError(proveedores.error, proveedores.message)
+    if ('error' in proveedores) throw new Error(proveedores.message)
     return proveedores
   } catch (err) {
     const error = err as Error
     return handleError(error, 'Ha ocurrido un error en la capa de servicios al listar los proveedores')
+  }
+}
+export const createProveedorService: Service<ProveedorRegisterFields, ErrorResponse|ResponseParent> = async (fields) => {
+  try {
+    const proveedor = await createProveedorDao(fields)
+    if ('error' in proveedor) throw new Error()
+    return {
+      message: `Cuenta ${proveedor.correo} registrada exitosamente`
+    }
+  } catch (err) {
+    const error = err as Error
+    return handleError(error, 'Ha ocurrido un error en la capa de servicios al registrar un nuevo proveedor de electricidad')
   }
 }

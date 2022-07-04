@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProveedoresService = exports.getInfoDashboardProveedorService = exports.participarLicitacionService = exports.getProveedoresToUserService = void 0;
+exports.createProveedorService = exports.getProveedoresService = exports.getInfoDashboardProveedorService = exports.participarLicitacionService = exports.getProveedoresToUserService = void 0;
 const licitacion_1 = require("../../dao/licitacion");
 const oferta_1 = require("../../dao/oferta");
 const proveedor_1 = require("../../dao/proveedor");
@@ -88,7 +88,7 @@ const getProveedoresService = () => __awaiter(void 0, void 0, void 0, function* 
     try {
         const proveedores = yield (0, proveedor_1.getProveedoresDao)();
         if ('error' in proveedores)
-            return (0, handleError_1.handleError)(proveedores.error, proveedores.message);
+            throw new Error(proveedores.message);
         return proveedores;
     }
     catch (err) {
@@ -97,3 +97,18 @@ const getProveedoresService = () => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.getProveedoresService = getProveedoresService;
+const createProveedorService = (fields) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const proveedor = yield (0, proveedor_1.createProveedorDao)(fields);
+        if ('error' in proveedor)
+            throw new Error();
+        return {
+            message: `Cuenta ${proveedor.correo} registrada exitosamente`
+        };
+    }
+    catch (err) {
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al registrar un nuevo proveedor de electricidad');
+    }
+});
+exports.createProveedorService = createProveedorService;

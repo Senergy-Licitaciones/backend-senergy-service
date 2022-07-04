@@ -1,7 +1,8 @@
 import { RequestHandler } from 'express'
 import { httpError } from '../../helpers/handleError'
-import { participarLicitacionService, getProveedoresService, getProveedoresToUserService, getInfoDashboardProveedorService } from '../../services/proveedor'
+import { participarLicitacionService, getProveedoresService, getProveedoresToUserService, getInfoDashboardProveedorService, createProveedorService } from '../../services/proveedor'
 import { DocType, Oferta, Proveedor } from '../../types/data'
+import { ProveedorRegisterFields } from '../../types/form'
 export const getInfoDashboardProveedor: RequestHandler = async (req, res) => {
   try {
     const proveedor = req.proveedor as DocType<Proveedor>
@@ -40,6 +41,17 @@ export const showProveedores: RequestHandler = async (_req, res) => {
     const proveedores = await getProveedoresService()
     if ('error' in proveedores) return res.status(400).send(proveedores)
     return res.status(200).send(proveedores)
+  } catch (err) {
+    const error = err as Error
+    return httpError(res, error)
+  }
+}
+export const createProveedor: RequestHandler = async (req, res) => {
+  try {
+    const fields = req.body as ProveedorRegisterFields
+    const response = await createProveedorService(fields)
+    if ('error' in response) return res.status(400).send(response)
+    return res.status(200).send(response)
   } catch (err) {
     const error = err as Error
     return httpError(res, error)
