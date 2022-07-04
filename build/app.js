@@ -23,7 +23,7 @@ app.use((0, cors_1.default)());
 // routes
 app.use('/api/admin', route_9.default);
 app.use('/api/auth', route_1.default);
-app.use('api/historial-parametros', route_10.default);
+app.use('/api/historial-parametros', route_10.default);
 app.use('/api/licitacion', route_2.default);
 app.use('/api/proveedor', route_3.default);
 app.use('/api/user', route_4.default);
