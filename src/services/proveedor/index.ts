@@ -2,6 +2,7 @@ import { Types } from 'mongoose'
 import { getLicitacionesToProveedorDashboardDao, updateLicitacionDao } from '../../dao/licitacion'
 import { crearOfertaDao, getOfertasToProveedorDashboardDao } from '../../dao/oferta'
 import { updateProveedorDao, getProveedoresDao, getProveedoresToUserDao, createProveedorDao } from '../../dao/proveedor'
+import { encrypt } from '../../helpers/handleBcrypt'
 import { handleError } from '../../helpers/handleError'
 import { DocType, ErrorResponse, InfoDashboardProveedor, Oferta, Proveedor, ResponseParent } from '../../types/data'
 import { InfoBasicaProveedor, ProveedorRegisterFields } from '../../types/form'
@@ -73,7 +74,9 @@ export const getProveedoresService: ServiceWithoutParam<ErrorResponse|Array<DocT
 }
 export const createProveedorService: Service<ProveedorRegisterFields, ErrorResponse|ResponseParent> = async (fields) => {
   try {
-    const proveedor = await createProveedorDao(fields)
+    const hash = await encrypt(fields.password)
+    if (typeof hash !== 'string') throw new Error(hash.message)
+    const proveedor = await createProveedorDao({ ...fields, password: hash })
     if ('error' in proveedor) throw new Error()
     return {
       message: `Cuenta ${proveedor.correo} registrada exitosamente`

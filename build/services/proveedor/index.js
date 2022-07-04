@@ -16,6 +16,7 @@ exports.createProveedorService = exports.getProveedoresService = exports.getInfo
 const licitacion_1 = require("../../dao/licitacion");
 const oferta_1 = require("../../dao/oferta");
 const proveedor_1 = require("../../dao/proveedor");
+const handleBcrypt_1 = require("../../helpers/handleBcrypt");
 const handleError_1 = require("../../helpers/handleError");
 const calcTime_1 = __importDefault(require("../../utils/calcTime"));
 const dateFormat_1 = require("../../utils/dateFormat");
@@ -99,7 +100,10 @@ const getProveedoresService = () => __awaiter(void 0, void 0, void 0, function* 
 exports.getProveedoresService = getProveedoresService;
 const createProveedorService = (fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const proveedor = yield (0, proveedor_1.createProveedorDao)(fields);
+        const hash = yield (0, handleBcrypt_1.encrypt)(fields.password);
+        if (typeof hash !== 'string')
+            throw new Error(hash.message);
+        const proveedor = yield (0, proveedor_1.createProveedorDao)(Object.assign(Object.assign({}, fields), { password: hash }));
         if ('error' in proveedor)
             throw new Error();
         return {
