@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createAdminService = void 0;
+exports.getAdminsService = exports.createAdminService = void 0;
 const admin_1 = require("../../dao/admin");
 const handleBcrypt_1 = require("../../helpers/handleBcrypt");
 const handleError_1 = require("../../helpers/handleError");
@@ -31,3 +31,16 @@ const createAdminService = (fields) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.createAdminService = createAdminService;
+const getAdminsService = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const admins = yield (0, admin_1.getAdminsDao)();
+        if ('error' in admins)
+            throw new Error(admins.message);
+        return admins;
+    }
+    catch (err) {
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al obtener la lista de administradores');
+    }
+});
+exports.getAdminsService = getAdminsService;

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createAdminDao = exports.getAccountDao = void 0;
+exports.getAdminsDao = exports.createAdminDao = exports.getAccountDao = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const model_1 = __importDefault(require("../../apiServices/admin/model"));
 const getAccountDao = (correo) => __awaiter(void 0, void 0, void 0, function* () {
@@ -40,3 +40,14 @@ const createAdminDao = (fields) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.createAdminDao = createAdminDao;
+const getAdminsDao = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const admins = yield model_1.default.find();
+        return admins;
+    }
+    catch (err) {
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al obtener la lista de administradores');
+    }
+});
+exports.getAdminsDao = getAdminsDao;

@@ -100,7 +100,7 @@ exports.getUserHashDao = getUserHashDao;
 } */
 const getUsersDao = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const users = yield model_1.default.find();
+        const users = yield model_1.default.find().select('correo empresa ruc estado role');
         return users;
     }
     catch (err) {

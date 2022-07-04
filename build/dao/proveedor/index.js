@@ -106,7 +106,7 @@ const proveedorEstadoDao = (correo) => __awaiter(void 0, void 0, void 0, functio
 exports.proveedorEstadoDao = proveedorEstadoDao;
 const getProveedoresDao = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const proveedores = yield model_1.default.find();
+        const proveedores = yield model_1.default.find().select('razSocial ruc role estado correo');
         return proveedores;
     }
     catch (err) {

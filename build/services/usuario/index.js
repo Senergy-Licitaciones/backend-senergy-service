@@ -92,7 +92,7 @@ const getUsersService = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const users = yield (0, usuario_1.getUsersDao)();
         if ('error' in users)
-            return (0, handleError_1.handleError)(users.error, users.message);
+            throw new Error(users.message);
         return users;
     }
     catch (err) {

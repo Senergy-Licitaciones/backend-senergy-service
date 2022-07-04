@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createAdminUser = void 0;
+exports.getAdmins = exports.createAdminUser = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const admin_1 = require("../../services/admin");
 const createAdminUser = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -26,3 +26,16 @@ const createAdminUser = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.createAdminUser = createAdminUser;
+const getAdmins = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const admins = yield (0, admin_1.getAdminsService)();
+        if ('error' in admins)
+            return res.status(400).send(admins);
+        return res.status(200).send(admins);
+    }
+    catch (err) {
+        const error = err;
+        return (0, handleError_1.httpError)(res, error);
+    }
+});
+exports.getAdmins = getAdmins;

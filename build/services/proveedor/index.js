@@ -88,7 +88,7 @@ const getProveedoresService = () => __awaiter(void 0, void 0, void 0, function* 
     try {
         const proveedores = yield (0, proveedor_1.getProveedoresDao)();
         if ('error' in proveedores)
-            return (0, handleError_1.handleError)(proveedores.error, proveedores.message);
+            throw new Error(proveedores.message);
         return proveedores;
     }
     catch (err) {
