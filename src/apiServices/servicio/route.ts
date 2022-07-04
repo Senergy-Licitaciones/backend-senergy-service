@@ -5,7 +5,7 @@ import checkRoleAuth from '../../middlewares/roleAuth'
 import { Role, Type } from '../../types/data/enums'
 import { getServicios, addServicio } from './controller'
 const router = express.Router()
-router.get('/getServicios', checkAuth, checkUserType([Type.User]), checkRoleAuth([Role.Basico, Role.Premium, Role.Admin]), getServicios)
+router.get('/getServicios', checkAuth, checkUserType([Type.User]), checkRoleAuth([Role.Basico, Role.Premium]), getServicios)
 router.post('/addServicio', addServicio)
 
 export default router

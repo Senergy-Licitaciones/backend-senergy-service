@@ -10,6 +10,6 @@ const roleAuth_1 = __importDefault(require("../../middlewares/roleAuth"));
 const enums_1 = require("../../types/data/enums");
 const controller_1 = require("./controller");
 const router = express_1.default.Router();
-router.get('/getBrgs', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.User]), (0, roleAuth_1.default)([enums_1.Role.Basico, enums_1.Role.Premium, enums_1.Role.Admin]), controller_1.getBrg);
+router.get('/getBrgs', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.User]), (0, roleAuth_1.default)([enums_1.Role.Basico, enums_1.Role.Premium]), controller_1.getBrg);
 router.post('/addBrg', controller_1.addBrg);
 exports.default = router;

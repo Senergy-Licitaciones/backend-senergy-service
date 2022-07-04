@@ -5,8 +5,8 @@ import { crearProveedorDao, verifyCorreoProveedorDao, confirmProveedorDao, prove
 import { Estado } from '../../types/data/enums'
 import { createSessionUser, logoutUserDao } from '../../dao/sessionUser'
 import { createSessionProveedor, logoutProveedorDao } from '../../dao/sessionProveedor'
-import { crearUsuarioDao, verifyCorreoDao, confirmUserDao, getUserHashDao, updateUsuarioDao, getUserDao } from '../../dao/usuario'
-import { tokenSignUser, tokenSignProveedor } from '../../helpers/generateToken'
+import { crearUsuarioDao, verifyCorreoDao, confirmUserDao, getUserHashDao, updateUsuarioDao } from '../../dao/usuario'
+import { tokenSignUser, tokenSignProveedor, tokenSignAdmin } from '../../helpers/generateToken'
 import { compare, encrypt } from '../../helpers/handleBcrypt'
 import { handleError } from '../../helpers/handleError'
 import generateCode from '../../utils/generateCode'
@@ -14,6 +14,7 @@ import { sendCodeVerification } from '../emails'
 import { Types } from 'mongoose'
 import { Service } from '../../types/methods'
 import { ErrorResponse, ResponseParent, ResponseRegisterUser } from '../../types/data'
+import { getAccountDao } from '../../dao/admin'
 
 export const registrarUsuarioService: Service<UserRegisterFields, ErrorResponse|ResponseRegisterUser> = async (fields) => {
   try {
@@ -179,15 +180,11 @@ export const logoutProveedorService: Service<Types.ObjectId, ErrorResponse|Respo
 export const loginAdminService: Service<LoginFields, ErrorResponse|ResponseParent&{token: string}> = async (fields) => {
   try {
     const { correo, password } = fields
-    const user = await getUserDao(correo)
-    if ('error' in user) return handleError(user.error, user.message)
-    const isCorrect = await compare({ password, hash: user.password })
+    const admin = await getAccountDao(correo)
+    if ('error' in admin) return handleError(admin.error, admin.message)
+    const isCorrect = await compare({ password, hash: admin.password })
     if (isCorrect === false || typeof isCorrect !== 'boolean') throw new Error('Contraseña incorrecta')
-    const token = tokenSignUser(user)
-    const result = await createSessionUser({ idUser: user._id, token })
-    if ('error' in result) return handleError(result.error, result.message)
-    const response = await updateUsuarioDao({ fields: { estado: Estado.Online, sessionId: result._id.toString() }, id: user._id })
-    if ('error' in response) return handleError(response.error, response.message)
+    const token = tokenSignAdmin(admin)
     return {
       message: 'Usuario admin logeado exitosamente',
       token

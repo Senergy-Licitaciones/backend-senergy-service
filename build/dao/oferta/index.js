@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateOfertaDao = exports.getOfertaByIdDao = exports.getOfertasDao = exports.crearOfertaDao = void 0;
+exports.getOfertasToProveedorDashboardDao = exports.updateOfertaDao = exports.getOfertaByIdDao = exports.getOfertasDao = exports.crearOfertaDao = void 0;
 const model_1 = __importDefault(require("../../apiServices/oferta/model"));
 const handleError_1 = require("../../helpers/handleError");
 const crearOfertaDao = (fields) => __awaiter(void 0, void 0, void 0, function* () {
@@ -74,3 +74,15 @@ const updateOfertaDao = ({ ofertaId, fields }) => __awaiter(void 0, void 0, void
     }
 });
 exports.updateOfertaDao = updateOfertaDao;
+const getOfertasToProveedorDashboardDao = (idProveedor) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const ofertas = yield model_1.default.find({ proveedor: idProveedor }).select('licitacion createdAt updatedAt').populate('licitacion').select('fechaInicio empresa');
+        console.log('ofertas', ofertas);
+        return ofertas;
+    }
+    catch (err) {
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al obtener las ofertas en la capa de datos');
+    }
+});
+exports.getOfertasToProveedorDashboardDao = getOfertasToProveedorDashboardDao;

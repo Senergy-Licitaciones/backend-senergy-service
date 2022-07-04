@@ -13,13 +13,12 @@ const checkRoleAuth = (roles) => (req, res, next) => __awaiter(void 0, void 0, v
     try {
         const proveedor = req.proveedor;
         const user = req.user;
-        const arrayInit = [];
         if (proveedor != null) {
-            return (arrayInit.concat(roles).includes(proveedor.role)) ? next() : res.status(409).send({ message: 'Usuario sin permisos', error: true });
+            return roles.includes(proveedor.role) ? next() : res.status(409).send({ message: 'Usuario sin permisos', error: true });
         }
         ;
         if (user != null) {
-            return arrayInit.concat(roles).includes(user.role) ? next() : res.status(409).send({ message: 'Proveedor sin permisos', error: true });
+            return roles.includes(user.role) ? next() : res.status(409).send({ message: 'Proveedor sin permisos', error: true });
         }
         ;
         throw new Error('No tiene acceso a este recurso');

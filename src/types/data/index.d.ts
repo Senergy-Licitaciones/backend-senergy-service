@@ -1,6 +1,14 @@
 import { Document, Types } from 'mongoose'
 import { FactorIndex, LicitacionRegisterFields, ProveedorRegisterFields, UserRegisterFields } from '../form'
-import { Estado, Role, Type } from './enums'
+import { Estado, Role, RoleAdmin, Type } from './enums'
+export interface Admin{
+  correo: string
+  name: string
+  password: string
+  role: RoleAdmin
+  createdAt: Date
+  updatedAt: Date
+}
 interface Code{
   code: string
   expiredTime: Date
@@ -11,7 +19,7 @@ export interface CodeUser extends Code{
 export interface CodeProveedor extends Code{
   proveedor: string
 }
-export type DataToken=DataProveedorToken|DataUserToken
+export type DataToken=DataProveedorToken|DataUserToken | DataAdminToken
 export interface DataUserToken {
   _id: string
   empresa: string
@@ -22,6 +30,12 @@ export interface DataProveedorToken {
   _id: string
   razSocial: string
   type: Type.Proveedor
+}
+export interface DataAdminToken{
+  _id: string
+  type: Type.Admin
+  name: string
+  correo: string
 }
 export type DocType<Param> = Document<any, any, Param> & Param & {
   _id: Types.ObjectId
@@ -45,6 +59,14 @@ export interface Info {
     fechaFinApertura: string
   }|ResponseParent
 }
+export interface InfoDashboardProveedor{
+  numOfertas: number
+  numLicitaciones: number
+  plan: Role
+  timeToExpireLic: string
+  ofertas: Array<{fechaInicio: Date, fechaFin: Date, participantes: number, empresa: string}>
+  licitaciones: Array<{fechaInicioApertura: Date, fechaFinApertura: Date, empresa: string, participantes: number}>
+}
 export interface Licitacion extends LicitacionRegisterFields{
   participantes: Types.Array<Types.ObjectId>
   createdAt: Date
@@ -61,12 +83,14 @@ export interface Oferta{
   formulaIndexEnergia: Types.Array<FactorIndex>
   proveedor: Types.ObjectId
   licitacion: Types.ObjectId
+  excesoEnergiaHp?: number
+  excesoEnergiaHfp?: number
+  createdAt: Date
+  updatedAt: Date
 }
 export interface Proveedor extends ProveedorRegisterFields{
   role: Role
   estado: Estado
-  codeToConfirm: string
-  verified: boolean
   session: string
   licitaciones: Types.Array<Types.ObjectId>
   createdAt: Date

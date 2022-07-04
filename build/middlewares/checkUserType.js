@@ -14,8 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const generateToken_1 = require("../helpers/generateToken");
 const enums_1 = require("../types/data/enums");
-const model_1 = __importDefault(require("../apiServices/usuario/model"));
-const model_2 = __importDefault(require("../apiServices/proveedor/model"));
+const model_1 = __importDefault(require("../apiServices/admin/model"));
+const model_2 = __importDefault(require("../apiServices/usuario/model"));
+const model_3 = __importDefault(require("../apiServices/proveedor/model"));
 const checkUserType = (types) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         console.log('iniciando check user type');
@@ -34,12 +35,10 @@ const checkUserType = (types) => (req, res, next) => __awaiter(void 0, void 0, v
                 message: 'Token inválido'
             });
         }
-        console.log('definiendo array');
-        const initialArray = [];
         console.log('type token ', tokenData.type, ' ', types.toString());
-        if (initialArray.concat(types).includes(tokenData.type)) {
+        if (types.includes(tokenData.type)) {
             if (tokenData.type === enums_1.Type.User) {
-                const user = yield model_1.default.findById(tokenData._id);
+                const user = yield model_2.default.findById(tokenData._id);
                 if (user == null)
                     return res.status(400).send({ message: 'Usuario sin permisos', error: true });
                 if (user.estado === 'offline')
@@ -47,10 +46,16 @@ const checkUserType = (types) => (req, res, next) => __awaiter(void 0, void 0, v
                 req.user = user;
             }
             if (tokenData.type === enums_1.Type.Proveedor) {
-                const proveedor = yield model_2.default.findById(tokenData._id);
+                const proveedor = yield model_3.default.findById(tokenData._id);
                 if (proveedor == null)
                     return res.status(400).send({ message: 'Usuario sin permisos', error: true });
                 req.proveedor = proveedor;
+            }
+            if (tokenData.type === enums_1.Type.Admin) {
+                const admin = yield model_1.default.findById(tokenData._id);
+                if (admin == null)
+                    return res.status(400).send({ message: 'Cuenta no encontrada', error: true });
+                req.admin = admin;
             }
             console.log('antes del next en user type');
             return next();
