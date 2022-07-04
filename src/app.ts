@@ -10,6 +10,7 @@ import routerPuntoSum from './apiServices/puntoSum/route'
 import routerServicio from './apiServices/servicio/route'
 import routerOferta from './apiServices/oferta/route'
 import routerAdmin from './apiServices/admin/route'
+import routerHistorialParametros from './apiServices/historial-parametros/route'
 const app = express()
 
 app.use(morgan('dev'))
@@ -18,6 +19,7 @@ app.use(cors())
 // routes
 app.use('/api/admin', routerAdmin)
 app.use('/api/auth', routerAuth)
+app.use('api/historial-parametros', routerHistorialParametros)
 app.use('/api/licitacion', routerLicitacion)
 app.use('/api/proveedor', routerProveedor)
 app.use('/api/user', routerUser)
