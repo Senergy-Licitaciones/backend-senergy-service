@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import { Licitacion } from '../../types/data'
+import { Estado } from '../../types/form/enums'
 const { ObjectId } = mongoose.Schema.Types
 const licitacionSchema = new mongoose.Schema<Licitacion>({
   title: {
@@ -38,10 +39,10 @@ const licitacionSchema = new mongoose.Schema<Licitacion>({
   },
   estado: {
     type: String,
-    enum: ['cerrado', 'abierto'],
+    enum: Estado,
     trim: true,
     required: true,
-    default: 'cerrado'
+    default: Estado.Cerrado
   },
   empresa: {
     type: String,

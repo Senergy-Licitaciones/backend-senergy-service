@@ -15,6 +15,7 @@ const route_6 = __importDefault(require("./apiServices/puntoSum/route"));
 const route_7 = __importDefault(require("./apiServices/servicio/route"));
 const route_8 = __importDefault(require("./apiServices/oferta/route"));
 const route_9 = __importDefault(require("./apiServices/admin/route"));
+const route_10 = __importDefault(require("./apiServices/historial-parametros/route"));
 const app = (0, express_1.default)();
 app.use((0, morgan_1.default)('dev'));
 app.use(express_1.default.json());
@@ -22,6 +23,7 @@ app.use((0, cors_1.default)());
 // routes
 app.use('/api/admin', route_9.default);
 app.use('/api/auth', route_1.default);
+app.use('api/historial-parametros', route_10.default);
 app.use('/api/licitacion', route_2.default);
 app.use('/api/proveedor', route_3.default);
 app.use('/api/user', route_4.default);
