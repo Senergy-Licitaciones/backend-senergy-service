@@ -90,7 +90,7 @@ export const getProveedoresDao: DaoWithoutParam<ErrorResponse|Array<DocType<Pick
 }
 export const getProveedoresToUserDao: DaoWithoutParam<ErrorResponse|InfoBasicaProveedor[]> = async () => {
   try {
-    const proveedores = await ProveedorModel.find().select('correo address phone razSocial ruc web') as InfoBasicaProveedor[]
+    const proveedores = await ProveedorModel.find().select('correo address phone1 razSocial ruc web') as InfoBasicaProveedor[]
     return proveedores
   } catch (err) {
     const error = err as Error

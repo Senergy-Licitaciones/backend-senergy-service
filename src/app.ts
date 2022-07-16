@@ -19,7 +19,7 @@ app.use(cors())
 // routes
 app.use('/api/admin', routerAdmin)
 app.use('/api/auth', routerAuth)
-app.use('api/historial-parametros', routerHistorialParametros)
+app.use('/api/historial-parametros', routerHistorialParametros)
 app.use('/api/licitacion', routerLicitacion)
 app.use('/api/proveedor', routerProveedor)
 app.use('/api/user', routerUser)

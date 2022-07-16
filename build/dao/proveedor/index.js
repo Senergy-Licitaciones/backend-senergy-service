@@ -117,7 +117,7 @@ const getProveedoresDao = () => __awaiter(void 0, void 0, void 0, function* () {
 exports.getProveedoresDao = getProveedoresDao;
 const getProveedoresToUserDao = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const proveedores = yield model_1.default.find().select('correo address phone razSocial ruc web');
+        const proveedores = yield model_1.default.find().select('correo address phone1 razSocial ruc web');
         return proveedores;
     }
     catch (err) {
