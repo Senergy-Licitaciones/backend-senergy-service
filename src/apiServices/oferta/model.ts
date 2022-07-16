@@ -6,14 +6,43 @@ const ofertaSchema = new mongoose.Schema<Oferta>({
     type: Number,
     required: true
   },
-  energiaHp: {
-    type: Number,
+  tarifa: {
+    type: Boolean,
+    default: false,
     required: true
   },
-  energiaHfp: {
-    type: Number,
-    required: true
-  },
+  energiaHp: [
+    {
+      fechaInicio: {
+        type: Date,
+        required: true
+      },
+      fechaFin: {
+        type: Date,
+        required: true
+      },
+      energia: {
+        type: Number,
+        required: true
+      }
+    }
+  ],
+  energiaHfp: [
+    {
+      fechaInicio: {
+        type: Date,
+        required: true
+      },
+      fechaFin: {
+        type: Date,
+        required: true
+      },
+      energia: {
+        type: Number,
+        required: true
+      }
+    }
+  ],
   potMinFacturable: {
     type: Number,
     required: true

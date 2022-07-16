@@ -35,8 +35,8 @@ const getProveedoresToUserService = () => __awaiter(void 0, void 0, void 0, func
 exports.getProveedoresToUserService = getProveedoresToUserService;
 const participarLicitacionService = ({ fields, idProveedor }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { potencia, energiaHp, energiaHfp, potenciaFacturar, formulaIndexPotencia, formulaIndexEnergia, potMinFacturable, licitacion, excesoPotencia, excesoEnergiaHp, excesoEnergiaHfp } = fields;
-        const oferta = yield (0, oferta_1.crearOfertaDao)({ potencia, energiaHfp, energiaHp, potenciaFacturar, formulaIndexPotencia, formulaIndexEnergia, potMinFacturable, excesoPotencia, proveedor: idProveedor, licitacion, excesoEnergiaHp, excesoEnergiaHfp });
+        const { potencia, energiaHp, energiaHfp, potenciaFacturar, formulaIndexPotencia, formulaIndexEnergia, potMinFacturable, licitacion, excesoPotencia, excesoEnergiaHp, excesoEnergiaHfp, tarifa } = fields;
+        const oferta = yield (0, oferta_1.crearOfertaDao)({ potencia, energiaHfp, energiaHp, potenciaFacturar, formulaIndexPotencia, formulaIndexEnergia, potMinFacturable, excesoPotencia, proveedor: idProveedor, licitacion, excesoEnergiaHp, excesoEnergiaHfp, tarifa });
         if ('error' in oferta)
             return (0, handleError_1.handleError)(oferta.error, oferta.message);
         const result = yield (0, licitacion_1.updateLicitacionDao)({ fields: { $push: { participantes: idProveedor } }, id: licitacion });
