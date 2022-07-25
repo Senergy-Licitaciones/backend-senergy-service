@@ -11,6 +11,7 @@ declare global {
       proveedor?: DocType<Proveedor>
       licitacionId?: Types.ObjectId
       ofertaId?: Types.ObjectId
+      filename?: string
     }
   }
 }

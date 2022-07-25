@@ -18,6 +18,7 @@ const checkAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function
         const token = auth.split(' ').pop();
         if (token === undefined)
             throw new Error('Token inválido');
+        console.log('token ', token);
         const tokenData = (0, generateToken_1.verifyToken)(token);
         if (tokenData._id === '')
             return res.status(409).send({ message: 'No ha iniciado sesión', error: true });
