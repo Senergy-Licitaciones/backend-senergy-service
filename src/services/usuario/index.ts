@@ -6,6 +6,8 @@ import { handleError } from '../../helpers/handleError'
 import { DocType, ErrorResponse, Info, Licitacion, ResponseParent, User } from '../../types/data'
 import { Estado } from '../../types/form/enums'
 import { Service, ServiceWithoutParam } from '../../types/methods'
+import XLSX from 'xlsx'
+import fs from 'fs'
 
 export const getInfoUserService: Service<DocType<User>, Info|ErrorResponse> = async (user) => {
   try {
@@ -85,6 +87,34 @@ export const getLicitacionesByUser: Service<Types.ObjectId, ErrorResponse|Array<
     return licitaciones
   } catch (err) {
     const error = err as Error
-    return handleError(error, 'Ha ocurrido un error en la capa de servicios al obtener las licitacioens')
+    return handleError(error, 'Ha ocurrido un error en la capa de servicios al obtener las licitaciones')
+  }
+}
+export const generateFileToMonthsDetailsService = (meses: Array<{mes: string, hp: number, hfp: number}>, user: DocType<User>): {filename: string}|{error: Error, message: string} => {
+  try {
+    const workbook = XLSX.utils.book_new()
+    const worksheet = XLSX.utils.json_to_sheet(meses)
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Meses')
+    const filename = `${user.ruc}_${user._id as string}_${new Date().getTime()}.xlsx`
+    XLSX.writeFile(workbook, `uploads/files/especificacion-mes-ut1/${filename}`)
+    return {
+      filename
+    }
+  } catch (err) {
+    console.log('error', err)
+    const error = err as Error
+    return handleError(error, 'Ha ocurrido un error en la capa de servicios al generar el archivo')
+  }
+}
+export const validateFileService = (filename: string): Array<{mes: string, hp: number, hfp: number}>|{error: Error, message: string} => {
+  try {
+    const workbook = XLSX.readFile(`uploads/files/especificacion-mes-ut1/${filename}`)
+    const sheet = workbook.Sheets.Meses
+    const meses = XLSX.utils.sheet_to_json<{mes: string, hp: number, hfp: number}>(sheet)
+    fs.rmSync(`uploads/files/especificacion-mes-ut1/${filename}`)
+    return meses
+  } catch (err) {
+    const error = err as Error
+    return handleError(error, 'Ha ocurrido un error en la capa de servicios al validar el archivo')
   }
 }

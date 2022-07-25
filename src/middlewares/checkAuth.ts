@@ -9,6 +9,7 @@ const checkAuth: RequestHandler = async (req, res, next) => {
     if (auth == null) throw new Error('Token no ingresado')
     const token = auth.split(' ').pop()
     if (token === undefined) throw new Error('Token inválido')
+    console.log('token ', token)
     const tokenData = verifyToken(token) as DataToken
     if (tokenData._id === '') return res.status(409).send({ message: 'No ha iniciado sesión', error: true })
     console.log('antes del next en check auth')

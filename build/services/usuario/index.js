@@ -8,14 +8,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLicitacionesByUser = exports.getUsersService = exports.changeStatusService = exports.getInfoUserService = void 0;
+exports.validateFileService = exports.generateFileToMonthsDetailsService = exports.getLicitacionesByUser = exports.getUsersService = exports.changeStatusService = exports.getInfoUserService = void 0;
 const mongoose_1 = require("mongoose");
 const licitacion_1 = require("../../dao/licitacion");
 const proveedor_1 = require("../../dao/proveedor");
 const usuario_1 = require("../../dao/usuario");
 const handleError_1 = require("../../helpers/handleError");
 const enums_1 = require("../../types/form/enums");
+const xlsx_1 = __importDefault(require("xlsx"));
+const fs_1 = __importDefault(require("fs"));
 const getInfoUserService = (user) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const licitaciones = yield (0, licitacion_1.getLicitacionesByUserDao)(user._id);
@@ -110,7 +115,39 @@ const getLicitacionesByUser = (id) => __awaiter(void 0, void 0, void 0, function
     }
     catch (err) {
         const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al obtener las licitacioens');
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al obtener las licitaciones');
     }
 });
 exports.getLicitacionesByUser = getLicitacionesByUser;
+const generateFileToMonthsDetailsService = (meses, user) => {
+    try {
+        const workbook = xlsx_1.default.utils.book_new();
+        const worksheet = xlsx_1.default.utils.json_to_sheet(meses);
+        xlsx_1.default.utils.book_append_sheet(workbook, worksheet, 'Meses');
+        const filename = `${user.ruc}_${user._id}_${new Date().getTime()}.xlsx`;
+        xlsx_1.default.writeFile(workbook, `uploads/files/especificacion-mes-ut1/${filename}`);
+        return {
+            filename
+        };
+    }
+    catch (err) {
+        console.log('error', err);
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al generar el archivo');
+    }
+};
+exports.generateFileToMonthsDetailsService = generateFileToMonthsDetailsService;
+const validateFileService = (filename) => {
+    try {
+        const workbook = xlsx_1.default.readFile(`uploads/files/especificacion-mes-ut1/${filename}`);
+        const sheet = workbook.Sheets.Meses;
+        const meses = xlsx_1.default.utils.sheet_to_json(sheet);
+        fs_1.default.rmSync(`uploads/files/especificacion-mes-ut1/${filename}`);
+        return meses;
+    }
+    catch (err) {
+        const error = err;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al validar el archivo');
+    }
+};
+exports.validateFileService = validateFileService;
