@@ -11,4 +11,5 @@ const enums_1 = require("../../types/data/enums");
 const controller_1 = require("./controller");
 const router = express_1.default.Router();
 router.post('/addParametro', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Employee, enums_1.RoleAdmin.Boss]), controller_1.addParametro);
+router.post('/exportFile', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Employee, enums_1.RoleAdmin.Boss]), controller_1.exportFile);
 exports.default = router;

@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createProveedorDao = exports.getProveedoresToUserDao = exports.getProveedoresDao = exports.proveedorEstadoDao = exports.confirmProveedorDao = exports.verifyCorreoProveedorDao = exports.updateProveedorDao = exports.getProveedorNameByIdDao = exports.crearProveedorDao = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const model_1 = __importDefault(require("../../apiServices/proveedor/model"));
-const enums_1 = require("../../types/data/enums");
 const crearProveedorDao = (fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield model_1.default.create(Object.assign({}, fields));
@@ -93,7 +92,7 @@ const confirmProveedorDao = (idCode) => __awaiter(void 0, void 0, void 0, functi
 exports.confirmProveedorDao = confirmProveedorDao;
 const proveedorEstadoDao = (correo) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const proveedor = yield model_1.default.findOne({ correo, verified: true, estado: enums_1.Estado.Offline });
+        const proveedor = yield model_1.default.findOne({ correo, verified: true /* estado: Estado.Offline */ });
         if (proveedor == null)
             throw new Error('Los datos son inválidos');
         return proveedor;

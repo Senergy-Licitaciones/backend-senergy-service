@@ -4,7 +4,6 @@ import { DaoProveedorRegister, InfoBasicaProveedor, ProveedorRegisterFields } fr
 import { DocType, ErrorResponse, Proveedor, ResponseParent } from '../../types/data'
 import { Document, Types, UpdateQuery } from 'mongoose'
 import { Dao, DaoWithoutParam } from '../../types/methods'
-import { Estado } from '../../types/data/enums'
 export const crearProveedorDao: Dao<DaoProveedorRegister, ErrorResponse|Document<any, any, Proveedor> & Proveedor & {
   _id: Types.ObjectId}> = async (fields) => {
   try {
@@ -71,7 +70,7 @@ export const confirmProveedorDao: Dao<string, ErrorResponse|Document<any, any, P
 }
 export const proveedorEstadoDao: Dao<string, ErrorResponse|DocType<Proveedor>> = async (correo) => {
   try {
-    const proveedor = await ProveedorModel.findOne({ correo, verified: true, estado: Estado.Offline })
+    const proveedor = await ProveedorModel.findOne({ correo, verified: true /* estado: Estado.Offline */ })
     if (proveedor == null) throw new Error('Los datos son inválidos')
     return proveedor
   } catch (err) {
