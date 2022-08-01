@@ -16,7 +16,6 @@ exports.loginAdminService = exports.logoutProveedorService = exports.confirmProv
 const code_1 = require("../../dao/code");
 const codeProveedor_1 = require("../../dao/codeProveedor");
 const proveedor_1 = require("../../dao/proveedor");
-const enums_1 = require("../../types/data/enums");
 const sessionUser_1 = require("../../dao/sessionUser");
 const sessionProveedor_1 = require("../../dao/sessionProveedor");
 const usuario_1 = require("../../dao/usuario");
@@ -131,14 +130,12 @@ const loginProveedorService = (fields) => __awaiter(void 0, void 0, void 0, func
         if (isCorrect === false || typeof isCorrect !== 'boolean')
             throw new Error('La contraseña es incorrecta');
         const token = (0, generateToken_1.tokenSignProveedor)(proveedor);
-        const session = yield (0, sessionProveedor_1.createSessionProveedor)({ proveedorId: proveedor._id, token });
-        console.log('session ', session);
-        if ('error' in session)
-            return (0, handleError_1.handleError)(session.error, session.message);
-        const response = yield (0, proveedor_1.updateProveedorDao)({ fields: { estado: enums_1.Estado.Online, session: session._id }, id: proveedor._id });
-        console.log('response ', response);
-        if ('error' in response)
-            return (0, handleError_1.handleError)(response.error, response.message);
+        /* const session = await createSessionProveedor({ proveedorId: proveedor._id, token })
+        console.log('session ', session)
+        if ('error' in session) return handleError(session.error, session.message)
+        const response = await updateProveedorDao({ fields: { estado: Estado.Online, session: session._id }, id: proveedor._id })
+        console.log('response ', response)
+        if ('error' in response) return handleError(response.error, response.message) */
         return {
             message: 'Proveedor logeado exitosamente',
             token
@@ -161,14 +158,12 @@ const loginUsuarioService = (fields) => __awaiter(void 0, void 0, void 0, functi
         if (isCorrect === false || typeof isCorrect !== 'boolean')
             throw new Error('La contraseña es incorrecta');
         const token = (0, generateToken_1.tokenSignUser)(user);
-        const result = yield (0, sessionUser_1.createSessionUser)({ idUser: user._id, token });
-        if ('error' in result)
-            return (0, handleError_1.handleError)(result.error, result.message);
-        console.log('session user ', result);
-        const response = yield (0, usuario_1.updateUsuarioDao)({ fields: { estado: enums_1.Estado.Online, sessionId: result._id.toString() }, id: user._id });
-        if ('error' in response)
-            return (0, handleError_1.handleError)(response.error, response.message);
-        console.log('update user ', response);
+        /* const result = await createSessionUser({ idUser: user._id, token })
+        if ('error' in result) return handleError(result.error, result.message)
+        console.log('session user ', result)
+        const response = await updateUsuarioDao({ fields: { estado: Estado.Online, sessionId: result._id.toString() }, id: user._id })
+        if ('error' in response) return handleError(response.error, response.message)
+        console.log('update user ', response) */
         return {
             message: 'Usuario logeado exitosamente',
             token

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addParametro = void 0;
+exports.exportFile = exports.addParametro = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const historial_parametros_1 = require("../../services/historial-parametros");
 const addParametro = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -26,3 +26,18 @@ const addParametro = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.addParametro = addParametro;
+const exportFile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { _id } = req.admin;
+        const { fechaInicio, fechaFin } = req.body;
+        const response = yield (0, historial_parametros_1.exportFileService)({ fechaInicio, fechaFin, id: _id });
+        if ('error' in response)
+            return res.status(400).send(response);
+        return res.status(200).send(response);
+    }
+    catch (err) {
+        const error = err;
+        return (0, handleError_1.httpError)(res, error);
+    }
+});
+exports.exportFile = exportFile;

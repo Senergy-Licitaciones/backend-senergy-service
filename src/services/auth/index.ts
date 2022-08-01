@@ -1,11 +1,10 @@
 import { ConfirmAccount, ConfirmProveedor, LoginFields, ProveedorRegisterFields, UserRegisterFields } from '../../types/form'
 import { createCodeDao, verifyCodeDao, removeCodeDao } from '../../dao/code'
 import { createCodeProveedorDao, confirmCodeDao } from '../../dao/codeProveedor'
-import { crearProveedorDao, verifyCorreoProveedorDao, confirmProveedorDao, proveedorEstadoDao, updateProveedorDao } from '../../dao/proveedor'
-import { Estado } from '../../types/data/enums'
-import { createSessionUser, logoutUserDao } from '../../dao/sessionUser'
-import { createSessionProveedor, logoutProveedorDao } from '../../dao/sessionProveedor'
-import { crearUsuarioDao, verifyCorreoDao, confirmUserDao, getUserHashDao, updateUsuarioDao } from '../../dao/usuario'
+import { crearProveedorDao, verifyCorreoProveedorDao, confirmProveedorDao, proveedorEstadoDao } from '../../dao/proveedor'
+import { logoutUserDao } from '../../dao/sessionUser'
+import { logoutProveedorDao } from '../../dao/sessionProveedor'
+import { crearUsuarioDao, verifyCorreoDao, confirmUserDao, getUserHashDao } from '../../dao/usuario'
 import { tokenSignUser, tokenSignProveedor, tokenSignAdmin } from '../../helpers/generateToken'
 import { compare, encrypt } from '../../helpers/handleBcrypt'
 import { handleError } from '../../helpers/handleError'
@@ -98,12 +97,12 @@ export const loginProveedorService: Service<LoginFields, ErrorResponse|ResponseP
     const isCorrect = await compare({ password: fields.password, hash: proveedor.password })
     if (isCorrect === false || typeof isCorrect !== 'boolean') throw new Error('La contraseña es incorrecta')
     const token = tokenSignProveedor(proveedor)
-    const session = await createSessionProveedor({ proveedorId: proveedor._id, token })
+    /* const session = await createSessionProveedor({ proveedorId: proveedor._id, token })
     console.log('session ', session)
     if ('error' in session) return handleError(session.error, session.message)
     const response = await updateProveedorDao({ fields: { estado: Estado.Online, session: session._id }, id: proveedor._id })
     console.log('response ', response)
-    if ('error' in response) return handleError(response.error, response.message)
+    if ('error' in response) return handleError(response.error, response.message) */
     return {
       message: 'Proveedor logeado exitosamente',
       token
@@ -122,12 +121,12 @@ export const loginUsuarioService: Service<LoginFields, ErrorResponse|ResponsePar
     const isCorrect = await compare({ password, hash: user.password })
     if (isCorrect === false || typeof isCorrect !== 'boolean') throw new Error('La contraseña es incorrecta')
     const token = tokenSignUser(user)
-    const result = await createSessionUser({ idUser: user._id, token })
+    /* const result = await createSessionUser({ idUser: user._id, token })
     if ('error' in result) return handleError(result.error, result.message)
     console.log('session user ', result)
     const response = await updateUsuarioDao({ fields: { estado: Estado.Online, sessionId: result._id.toString() }, id: user._id })
     if ('error' in response) return handleError(response.error, response.message)
-    console.log('update user ', response)
+    console.log('update user ', response) */
     return {
       message: 'Usuario logeado exitosamente',
       token
