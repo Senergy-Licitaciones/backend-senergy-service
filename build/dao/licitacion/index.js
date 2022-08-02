@@ -35,6 +35,7 @@ const createLicitacionDao = (fields) => __awaiter(void 0, void 0, void 0, functi
         };
     }
     catch (err) {
+        console.log('error ', err);
         const error = err;
         return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
     }

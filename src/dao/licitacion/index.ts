@@ -21,6 +21,7 @@ export const createLicitacionDao: Dao<Omit<Licitacion, '_id'|'participantes'|'cr
       message: 'Licitacion creada exitosamente'
     }
   } catch (err) {
+    console.log('error ', err)
     const error = err as Error
     return handleError(error, 'Ha ocurrido un error en la capa de datos')
   }
