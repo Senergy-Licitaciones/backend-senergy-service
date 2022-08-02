@@ -25,7 +25,7 @@ const checkUserType: CheckUserType = (types) => async (req, res, next) => {
       if (tokenData.type === Type.User) {
         const user = await UsuarioModel.findById(tokenData._id)
         if (user == null) return res.status(400).send({ message: 'Usuario sin permisos', error: true })
-        if (user.estado === 'offline') return res.status(400).send({ message: 'Debe iniciar sesión', error: true })
+        // if (user.estado === 'offline') return res.status(400).send({ message: 'Debe iniciar sesión', error: true })
         req.user = user
       }
       if (tokenData.type === Type.Proveedor) {
