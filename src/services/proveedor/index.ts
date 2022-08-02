@@ -40,6 +40,16 @@ export const getInfoDashboardProveedorService: Service<DocType<Proveedor>, Error
   try {
     const licitaciones = await getLicitacionesToProveedorDashboardDao(proveedor._id)
     if ('error' in licitaciones) throw new Error(licitaciones.message)
+    if (licitaciones.length === 0) {
+      return {
+        numOfertas: 0,
+        numLicitaciones: 0,
+        plan: proveedor.role,
+        timeToExpireLic: 'No existen licitaciones',
+        ofertas: [],
+        licitaciones: []
+      }
+    }
     const fechaActual = new Date(Date.now())
     const licitacionToExpire = licitaciones.reduce((prev, current) => {
       const currentDate = formatFromStringToDate(current.fechaFinApertura)

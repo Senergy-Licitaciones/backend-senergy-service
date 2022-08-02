@@ -60,6 +60,16 @@ const getInfoDashboardProveedorService = (proveedor) => __awaiter(void 0, void 0
         const licitaciones = yield (0, licitacion_1.getLicitacionesToProveedorDashboardDao)(proveedor._id);
         if ('error' in licitaciones)
             throw new Error(licitaciones.message);
+        if (licitaciones.length === 0) {
+            return {
+                numOfertas: 0,
+                numLicitaciones: 0,
+                plan: proveedor.role,
+                timeToExpireLic: 'No existen licitaciones',
+                ofertas: [],
+                licitaciones: []
+            };
+        }
         const fechaActual = new Date(Date.now());
         const licitacionToExpire = licitaciones.reduce((prev, current) => {
             const currentDate = (0, dateFormat_1.formatFromStringToDate)(current.fechaFinApertura);
