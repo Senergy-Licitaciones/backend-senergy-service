@@ -1,7 +1,8 @@
 import { RequestHandler } from 'express'
+import { Types } from 'mongoose'
 import { httpError } from '../../helpers/handleError'
 import { participarLicitacionService, getProveedoresService, getProveedoresToUserService, getInfoDashboardProveedorService, createProveedorService } from '../../services/proveedor'
-import { DocType, Oferta, Proveedor } from '../../types/data'
+import { DocType, EnergiaBloqueReq, Oferta, PotenciaBloqueReq, Proveedor } from '../../types/data'
 import { ProveedorRegisterFields } from '../../types/form'
 export const getInfoDashboardProveedor: RequestHandler = async (req, res) => {
   try {
@@ -27,7 +28,7 @@ export const getProveedoresToUser: RequestHandler = async (_req, res) => {
 export const participarLicitacion: RequestHandler = async (req, res) => {
   try {
     const proveedor = req.proveedor as DocType<Proveedor>
-    const fields = req.body as Oferta
+    const fields = req.body as Omit<Oferta, 'potencia'|'energiaHp'|'energiaHfp'>&{potencia: Types.Array<PotenciaBloqueReq>, energiaHp: Types.Array<EnergiaBloqueReq>, energiaHfp: Types.Array<EnergiaBloqueReq>}
     const result = await participarLicitacionService({ fields, idProveedor: proveedor._id })
     if ('error' in result) return res.status(400).send(result)
     return res.status(200).send(result)

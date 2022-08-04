@@ -77,9 +77,24 @@ export interface OfertaBloque{
   fechaFin: Date
   energia: number
 }
-export interface Oferta{
+export interface PotenciaBloque extends Omit<OfertaBloque, 'energia'>{
   potencia: number
-  tarifa: boolean
+}
+export interface PotenciaBloqueReq{
+  potencia: number
+  fechaInicio: string
+  fechaFin: string
+}
+export interface EnergiaBloqueReq{
+  energia: number
+  fechaInicio: string
+  fechaFin: string
+}
+export interface Oferta{
+  potencia: Types.Array<PotenciaBloque>
+  tarifaPotencia: boolean
+  tarifaEnergiaHp: boolean
+  tarifaEnergiaHfp: boolean
   energiaHp: Types.Array<OfertaBloque>
   energiaHfp: Types.Array<OfertaBloque>
   potMinFacturable: number

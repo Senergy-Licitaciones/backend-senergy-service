@@ -2,11 +2,33 @@ import mongoose from 'mongoose'
 import { Oferta } from '../../types/data'
 const { ObjectId } = mongoose.Schema.Types
 const ofertaSchema = new mongoose.Schema<Oferta>({
-  potencia: {
-    type: Number,
+  potencia: [
+    {
+      fechaInicio: {
+        type: Date,
+        required: true
+      },
+      fechaFin: {
+        type: Date,
+        required: true
+      },
+      potencia: {
+        type: Number,
+        required: true
+      }
+    }
+  ],
+  tarifaPotencia: {
+    type: Boolean,
+    default: false,
     required: true
   },
-  tarifa: {
+  tarifaEnergiaHp: {
+    type: Boolean,
+    default: false,
+    required: true
+  },
+  tarifaEnergiaHfp: {
     type: Boolean,
     default: false,
     required: true
