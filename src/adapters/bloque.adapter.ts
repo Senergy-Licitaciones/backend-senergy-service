@@ -15,6 +15,7 @@ export const createPotenciaBloqueAdapter = (request: PotenciaBloqueReq[]): Types
 }
 export const createEnergiaBloqueAdapter = (request: EnergiaBloqueReq[]): Types.Array<EnergiaBloque> => {
   const array = new Types.Array<EnergiaBloque>()
+  if (request.length === 0) return array
   request.map((bloque) => {
     return array.push({
       energia: bloque.energia,

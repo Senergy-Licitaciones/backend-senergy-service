@@ -16,6 +16,8 @@ const createPotenciaBloqueAdapter = (request) => {
 exports.createPotenciaBloqueAdapter = createPotenciaBloqueAdapter;
 const createEnergiaBloqueAdapter = (request) => {
     const array = new mongoose_1.Types.Array();
+    if (request.length === 0)
+        return array;
     request.map((bloque) => {
         return array.push({
             energia: bloque.energia,
