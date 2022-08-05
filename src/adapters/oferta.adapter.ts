@@ -3,6 +3,7 @@ import { OfertaRequest } from '../types/requests'
 import { createEnergiaBloqueAdapter, createPotenciaBloqueAdapter } from './bloque.adapter'
 
 export const createOfertaAdapter = (request: OfertaRequest): Omit<Oferta, 'proveedor'|'createdAt'|'updatedAt'> => {
+  console.log('createOfertaAdapter', request)
   return {
     excesoPotencia: request.excesoPotencia,
     excesoEnergiaHp: request.excesoEnergiaHp,

@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createOfertaAdapter = void 0;
 const bloque_adapter_1 = require("./bloque.adapter");
 const createOfertaAdapter = (request) => {
+    console.log('createOfertaAdapter', request);
     return {
         excesoPotencia: request.excesoPotencia,
         excesoEnergiaHp: request.excesoEnergiaHp,
