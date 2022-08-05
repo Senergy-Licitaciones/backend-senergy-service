@@ -9,11 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const adapter = (cb) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+const adapters_1 = require("../adapters");
+const adapterOferta = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = req.body;
         console.log('body', body);
-        const bodyParsed = cb(body);
+        const bodyParsed = (0, adapters_1.createOfertaAdapter)(body);
+        console.log('parsed', bodyParsed);
         req.body = bodyParsed;
         return next();
     }
@@ -26,4 +28,4 @@ const adapter = (cb) => (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         });
     }
 });
-exports.default = adapter;
+exports.default = adapterOferta;

@@ -1,10 +1,13 @@
-import { AdapterMiddleware } from '../types/methods'
+import { RequestHandler } from 'express'
+import { createOfertaAdapter } from '../adapters'
+import { OfertaRequest } from '../types/requests'
 
-const adapter: AdapterMiddleware = <Body, BodyParsed>(cb: (body: Body) => BodyParsed) => async (req, res, next) => {
+const adapterOferta: RequestHandler = async (req, res, next) => {
   try {
-    const body = req.body as Body
+    const body = req.body as OfertaRequest
     console.log('body', body)
-    const bodyParsed = cb(body)
+    const bodyParsed = createOfertaAdapter(body)
+    console.log('parsed', bodyParsed)
     req.body = bodyParsed
     return next()
   } catch (err) {
@@ -16,4 +19,4 @@ const adapter: AdapterMiddleware = <Body, BodyParsed>(cb: (body: Body) => BodyPa
     })
   }
 }
-export default adapter
+export default adapterOferta
