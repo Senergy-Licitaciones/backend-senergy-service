@@ -1,8 +1,8 @@
-import { Oferta } from '../types/data'
+import { OfertaData } from '../types/data'
 import { OfertaRequest } from '../types/requests'
 import { createEnergiaBloqueAdapter, createPotenciaBloqueAdapter } from './bloque.adapter'
 
-export const createOfertaAdapter = (request: OfertaRequest): Omit<Oferta, 'proveedor'|'createdAt'|'updatedAt'> => {
+export const createOfertaAdapter = (request: OfertaRequest): OfertaData => {
   console.log('createOfertaAdapter', request)
   return {
     excesoPotencia: request.excesoPotencia,

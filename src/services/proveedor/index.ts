@@ -4,7 +4,7 @@ import { crearOfertaDao, getOfertasToProveedorDashboardDao } from '../../dao/ofe
 import { updateProveedorDao, getProveedoresDao, getProveedoresToUserDao, createProveedorDao } from '../../dao/proveedor'
 import { encrypt } from '../../helpers/handleBcrypt'
 import { handleError } from '../../helpers/handleError'
-import { DocType, ErrorResponse, InfoDashboardProveedor, Oferta, Proveedor, ResponseParent } from '../../types/data'
+import { DocType, ErrorResponse, InfoDashboardProveedor, OfertaData, Proveedor, ResponseParent } from '../../types/data'
 import { InfoBasicaProveedor, ProveedorRegisterFields } from '../../types/form'
 import { Service, ServiceWithoutParam } from '../../types/methods'
 import calcTime from '../../utils/calcTime'
@@ -20,7 +20,7 @@ export const getProveedoresToUserService: ServiceWithoutParam<ErrorResponse|Info
   }
 }
 
-export const participarLicitacionService: Service<{fields: Omit<Oferta, 'createdAt'|'updatedAt'>, idProveedor: Types.ObjectId}, ErrorResponse|ResponseParent> = async ({ fields, idProveedor }) => {
+export const participarLicitacionService: Service<{fields: OfertaData, idProveedor: Types.ObjectId}, ErrorResponse|ResponseParent> = async ({ fields, idProveedor }) => {
   try {
     const { potencia, energiaHp, energiaHfp, potenciaFacturar, formulaIndexPotencia, formulaIndexEnergia, potMinFacturable, licitacion, excesoPotencia, excesoEnergiaHp, excesoEnergiaHfp, tarifaEnergiaHfp, tarifaPotencia, tarifaEnergiaHp } = fields
 

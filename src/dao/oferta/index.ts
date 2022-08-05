@@ -1,9 +1,9 @@
 import { Types } from 'mongoose'
 import OfertaModel from '../../apiServices/oferta/model'
 import { handleError } from '../../helpers/handleError'
-import { DocType, ErrorResponse, Licitacion, Oferta } from '../../types/data'
+import { DocType, ErrorResponse, Licitacion, Oferta, OfertaData } from '../../types/data'
 import { Dao } from '../../types/methods'
-export const crearOfertaDao: Dao<Omit<Oferta, 'createdAt'|'updatedAt'>, ErrorResponse|DocType<Oferta>> = async (fields) => {
+export const crearOfertaDao: Dao<OfertaData&{proveedor: Types.ObjectId}, ErrorResponse|DocType<Oferta>> = async (fields) => {
   try {
     console.log('fields ', fields)
     const oferta = await OfertaModel.create(fields)

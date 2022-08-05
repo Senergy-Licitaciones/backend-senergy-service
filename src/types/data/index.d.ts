@@ -80,25 +80,31 @@ export interface EnergiaBloque{
 export interface PotenciaBloque extends Omit<EnergiaBloque, 'energia'>{
   potencia: number
 }
-
-export interface Oferta{
-  potencia: Types.Array<PotenciaBloque>
+export interface OfertaBase{
   tarifaPotencia: boolean
   tarifaEnergiaHp: boolean
   tarifaEnergiaHfp: boolean
-  energiaHp: Types.Array<EnergiaBloque>
-  energiaHfp: Types.Array<EnergiaBloque>
   potMinFacturable: number
   potenciaFacturar: string
   excesoPotencia: number
   formulaIndexPotencia: Types.Array<FactorIndex> // recommended by mongoose doc
   formulaIndexEnergia: Types.Array<FactorIndex>
-  proveedor: Types.ObjectId
   licitacion: Types.ObjectId
   excesoEnergiaHp?: number
   excesoEnergiaHfp?: number
+}
+export interface Oferta extends OfertaBase{
+  potencia: Types.Array<PotenciaBloque>
+  energiaHp: Types.Array<EnergiaBloque>
+  energiaHfp: Types.Array<EnergiaBloque>
+  proveedor: Types.ObjectId
   createdAt: Date
   updatedAt: Date
+}
+export interface OfertaData extends OfertaBase{
+  potencia: PotenciaBloque[]
+  energiaHp: EnergiaBloque[]
+  energiaHfp: EnergiaBloque[]
 }
 export interface Proveedor extends ProveedorRegisterFields{
   role: Role
