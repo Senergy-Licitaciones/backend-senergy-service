@@ -13,3 +13,4 @@ export type VerifyToken=(token: string) => null|DataToken
 export type CheckUserType=(types: Type[]) => RequestHandler
 export type CheckRoleAuth=(roles: Role[]) => RequestHandler
 export type CheckRoleAdminAuth=(roles: RoleAdmin[]) => RequestHandler
+export type AdapterMiddleware =<Body, BodyParsed>(cb: (body: Body) => BodyParsed) => RequestHandler

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateCode = exports.validateUserRegister = exports.validateUserLogin = void 0;
+exports.validateOferta = exports.validateCode = exports.validateUserRegister = exports.validateUserLogin = void 0;
 const express_validator_1 = require("express-validator");
 const validateUserLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     yield Promise.all([(0, express_validator_1.body)('correo').isEmail().isLength({ max: 32 }).run(req),
@@ -54,3 +54,10 @@ const validateCode = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     return next();
 });
 exports.validateCode = validateCode;
+const validateOferta = (_req, _res, _next) => __awaiter(void 0, void 0, void 0, function* () {
+    yield Promise.all([(0, express_validator_1.body)('tarifaPotencia').exists({ checkFalsy: false, checkNull: true }).isBoolean({ strict: true }).if((0, express_validator_1.body)('Potencia').isArray({ min: 0, max: 0 })),
+        (0, express_validator_1.body)('tarifaEnergiaHp').exists({ checkFalsy: false, checkNull: true }).isBoolean({ strict: true }).if((0, express_validator_1.body)('EnergiaHp').isArray({ min: 0, max: 0 })),
+        (0, express_validator_1.body)('tarifaEnergiaHfp').exists({ checkFalsy: false, checkNull: true }).isBoolean({ strict: true }).if((0, express_validator_1.body)('EnergiaHfp').isArray({ min: 0, max: 0 }))
+    ]);
+});
+exports.validateOferta = validateOferta;

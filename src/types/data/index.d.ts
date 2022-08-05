@@ -72,31 +72,22 @@ export interface Licitacion extends LicitacionRegisterFields{
   createdAt: Date
   updatedAt: Date
 }
-export interface OfertaBloque{
+export interface EnergiaBloque{
   fechaInicio: Date
   fechaFin: Date
   energia: number
 }
-export interface PotenciaBloque extends Omit<OfertaBloque, 'energia'>{
+export interface PotenciaBloque extends Omit<EnergiaBloque, 'energia'>{
   potencia: number
 }
-export interface PotenciaBloqueReq{
-  potencia: number
-  fechaInicio: string
-  fechaFin: string
-}
-export interface EnergiaBloqueReq{
-  energia: number
-  fechaInicio: string
-  fechaFin: string
-}
+
 export interface Oferta{
   potencia: Types.Array<PotenciaBloque>
   tarifaPotencia: boolean
   tarifaEnergiaHp: boolean
   tarifaEnergiaHfp: boolean
-  energiaHp: Types.Array<OfertaBloque>
-  energiaHfp: Types.Array<OfertaBloque>
+  energiaHp: Types.Array<EnergiaBloque>
+  energiaHfp: Types.Array<EnergiaBloque>
   potMinFacturable: number
   potenciaFacturar: string
   excesoPotencia: number

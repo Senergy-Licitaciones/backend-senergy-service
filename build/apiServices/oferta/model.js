@@ -6,11 +6,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const { ObjectId } = mongoose_1.default.Schema.Types;
 const ofertaSchema = new mongoose_1.default.Schema({
-    potencia: {
-        type: Number,
+    potencia: [
+        {
+            fechaInicio: {
+                type: Date,
+                required: true
+            },
+            fechaFin: {
+                type: Date,
+                required: true
+            },
+            potencia: {
+                type: Number,
+                required: true
+            }
+        }
+    ],
+    tarifaPotencia: {
+        type: Boolean,
+        default: false,
         required: true
     },
-    tarifa: {
+    tarifaEnergiaHp: {
+        type: Boolean,
+        default: false,
+        required: true
+    },
+    tarifaEnergiaHfp: {
         type: Boolean,
         default: false,
         required: true

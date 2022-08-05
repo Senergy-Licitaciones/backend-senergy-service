@@ -40,3 +40,9 @@ export const validateCode: RequestHandler = async (req, res, next) => {
   }
   return next()
 }
+export const validateOferta: RequestHandler = async (_req, _res, _next) => {
+  await Promise.all([body('tarifaPotencia').exists({ checkFalsy: false, checkNull: true }).isBoolean({ strict: true }).if(body('Potencia').isArray({ min: 0, max: 0 })),
+    body('tarifaEnergiaHp').exists({ checkFalsy: false, checkNull: true }).isBoolean({ strict: true }).if(body('EnergiaHp').isArray({ min: 0, max: 0 })),
+    body('tarifaEnergiaHfp').exists({ checkFalsy: false, checkNull: true }).isBoolean({ strict: true }).if(body('EnergiaHfp').isArray({ min: 0, max: 0 }))
+  ])
+}
