@@ -4,6 +4,8 @@ exports.createEnergiaBloqueAdapter = exports.createPotenciaBloqueAdapter = void 
 const mongoose_1 = require("mongoose");
 const createPotenciaBloqueAdapter = (request) => {
     const array = new mongoose_1.Types.Array();
+    if (request.length === 0)
+        return array;
     request.map((bloque) => {
         return array.push({
             potencia: bloque.potencia,
@@ -16,6 +18,7 @@ const createPotenciaBloqueAdapter = (request) => {
 exports.createPotenciaBloqueAdapter = createPotenciaBloqueAdapter;
 const createEnergiaBloqueAdapter = (request) => {
     const array = new mongoose_1.Types.Array();
+    console.log(array);
     if (request.length === 0)
         return array;
     request.map((bloque) => {
@@ -25,6 +28,7 @@ const createEnergiaBloqueAdapter = (request) => {
             fechaFin: new Date(bloque.fechaFin)
         });
     });
+    console.log(array);
     return array;
 };
 exports.createEnergiaBloqueAdapter = createEnergiaBloqueAdapter;
