@@ -9,7 +9,7 @@ export interface EnergiaBloqueReq{
   fechaInicio: string
   fechaFin: string
 }
-export interface OfertaRequest extends Omit<Oferta, 'potencia'|'energiaHp'|'energiaHfp'|'createdAt'|'updatedAt'> {
+export interface OfertaRequest extends Omit<Oferta, 'proveedor'| 'potencia'|'energiaHp'|'energiaHfp'|'createdAt'|'updatedAt'> {
   potencia: PotenciaBloqueReq[]
   energiaHp: EnergiaBloqueReq[]
   energiaHfp: EnergiaBloqueReq[]
