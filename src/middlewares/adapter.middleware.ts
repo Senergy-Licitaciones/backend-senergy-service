@@ -3,6 +3,7 @@ import { AdapterMiddleware } from '../types/methods'
 const adapter: AdapterMiddleware = <Body, BodyParsed>(cb: (body: Body) => BodyParsed) => async (req, res, next) => {
   try {
     const body = req.body as Body
+    console.log('body', body)
     const bodyParsed = cb(body)
     req.body = bodyParsed
     return next()

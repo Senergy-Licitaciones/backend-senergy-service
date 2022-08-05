@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const adapter = (cb) => (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const body = req.body;
+        console.log('body', body);
         const bodyParsed = cb(body);
         req.body = bodyParsed;
         return next();
