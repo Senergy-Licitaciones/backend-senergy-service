@@ -4,7 +4,9 @@ import { EnergiaBloqueReq, PotenciaBloqueReq } from '../types/requests'
 
 export const createPotenciaBloqueAdapter = (request: PotenciaBloqueReq[]): Types.Array<PotenciaBloque> => {
   const array = new Types.Array<PotenciaBloque>()
+  console.log('array ', array)
   if (request.length === 0) return array
+  console.log('dsps del if')
   request.map((bloque) => {
     return array.push({
       potencia: bloque.potencia,
@@ -18,6 +20,7 @@ export const createEnergiaBloqueAdapter = (request: EnergiaBloqueReq[]): Types.A
   const array = new Types.Array<EnergiaBloque>()
   console.log(array)
   if (request.length === 0) return array
+  console.log('dsps del if energy')
   request.map((bloque) => {
     return array.push({
       energia: bloque.energia,

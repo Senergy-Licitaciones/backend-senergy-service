@@ -4,8 +4,10 @@ exports.createEnergiaBloqueAdapter = exports.createPotenciaBloqueAdapter = void 
 const mongoose_1 = require("mongoose");
 const createPotenciaBloqueAdapter = (request) => {
     const array = new mongoose_1.Types.Array();
+    console.log('array ', array);
     if (request.length === 0)
         return array;
+    console.log('dsps del if');
     request.map((bloque) => {
         return array.push({
             potencia: bloque.potencia,
@@ -21,6 +23,7 @@ const createEnergiaBloqueAdapter = (request) => {
     console.log(array);
     if (request.length === 0)
         return array;
+    console.log('dsps del if energy');
     request.map((bloque) => {
         return array.push({
             energia: bloque.energia,
