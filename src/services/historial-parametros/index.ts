@@ -3,8 +3,9 @@ import { handleError } from '../../helpers/handleError'
 import { ErrorResponse, HistorialParametros, ResponseParent } from '../../types/data'
 import { Service } from '../../types/methods'
 import { formatFromStringToDate } from '../../utils/dateFormat'
-import XLSX from 'xlsx'
 import { FACTORES } from '../../constants'
+import { generateMesesArray } from '../../utils'
+import { addWorksheetToBook, createFile, createWorkbook, createWorksheetFromArrays } from '../excel'
 export const addParametroService: Service<Omit<HistorialParametros, 'createdAt'|'updatedAt'|'fecha'> & {fecha: string}, ErrorResponse|ResponseParent> = async (fields) => {
   try {
     const parametro = await addParametroDao({ ...fields, fecha: formatFromStringToDate(fields.fecha) })
@@ -17,27 +18,20 @@ export const addParametroService: Service<Omit<HistorialParametros, 'createdAt'|
     return handleError(error, 'Ha ocurrido un error al agregar el dato en la capa de servicios')
   }
 }
-export const exportFileService: Service<{fechaInicio: string, fechaFin: string, id: string}, ErrorResponse|ResponseParent> = async ({ fechaInicio, fechaFin, id }) => {
+export const exportFileService: Service<{fechaInicio: Date, fechaFin: Date, id: string}, ErrorResponse|ResponseParent> = async ({ fechaInicio, fechaFin, id }) => {
   try {
-    const fechaInicioDate = new Date(fechaInicio)
-    const fechaFinDate = new Date(fechaFin)
-    const months = (fechaFinDate.getFullYear() - fechaInicioDate.getFullYear()) * 12 + fechaFinDate.getMonth() - fechaInicioDate.getMonth() + 1
-    const array = Array(months).fill('')
-    const flagDate = new Date(fechaInicioDate)
-    const meses = array.map((_el, i) => {
-      i !== 0 && flagDate.setMonth(flagDate.getMonth() + 1)
-      return (flagDate.getMonth() + 1).toString() + '-' + flagDate.getFullYear().toString()
-    })
+    const meses = generateMesesArray(fechaInicio, fechaFin)
     const ids = meses.map((_mes, i) => i + 1)
     const values = meses.map((_mes) => 0)
-    const workbook = XLSX.utils.book_new()
-    const worksheet = XLSX.utils.aoa_to_sheet([
+    const workbook = createWorkbook()
+    const worksheet = createWorksheetFromArrays([
       ['Meses', 'Nombre', ...meses],
       ['Codigo', 'Id', ...ids],
       ...FACTORES.map((el) => ([el.nombre, el.codigo, ...values]))
     ])
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Base de datos Factores')
-    XLSX.writeFile(workbook, `uploads/files/admin/base-de-datos-factores-${id}.xlsx`)
+    addWorksheetToBook(workbook, worksheet, 'Base de datos Factores')
+    const path = `uploads/files/admin/base-de-datos-factores-${id}.xlsx`
+    createFile(workbook, path)
     return {
       message: 'Se ha exportado el archivo exitosamente'
     }

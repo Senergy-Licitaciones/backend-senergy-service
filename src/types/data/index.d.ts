@@ -101,6 +101,10 @@ export interface Oferta extends OfertaBase{
   createdAt: Date
   updatedAt: Date
 }
+export interface ExportFileAdminData{
+  fechaInicio: Date
+  fechaFin: Date
+}
 export interface OfertaData extends OfertaBase{
   potencia: PotenciaBloque[]
   energiaHp: EnergiaBloque[]

@@ -1,7 +1,7 @@
 import { RequestHandler } from 'express'
 import { httpError } from '../../helpers/handleError'
 import { addParametroService, exportFileService } from '../../services/historial-parametros'
-import { Admin, DocType } from '../../types/data'
+import { Admin, DocType, ExportFileAdminData } from '../../types/data'
 import { Parametro, Unidad } from '../../types/data/enums'
 
 export const addParametro: RequestHandler = async (req, res) => {
@@ -18,7 +18,7 @@ export const addParametro: RequestHandler = async (req, res) => {
 export const exportFile: RequestHandler = async (req, res) => {
   try {
     const { _id } = req.admin as DocType<Admin>
-    const { fechaInicio, fechaFin } = req.body as {fechaInicio: string, fechaFin: string}
+    const { fechaInicio, fechaFin } = req.body as ExportFileAdminData
     const response = await exportFileService({ fechaInicio, fechaFin, id: _id })
     if ('error' in response) return res.status(400).send(response)
     return res.status(200).send(response)
