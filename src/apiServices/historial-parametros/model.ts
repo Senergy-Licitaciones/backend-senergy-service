@@ -1,27 +1,27 @@
 import mongoose from 'mongoose'
-import { HistorialParametros } from '../../types/data'
-import { Parametro, Unidad } from '../../types/data/enums'
-const historialParametrosSchema = new mongoose.Schema<HistorialParametros>({
+import { HistorialParametro } from '../../types/schemas'
+const historialParametrosSchema = new mongoose.Schema<HistorialParametro>({
   name: {
     type: String,
-    enum: Parametro,
+    trim: true,
     required: true
   },
-  valor: {
-    type: Number,
-    required: true
-  },
-  fecha: {
-    type: Date,
-    required: true
-  },
-  unidad: {
-    type: String,
-    enum: Unidad,
-    required: true
-  }
+  values: [
+    {
+      _id: false,
+      fecha: {
+        type: String,
+        required: true,
+        trim: true
+      },
+      value: {
+        type: Number,
+        required: true
+      }
+    }
+  ]
 }, {
   versionKey: false,
   timestamps: true
 })
-export default mongoose.model<HistorialParametros>('HistorialParametrosModel', historialParametrosSchema)
+export default mongoose.model<HistorialParametro>('HistorialParametrosModel', historialParametrosSchema)

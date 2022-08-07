@@ -1,6 +1,6 @@
 import { Document, Types } from 'mongoose'
 import { FactorIndex, LicitacionRegisterFields, ProveedorRegisterFields, UserRegisterFields } from '../form'
-import { Estado, Parametro, Role, RoleAdmin, Type, Unidad } from './enums'
+import { Estado, Role, RoleAdmin, Type } from './enums'
 export interface Admin{
   correo: string
   name: string
@@ -142,12 +142,4 @@ export interface User extends UserRegisterFields{
   estado: Estado
   sessionId: string
   role: Role
-}
-export interface HistorialParametros{
-  name: Parametro
-  valor: number
-  fecha: Date
-  unidad: Unidad
-  createdAt: Date
-  updatedAt: Date
 }
