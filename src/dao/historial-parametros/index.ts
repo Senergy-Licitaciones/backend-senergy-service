@@ -1,8 +1,5 @@
-import { handleError } from '../../helpers/handleError'
-import { DocType, ErrorResponse, HistorialParametros } from '../../types/data'
-import HistorialParametrosModel from '../../apiServices/historial-parametros/model'
-import { Dao } from '../../types/methods'
-
+// import { DocType, ErrorResponse, HistorialParametros } from '../../types/data'
+/*
 export const addParametroDao: Dao<Omit<HistorialParametros, 'createdAt'|'updatedAt'>, ErrorResponse|DocType<HistorialParametros>> = async (fields) => {
   try {
     const parametro = await HistorialParametrosModel.create(fields)
@@ -13,3 +10,5 @@ export const addParametroDao: Dao<Omit<HistorialParametros, 'createdAt'|'updated
     return handleError(error, 'Ha ocurrido un error al agregar el histórico en la capa de datos')
   }
 }
+*/
+export * from './insertMultipleParametros.dao'

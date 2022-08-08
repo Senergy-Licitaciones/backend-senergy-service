@@ -143,3 +143,8 @@ export interface User extends UserRegisterFields{
   sessionId: string
   role: Role
 }
+export interface JsonParametroData{
+  Meses: string
+  Nombre: string
+  [index: string]: string|number
+}
