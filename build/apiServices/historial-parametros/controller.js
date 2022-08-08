@@ -9,23 +9,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.exportFile = exports.addParametro = void 0;
+exports.updateParametros = exports.addParametros = exports.downloadFile = exports.getFilename = exports.exportFile = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const historial_parametros_1 = require("../../services/historial-parametros");
-const addParametro = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const fields = req.body;
-        const response = yield (0, historial_parametros_1.addParametroService)(fields);
-        if ('error' in response)
-            return res.status(400).send(response);
-        return res.status(200).send(response);
-    }
-    catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
-    }
-});
-exports.addParametro = addParametro;
+/* export const addParametro: RequestHandler = async (req, res) => {
+  try {
+    const fields = req.body as {name: Parametro, unidad: Unidad, valor: number, fecha: string}
+    const response = await addParametroService(fields)
+    if ('error' in response) return res.status(400).send(response)
+    return res.status(200).send(response)
+  } catch (err) {
+    const error = err as Error
+    return httpError(res, error)
+  }
+} */
 const exportFile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { _id } = req.admin;
@@ -41,3 +38,59 @@ const exportFile = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.exportFile = exportFile;
+const getFilename = (req, _res, next, filename) => {
+    req.filename = filename;
+    return next();
+};
+exports.getFilename = getFilename;
+const downloadFile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const filename = req.filename;
+        if (filename == null)
+            return res.status(400).send({ message: 'No se encontró el archivo' });
+        return res.status(200).download(`uploads/files/admin/${filename}`);
+    }
+    catch (err) {
+        const error = err;
+        return (0, handleError_1.httpError)(res, error);
+    }
+});
+exports.downloadFile = downloadFile;
+const addParametros = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const file = req.file;
+        console.log('iniciando request');
+        if (file == null)
+            return res.status(400).send({ message: 'No se ha subido ningún archivo' });
+        const path = 'uploads/files/admin/base-de-datos-factores-62b9e2eb9c0a4a5c9d052131.xlsx';
+        const response = yield (0, historial_parametros_1.addParametrosService)({ filename: path });
+        if ('error' in response)
+            return res.status(400).send(response);
+        console.log('antes del response');
+        return res.status(200).send(response);
+    }
+    catch (err) {
+        const error = err;
+        return (0, handleError_1.httpError)(res, error);
+    }
+});
+exports.addParametros = addParametros;
+const updateParametros = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const file = req.file;
+        console.log('iniciando request');
+        if (file == null)
+            return res.status(400).send({ message: 'No se ha subido ningún archivo' });
+        const path = `uploads/files/admin/${file.filename}`;
+        const response = yield (0, historial_parametros_1.updateParametrosService)({ path });
+        if ('error' in response)
+            return res.status(400).send(response);
+        console.log('antes del response');
+        return res.status(200).send(response);
+    }
+    catch (e) {
+        const error = e;
+        return (0, handleError_1.httpError)(res, error);
+    }
+});
+exports.updateParametros = updateParametros;

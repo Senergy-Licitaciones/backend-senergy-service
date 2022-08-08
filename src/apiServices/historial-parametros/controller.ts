@@ -1,6 +1,6 @@
 import { RequestHandler, RequestParamHandler } from 'express'
 import { httpError } from '../../helpers/handleError'
-import { addParametrosService, exportFileService } from '../../services/historial-parametros'
+import { addParametrosService, exportFileService, updateParametrosService } from '../../services/historial-parametros'
 import { Admin, DocType, ExportFileAdminData } from '../../types/data'
 
 /* export const addParametro: RequestHandler = async (req, res) => {
@@ -53,6 +53,21 @@ export const addParametros: RequestHandler = async (req, res) => {
     return res.status(200).send(response)
   } catch (err) {
     const error = err as Error
+    return httpError(res, error)
+  }
+}
+export const updateParametros: RequestHandler = async (req, res) => {
+  try {
+    const file = req.file
+    console.log('iniciando request')
+    if (file == null) return res.status(400).send({ message: 'No se ha subido ningún archivo' })
+    const path = `uploads/files/admin/${file.filename}`
+    const response = await updateParametrosService({ path })
+    if ('error' in response) return res.status(400).send(response)
+    console.log('antes del response')
+    return res.status(200).send(response)
+  } catch (e) {
+    const error = e as Error
     return httpError(res, error)
   }
 }

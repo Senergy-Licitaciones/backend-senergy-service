@@ -1,29 +1,31 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addParametroDao = void 0;
-const handleError_1 = require("../../helpers/handleError");
-const model_1 = __importDefault(require("../../apiServices/historial-parametros/model"));
-const addParametroDao = (fields) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const parametro = yield model_1.default.create(fields);
-        const response = yield parametro.save();
-        return response;
-    }
-    catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al agregar el histórico en la capa de datos');
-    }
-});
-exports.addParametroDao = addParametroDao;
+// import { DocType, ErrorResponse, HistorialParametros } from '../../types/data'
+/*
+export const addParametroDao: Dao<Omit<HistorialParametros, 'createdAt'|'updatedAt'>, ErrorResponse|DocType<HistorialParametros>> = async (fields) => {
+  try {
+    const parametro = await HistorialParametrosModel.create(fields)
+    const response = await parametro.save()
+    return response
+  } catch (err) {
+    const error = err as Error
+    return handleError(error, 'Ha ocurrido un error al agregar el histórico en la capa de datos')
+  }
+}
+*/
+__exportStar(require("./insertMultipleParametros.dao"), exports);
+__exportStar(require("./updateMultipleParametros.dao"), exports);
