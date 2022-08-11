@@ -13,3 +13,4 @@ export const addParametroDao: Dao<Omit<HistorialParametros, 'createdAt'|'updated
 */
 export * from './insertMultipleParametros.dao'
 export * from './updateMultipleParametros.dao'
+export * from './getParametros.dao'

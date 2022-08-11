@@ -29,3 +29,4 @@ export const addParametroDao: Dao<Omit<HistorialParametros, 'createdAt'|'updated
 */
 __exportStar(require("./insertMultipleParametros.dao"), exports);
 __exportStar(require("./updateMultipleParametros.dao"), exports);
+__exportStar(require("./getParametros.dao"), exports);

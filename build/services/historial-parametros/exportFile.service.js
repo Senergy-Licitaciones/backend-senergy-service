@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.exportFileService = void 0;
+exports.exportFileToUpdateService = exports.exportFileService = void 0;
 const constants_1 = require("../../constants");
+const historial_parametros_1 = require("../../dao/historial-parametros");
 const handleError_1 = require("../../helpers/handleError");
 const utils_1 = require("../../utils");
 const excel_1 = require("../excel");
@@ -39,3 +40,28 @@ const exportFileService = ({ fechaInicio, fechaFin, id }) => __awaiter(void 0, v
     }
 });
 exports.exportFileService = exportFileService;
+const exportFileToUpdateService = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const parametros = yield (0, historial_parametros_1.getParametrosDao)();
+        if ('error' in parametros)
+            return (0, handleError_1.handleError)(parametros.error, parametros.message);
+        const workbook = (0, excel_1.createWorkbook)();
+        const worksheet = (0, excel_1.createWorksheetFromArrays)([
+            ['Meses', 'Nombre', ...parametros[0].values.map((el) => el.fecha)],
+            ['Codigo', 'Id', ...parametros.map((_el, i) => i + 1)],
+            ...parametros.map((el, i) => ([i, el.name, ...el.values.map((value) => value.value)]))
+        ]);
+        (0, excel_1.addWorksheetToBook)(workbook, worksheet, 'Base de datos Factores');
+        const path = `uploads/files/admin/base-de-datos-factores-${id}.xlsx`;
+        (0, excel_1.createFile)(workbook, path);
+        return {
+            message: 'Se ha exportado el archivo exitosamente',
+            filename: `base-de-datos-factores-${id}.xlsx`
+        };
+    }
+    catch (e) {
+        const error = e;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al exportar el archivo');
+    }
+});
+exports.exportFileToUpdateService = exportFileToUpdateService;

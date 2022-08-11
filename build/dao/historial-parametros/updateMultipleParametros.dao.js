@@ -17,12 +17,23 @@ const handleError_1 = require("../../helpers/handleError");
 const model_1 = __importDefault(require("../../apiServices/historial-parametros/model"));
 const updateMultipleParametrosDao = (parametros) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield model_1.default.bulkWrite(parametros.map((parametro) => ({
-            updateOne: {
-                filter: { name: parametro.name },
-                update: parametro
+        const response = yield model_1.default.find().select('name');
+        const names = response.map((name) => name.name);
+        yield model_1.default.bulkWrite(parametros.map((parametro) => {
+            if (names.includes(parametro.name)) {
+                return {
+                    updateOne: {
+                        filter: { name: parametro.name },
+                        update: parametro
+                    }
+                };
             }
-        })));
+            return {
+                insertOne: {
+                    document: parametro
+                }
+            };
+        }));
         //    await HistorialParametrosModel.collection.updateMany({}, parametros)
         return {
             message: 'Datos actualizados exitosamente'
