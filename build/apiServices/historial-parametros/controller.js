@@ -62,7 +62,7 @@ const addParametros = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         console.log('iniciando request');
         if (file == null)
             return res.status(400).send({ message: 'No se ha subido ningún archivo' });
-        const path = 'uploads/files/admin/base-de-datos-factores-62b9e2eb9c0a4a5c9d052131.xlsx';
+        const path = 'uploads/files/admin/' + file.filename;
         const response = yield (0, historial_parametros_1.addParametrosService)({ filename: path });
         if ('error' in response)
             return res.status(400).send(response);
