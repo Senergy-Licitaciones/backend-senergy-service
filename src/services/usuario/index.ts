@@ -70,7 +70,7 @@ export const changeStatusService: Service<{status: Estado, id: Types.ObjectId}, 
     return handleError(error, 'Error en la capa de servicios')
   }
 }
-export const getUsersService: ServiceWithoutParam<ErrorResponse|Array<DocType<Pick<User, 'correo'| 'empresa' |'ruc' |'estado'| 'role'>>>> = async () => {
+export const getUsersService: ServiceWithoutParam<ErrorResponse|Array<DocType<Pick<User, 'correo'| 'empresa' |'ruc' |'phone'| 'role'>>>> = async () => {
   try {
     const users = await getUsersDao()
     if ('error' in users) throw new Error(users.message)
