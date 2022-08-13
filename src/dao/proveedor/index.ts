@@ -78,22 +78,22 @@ export const proveedorEstadoDao: Dao<string, ErrorResponse|DocType<Proveedor>> =
     return handleError(error, 'Ha ocurrido un error al verificar la cuenta')
   }
 }
-export const getProveedoresDao: DaoWithoutParam<ErrorResponse|Array<DocType<Pick<Proveedor, 'razSocial'|'ruc'|'role'|'estado'|'correo'>>>> = async () => {
+export const getProveedoresDao: DaoWithoutParam<ErrorResponse|Array<DocType<Pick<Proveedor, 'razSocial'|'ruc'|'role'|'updatedAt'|'phone1'|'correo'>>>> = async () => {
   try {
-    const proveedores = await ProveedorModel.find().select('razSocial ruc role estado correo') as Array<DocType<Pick<Proveedor, 'razSocial'|'ruc'|'role'|'estado'|'correo'>>>
+    const proveedores = await ProveedorModel.find().select('razSocial ruc role createdAt updatedAt correo phone1') as Array<DocType<Pick<Proveedor, 'phone1'|'updatedAt'|'createdAt'| 'razSocial'|'ruc'|'role'|'correo'>>>
     return proveedores
   } catch (err) {
     const error = err as Error
     return handleError(error, 'Ha ocurrido un error en la capa de datos al listar los proveedores')
   }
 }
-export const getProveedoresToUserDao: DaoWithoutParam<ErrorResponse|InfoBasicaProveedor[]> = async () => {
+export const getProveedoresToUserDao: DaoWithoutParam<ErrorResponse|Array<DocType<InfoBasicaProveedor>>> = async () => {
   try {
-    const proveedores = await ProveedorModel.find().select('correo address phone1 razSocial ruc web') as InfoBasicaProveedor[]
+    const proveedores = await ProveedorModel.find().select('razSocial ruc address web createdAt updatedAt correo phone1') as Array<DocType<InfoBasicaProveedor>>
     return proveedores
-  } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error al obtener los proveedores en la capa de datos')
+  } catch (e) {
+    const error = e as Error
+    return handleError(error, 'Ha ocurrido un error en la capa de datos al listar los proveedores')
   }
 }
 export const createProveedorDao: Dao<ProveedorRegisterFields, ErrorResponse|DocType<Proveedor>> = async (fields) => {

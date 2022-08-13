@@ -142,6 +142,8 @@ export interface User extends UserRegisterFields{
   estado: Estado
   sessionId: string
   role: Role
+  createdAt: Date
+  updatedAt: Date
 }
 export interface JsonParametroData{
   Meses: string

@@ -105,7 +105,7 @@ const proveedorEstadoDao = (correo) => __awaiter(void 0, void 0, void 0, functio
 exports.proveedorEstadoDao = proveedorEstadoDao;
 const getProveedoresDao = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const proveedores = yield model_1.default.find().select('razSocial ruc role estado correo');
+        const proveedores = yield model_1.default.find().select('razSocial ruc role createdAt updatedAt correo phone1');
         return proveedores;
     }
     catch (err) {
@@ -116,12 +116,12 @@ const getProveedoresDao = () => __awaiter(void 0, void 0, void 0, function* () {
 exports.getProveedoresDao = getProveedoresDao;
 const getProveedoresToUserDao = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const proveedores = yield model_1.default.find().select('correo address phone1 razSocial ruc web');
+        const proveedores = yield model_1.default.find().select('razSocial ruc address web createdAt updatedAt correo phone1');
         return proveedores;
     }
-    catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al obtener los proveedores en la capa de datos');
+    catch (e) {
+        const error = e;
+        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al listar los proveedores');
     }
 });
 exports.getProveedoresToUserDao = getProveedoresToUserDao;

@@ -1,7 +1,7 @@
 import { Types } from 'mongoose'
 import { getLicitacionesToProveedorDashboardDao, updateLicitacionDao } from '../../dao/licitacion'
 import { crearOfertaDao, getOfertasToProveedorDashboardDao } from '../../dao/oferta'
-import { updateProveedorDao, getProveedoresDao, getProveedoresToUserDao, createProveedorDao } from '../../dao/proveedor'
+import { updateProveedorDao, getProveedoresDao, createProveedorDao, getProveedoresToUserDao } from '../../dao/proveedor'
 import { encrypt } from '../../helpers/handleBcrypt'
 import { handleError } from '../../helpers/handleError'
 import { DocType, ErrorResponse, InfoDashboardProveedor, OfertaData, Proveedor, ResponseParent } from '../../types/data'
@@ -90,7 +90,7 @@ export const getInfoDashboardProveedorService: Service<DocType<Proveedor>, Error
     return handleError(error, 'Ha ocurrido un error al obtener la información en la capa de servicios')
   }
 }
-export const getProveedoresService: ServiceWithoutParam<ErrorResponse|Array<DocType<Pick<Proveedor, 'razSocial'|'ruc'|'role'|'estado'|'correo'>>>> = async () => {
+export const getProveedoresService: ServiceWithoutParam<ErrorResponse|Array<DocType<Pick<Proveedor, 'razSocial'|'ruc'|'role'|'phone1'|'correo'|'createdAt'|'updatedAt'>>>> = async () => {
   try {
     const proveedores = await getProveedoresDao()
     if ('error' in proveedores) throw new Error(proveedores.message)
