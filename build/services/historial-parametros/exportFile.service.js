@@ -35,16 +35,13 @@ const exportFileService = ({ fechaInicio, fechaFin, id }) => __awaiter(void 0, v
         };
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al exportar el archivo');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.exportFileService = exportFileService;
 const exportFileToUpdateService = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const parametros = yield (0, historial_parametros_1.getParametrosDao)();
-        if ('error' in parametros)
-            return (0, handleError_1.handleError)(parametros.error, parametros.message);
         const workbook = (0, excel_1.createWorkbook)();
         const worksheet = (0, excel_1.createWorksheetFromArrays)([
             ['Meses', 'Nombre', ...parametros[0].values.map((el) => el.fecha)],
@@ -60,8 +57,7 @@ const exportFileToUpdateService = ({ id }) => __awaiter(void 0, void 0, void 0, 
         };
     }
     catch (e) {
-        const error = e;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al exportar el archivo');
+        throw (0, handleError_1.handleError)(e);
     }
 });
 exports.exportFileToUpdateService = exportFileToUpdateService;

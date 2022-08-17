@@ -15,13 +15,10 @@ const handleError_1 = require("../../helpers/handleError");
 const getPuntoSumService = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, puntoSum_1.getPuntoSumDao)();
-        if ('error' in result)
-            return (0, handleError_1.handleError)(result.error, result.message);
         return result;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.getPuntoSumService = getPuntoSumService;
@@ -31,8 +28,7 @@ const addPuntoSumService = (fields) => __awaiter(void 0, void 0, void 0, functio
         return response;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.addPuntoSumService = addPuntoSumService;

@@ -41,8 +41,7 @@ const updateMultipleParametrosDao = (parametros) => __awaiter(void 0, void 0, vo
     }
     catch (e) {
         console.log(e);
-        const error = e;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al actualizar los parametros en la capa de datos');
+        throw (0, handleError_1.handleError)(e, 'Ha ocurrido un error al actualizar los parametros en la capa de datos');
     }
 });
 exports.updateMultipleParametrosDao = updateMultipleParametrosDao;

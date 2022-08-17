@@ -6,8 +6,7 @@ export const validateUserLogin: RequestHandler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return res.status(400).send({
-      message: 'Datos inválidos',
-      error: errors.array()
+      message: 'Datos inválidos'
     })
   }
   return next()
@@ -22,8 +21,7 @@ export const validateUserRegister: RequestHandler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return res.status(400).send({
-      message: 'Datos inválidos',
-      error: errors.array()
+      message: 'Datos inválidos'
     })
   }
   return next()
@@ -34,8 +32,7 @@ export const validateCode: RequestHandler = async (req, res, next) => {
   const errors = validationResult(req)
   if (!errors.isEmpty()) {
     return res.status(400).send({
-      message: 'Datos inválidos',
-      error: errors.array()
+      message: 'Datos inválidos'
     })
   }
   return next()

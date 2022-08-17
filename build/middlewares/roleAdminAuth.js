@@ -14,15 +14,14 @@ const checkRoleAdminAuth = (roles) => (req, res, next) => __awaiter(void 0, void
     try {
         const admin = req.admin;
         if (admin != null) {
-            return roles.includes(admin.role) ? next() : res.status(409).send({ message: 'No cuenta con los permisos necesarios para realizar esta acción', error: true });
+            return roles.includes(admin.role) ? next() : res.status(409).send({ message: 'No cuenta con los permisos necesarios para realizar esta acción' });
         }
         throw new Error('No cuentas con los permisos para acceder a este recurso');
     }
     catch (err) {
         const error = err;
         return res.status(500).send({
-            message: error.message,
-            error: err
+            message: error.message
         });
     }
 });

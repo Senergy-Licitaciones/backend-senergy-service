@@ -2,20 +2,19 @@ import { handleError } from '../../helpers/handleError'
 import BrgModel from '../../apiServices/brg/model'
 import { FieldsAdd } from '../../types/form'
 import { Dao, DaoWithoutParam } from '../../types/methods'
-import { ErrorResponse, ResponseParent } from '../../types/data'
+import { ResponseParent } from '../../types/data'
 import { Document, Types } from 'mongoose'
 
-export const getBrgDao: DaoWithoutParam<ErrorResponse|Array<Document<any, any, FieldsAdd> & FieldsAdd & {
+export const getBrgDao: DaoWithoutParam<Array<Document<any, any, FieldsAdd> & FieldsAdd & {
   _id: Types.ObjectId}>> = async () => {
   try {
     const result = await BrgModel.find()
     return result
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error en la capa de datos')
+    throw handleError(err, 'Ha ocurrido un error al obtener la lista de BRG')
   }
 }
-export const createBrgDao: Dao<FieldsAdd, ErrorResponse|ResponseParent> = async (fields) => {
+export const createBrgDao: Dao<FieldsAdd, ResponseParent> = async (fields) => {
   try {
     const response = await BrgModel.create<FieldsAdd>({ name: fields.name })
     const brg = await response.save()
@@ -23,7 +22,6 @@ export const createBrgDao: Dao<FieldsAdd, ErrorResponse|ResponseParent> = async 
       message: `BRG ${brg.name} añadido exitosamente `
     }
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error al crear un nuevo BRG')
+    throw handleError(err, 'Ha ocurrido un error al crear un nuevo BRG')
   }
 }

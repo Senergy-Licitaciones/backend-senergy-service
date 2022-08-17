@@ -15,41 +15,32 @@ const handleError_1 = require("../../helpers/handleError");
 const getOfertasService = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const ofertas = yield (0, oferta_1.getOfertasDao)(id);
-        if ('error' in ofertas)
-            return (0, handleError_1.handleError)(ofertas.error, ofertas.message);
         return ofertas;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al obtener las ofertas');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.getOfertasService = getOfertasService;
 const getOfertaByIdService = (ofertaId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const oferta = yield (0, oferta_1.getOfertaByIdDao)(ofertaId);
-        if ('error' in oferta)
-            return (0, handleError_1.handleError)(oferta.error, oferta.message);
         return oferta;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al obtener la oferta');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.getOfertaByIdService = getOfertaByIdService;
 const updateOfertaService = ({ ofertaId, fields }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const oferta = yield (0, oferta_1.updateOfertaDao)({ ofertaId, fields });
-        if ('error' in oferta)
-            return (0, handleError_1.handleError)(oferta.error, oferta.message);
         return {
             message: `Oferta para ${oferta.licitacion.empresa} actualizada exitosamente `
         };
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios a actualizar la oferta');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.updateOfertaService = updateOfertaService;

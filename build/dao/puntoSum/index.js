@@ -21,8 +21,7 @@ const getPuntoSumDao = () => __awaiter(void 0, void 0, void 0, function* () {
         return result;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al obtener los puntos de suministro');
     }
 });
 exports.getPuntoSumDao = getPuntoSumDao;
@@ -35,8 +34,7 @@ const createPuntoSumDao = (fields) => __awaiter(void 0, void 0, void 0, function
         };
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al crear un nuevo punto de suministro');
     }
 });
 exports.createPuntoSumDao = createPuntoSumDao;

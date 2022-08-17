@@ -8,22 +8,18 @@ export const getOfertas: RequestHandler = async (req, res) => {
   try {
     const proveedor = req.proveedor as DocType<Proveedor>
     const ofertas = await getOfertasService(proveedor._id)
-    if ('error' in ofertas) return res.status(400).send(ofertas)
     return res.status(200).send(ofertas)
   } catch (err) {
-    const error = err as Error
-    return httpError(res, error)
+    return httpError(res, err)
   }
 }
 export const getOfertaById: RequestHandler = async (req, res) => {
   try {
     const ofertaId = req.ofertaId as Types.ObjectId
     const oferta = await getOfertaByIdService(ofertaId)
-    if ('error' in oferta) return res.status(400).send(oferta)
     return res.status(200).send(oferta)
   } catch (err) {
-    const error = err as Error
-    return httpError(res, error)
+    return httpError(res, err)
   }
 }
 export const ofertaId: RequestParamHandler = (req, _res, next, id) => {
@@ -35,10 +31,8 @@ export const updateOferta: RequestHandler = async (req, res) => {
     const ofertaId = req.ofertaId as Types.ObjectId
     const fields = req.body as Partial<Oferta>
     const response = await updateOfertaService({ ofertaId, fields })
-    if ('error' in response) return res.status(400).send(response)
     return res.status(200).send(response)
   } catch (err) {
-    const error = err as Error
-    return httpError(res, error)
+    return httpError(res, err)
   }
 }

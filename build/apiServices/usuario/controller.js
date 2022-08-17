@@ -16,26 +16,20 @@ const changeStatus = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     try {
         const { estado, idLicitacion } = req.body;
         const result = yield (0, usuario_1.changeStatusService)({ status: estado, id: idLicitacion });
-        if ('error' in result)
-            return res.send(result);
         return res.status(200).send(result);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.changeStatus = changeStatus;
 const showUsers = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const users = yield (0, usuario_1.getUsersService)();
-        if ('error' in users)
-            return res.status(400).send(users);
         return res.status(200).send(users);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.showUsers = showUsers;
@@ -43,13 +37,10 @@ const showLicitaciones = (req, res) => __awaiter(void 0, void 0, void 0, functio
     try {
         const user = req.user;
         const licitaciones = yield (0, usuario_1.getLicitacionesByUser)(user._id);
-        if ('error' in licitaciones)
-            return res.status(400).send(licitaciones);
         return res.status(200).send(licitaciones);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.showLicitaciones = showLicitaciones;
@@ -57,13 +48,10 @@ const getInfoUser = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const user = req.user;
         const info = yield (0, usuario_1.getInfoUserService)(user);
-        if ('error' in info)
-            return res.status(400).send(info);
         return res.status(200).send(info);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.getInfoUser = getInfoUser;
@@ -72,13 +60,10 @@ const generateFileToMonthsDetails = (req, res) => __awaiter(void 0, void 0, void
         const { meses } = req.body;
         const user = req.user;
         const result = (0, usuario_1.generateFileToMonthsDetailsService)(meses, user);
-        if ('error' in result)
-            return res.status(400).send(result);
         return res.status(200).send(result);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.generateFileToMonthsDetails = generateFileToMonthsDetails;
@@ -95,8 +80,7 @@ const getEspecificacionMes = (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
     catch (err) {
         console.log(err);
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.getEspecificacionMes = getEspecificacionMes;
@@ -106,13 +90,10 @@ const validateFile = (req, res) => {
         if (file == null)
             return res.status(400).send({ message: 'No se ha subido ningún archivo' });
         const response = (0, usuario_1.validateFileService)(file.filename);
-        if ('error' in response)
-            return res.status(400).send(response);
         return res.status(200).send(response);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 };
 exports.validateFile = validateFile;

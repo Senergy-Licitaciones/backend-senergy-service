@@ -26,8 +26,7 @@ const crearOfertaDao = (fields) => __awaiter(void 0, void 0, void 0, function* (
     }
     catch (err) {
         console.log('error ', err);
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al crear la oferta');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al crear la oferta');
     }
 });
 exports.crearOfertaDao = crearOfertaDao;
@@ -39,8 +38,7 @@ const getOfertasDao = (id) => __awaiter(void 0, void 0, void 0, function* () {
         return ofertas;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al obtener las ofertas');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al obtener las ofertas');
     }
 });
 exports.getOfertasDao = getOfertasDao;
@@ -52,8 +50,7 @@ const getOfertaByIdDao = (ofertaId) => __awaiter(void 0, void 0, void 0, functio
         return oferta;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al obtener la oferta');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al obtener la oferta');
     }
 });
 exports.getOfertaByIdDao = getOfertaByIdDao;
@@ -69,8 +66,7 @@ const updateOfertaDao = ({ ofertaId, fields }) => __awaiter(void 0, void 0, void
         return oferta;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al actualizar la oferta');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al actualizar la oferta');
     }
 });
 exports.updateOfertaDao = updateOfertaDao;
@@ -81,8 +77,7 @@ const getOfertasToProveedorDashboardDao = (idProveedor) => __awaiter(void 0, voi
         return ofertas;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al obtener las ofertas en la capa de datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al obtener las ofertas');
     }
 });
 exports.getOfertasToProveedorDashboardDao = getOfertasToProveedorDashboardDao;

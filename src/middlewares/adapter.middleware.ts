@@ -7,10 +7,8 @@ export const adapter: AdapterMiddleware = <Body, BodyParser>(cb: (body: Body) =>
     return next()
   } catch (err) {
     console.log(err)
-    const error = err as Error
     return res.status(409).send({
-      message: 'Ha ocurrido un error al adaptar la petición',
-      error: error
+      message: 'Ha ocurrido un error al adaptar la petición'
     })
   }
 }

@@ -10,10 +10,8 @@ const adapter = (cb) => (req, res, next) => {
     }
     catch (err) {
         console.log(err);
-        const error = err;
         return res.status(409).send({
-            message: 'Ha ocurrido un error al adaptar la petición',
-            error: error
+            message: 'Ha ocurrido un error al adaptar la petición'
         });
     }
 };

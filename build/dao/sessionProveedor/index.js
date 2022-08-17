@@ -33,8 +33,7 @@ const createSessionProveedor = ({ proveedorId, token }) => __awaiter(void 0, voi
         return session;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al crear la sesión ');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al crear la sesión ');
     }
 });
 exports.createSessionProveedor = createSessionProveedor;
@@ -46,9 +45,8 @@ const logoutProveedorDao = (proveedorId) => __awaiter(void 0, void 0, void 0, fu
         return proveedor;
     }
     catch (err) {
-        const error = err;
         console.log('error ', err);
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al eliminar la sesión');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al eliminar la sesión');
     }
 });
 exports.logoutProveedorDao = logoutProveedorDao;

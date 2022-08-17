@@ -1,6 +1,6 @@
 import { RequestHandler, RequestParamHandler } from 'express'
 import { httpError } from '../../helpers/handleError'
-import { addParametrosService, exportFileService, exportFileToUpdateService, updateParametrosService } from '../../services/historial-parametros'
+import { addParametrosService, exportFileService, exportFileToUpdateService, getParametrosService, updateParametrosService } from '../../services/historial-parametros'
 import { Admin, DocType, ExportFileAdminData } from '../../types/data'
 
 /* export const addParametro: RequestHandler = async (req, res) => {
@@ -19,11 +19,9 @@ export const exportFile: RequestHandler = async (req, res) => {
     const { _id } = req.admin as DocType<Admin>
     const { fechaInicio, fechaFin } = req.body as ExportFileAdminData
     const response = await exportFileService({ fechaInicio, fechaFin, id: _id })
-    if ('error' in response) return res.status(400).send(response)
     return res.status(200).send(response)
   } catch (err) {
-    const error = err as Error
-    return httpError(res, error)
+    return httpError(res, err)
   }
 }
 export const getFilename: RequestParamHandler = (req, _res, next, filename) => {
@@ -36,8 +34,7 @@ export const downloadFile: RequestHandler = async (req, res) => {
     if (filename == null) return res.status(400).send({ message: 'No se encontró el archivo' })
     return res.status(200).download(`uploads/files/admin/${filename}`)
   } catch (err) {
-    const error = err as Error
-    return httpError(res, error)
+    return httpError(res, err)
   }
 }
 
@@ -48,12 +45,10 @@ export const addParametros: RequestHandler = async (req, res) => {
     if (file == null) return res.status(400).send({ message: 'No se ha subido ningún archivo' })
     const path = 'uploads/files/admin/' + file.filename
     const response = await addParametrosService({ filename: path })
-    if ('error' in response) return res.status(400).send(response)
     console.log('antes del response')
     return res.status(200).send(response)
   } catch (err) {
-    const error = err as Error
-    return httpError(res, error)
+    return httpError(res, err)
   }
 }
 export const updateParametros: RequestHandler = async (req, res) => {
@@ -63,22 +58,26 @@ export const updateParametros: RequestHandler = async (req, res) => {
     if (file == null) return res.status(400).send({ message: 'No se ha subido ningún archivo' })
     const path = `uploads/files/admin/${file.filename}`
     const response = await updateParametrosService({ path })
-    if ('error' in response) return res.status(400).send(response)
     console.log('antes del response')
     return res.status(200).send(response)
   } catch (e) {
-    const error = e as Error
-    return httpError(res, error)
+    return httpError(res, e)
   }
 }
 export const exportFileToUpdate: RequestHandler = async (req, res) => {
   try {
     const { _id } = req.admin as DocType<Admin>
     const response = await exportFileToUpdateService({ id: _id })
-    if ('error' in response) return res.status(400).send(response)
     return res.status(200).send(response)
   } catch (e) {
-    const error = e as Error
-    return httpError(res, error)
+    return httpError(res, e)
+  }
+}
+export const getParametros: RequestHandler = async (_req, res) => {
+  try {
+    const parametros = await getParametrosService()
+    return res.status(200).send(parametros)
+  } catch (e) {
+    return httpError(res, e)
   }
 }

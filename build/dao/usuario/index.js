@@ -24,8 +24,7 @@ const crearUsuarioDao = (fields) => __awaiter(void 0, void 0, void 0, function* 
     }
     catch (err) {
         console.log('error crear user dao ', err);
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al registrar un nuevo usuario');
     }
 });
 exports.crearUsuarioDao = crearUsuarioDao;
@@ -40,8 +39,7 @@ const verifyCorreoDao = (correo) => __awaiter(void 0, void 0, void 0, function* 
     }
     catch (err) {
         console.log('usuario dao ', err);
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al verificar el correo');
     }
 });
 exports.verifyCorreoDao = verifyCorreoDao;
@@ -55,8 +53,7 @@ const updateUsuarioDao = ({ fields, id }) => __awaiter(void 0, void 0, void 0, f
         };
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al actualizar el usuario');
     }
 });
 exports.updateUsuarioDao = updateUsuarioDao;
@@ -70,8 +67,7 @@ const confirmUserDao = (idUser) => __awaiter(void 0, void 0, void 0, function* (
         };
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error en la capa de datos');
     }
 });
 exports.confirmUserDao = confirmUserDao;
@@ -83,8 +79,7 @@ const getUserHashDao = (correo) => __awaiter(void 0, void 0, void 0, function* (
         return response;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error en la capa de datos');
     }
 });
 exports.getUserHashDao = getUserHashDao;
@@ -104,8 +99,7 @@ const getUsersDao = () => __awaiter(void 0, void 0, void 0, function* () {
         return users;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al obtener la lista de usuarios');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error en la capa de datos al obtener la lista de usuarios');
     }
 });
 exports.getUsersDao = getUsersDao;

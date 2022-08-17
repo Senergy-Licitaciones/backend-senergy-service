@@ -4,27 +4,25 @@ import { crearOfertaDao, getOfertasToProveedorDashboardDao } from '../../dao/ofe
 import { updateProveedorDao, getProveedoresDao, createProveedorDao, getProveedoresToUserDao } from '../../dao/proveedor'
 import { encrypt } from '../../helpers/handleBcrypt'
 import { handleError } from '../../helpers/handleError'
-import { DocType, ErrorResponse, InfoDashboardProveedor, OfertaData, Proveedor, ResponseParent } from '../../types/data'
+import { DocType, InfoDashboardProveedor, OfertaData, Proveedor, ResponseParent } from '../../types/data'
 import { InfoBasicaProveedor, ProveedorRegisterFields } from '../../types/form'
 import { Service, ServiceWithoutParam } from '../../types/methods'
 import calcTime from '../../utils/calcTime'
 import { formatFromStringToDate } from '../../utils/dateFormat'
-export const getProveedoresToUserService: ServiceWithoutParam<ErrorResponse|InfoBasicaProveedor[]> = async () => {
+export const getProveedoresToUserService: ServiceWithoutParam<InfoBasicaProveedor[]> = async () => {
   try {
     const proveedores = await getProveedoresToUserDao()
-    if ('error' in proveedores) return handleError(proveedores.error, proveedores.message)
     return proveedores
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error al obtener los proveedores en la capa de servicios')
+    throw handleError(err)
   }
 }
 
-export const participarLicitacionService: Service<{fields: OfertaData, idProveedor: Types.ObjectId}, ErrorResponse|ResponseParent> = async ({ fields, idProveedor }) => {
+export const participarLicitacionService: Service<{fields: OfertaData, idProveedor: Types.ObjectId}, ResponseParent> = async ({ fields, idProveedor }) => {
   try {
     const { potencia, energiaHp, energiaHfp, potenciaFacturar, formulaIndexPotencia, formulaIndexEnergia, potMinFacturable, licitacion, excesoPotencia, excesoEnergiaHp, excesoEnergiaHfp, tarifaEnergiaHfp, tarifaPotencia, tarifaEnergiaHp } = fields
 
-    const oferta = await crearOfertaDao({
+    await crearOfertaDao({
       potencia,
       energiaHfp,
       energiaHp,
@@ -41,23 +39,18 @@ export const participarLicitacionService: Service<{fields: OfertaData, idProveed
       tarifaEnergiaHfp,
       tarifaEnergiaHp
     })
-    if ('error' in oferta) return handleError(oferta.error, oferta.message)
-    const result = await updateLicitacionDao({ fields: { $push: { participantes: idProveedor } }, id: licitacion })
-    if ('error' in result) return handleError(result.error, result.message)
-    const proveedor = await updateProveedorDao({ fields: { $push: { licitaciones: licitacion } }, id: idProveedor })
-    if ('error' in proveedor) return handleError(proveedor.error, proveedor.message)
+    await updateLicitacionDao({ fields: { $push: { participantes: idProveedor } }, id: licitacion })
+    await updateProveedorDao({ fields: { $push: { licitaciones: licitacion } }, id: idProveedor })
     return {
       message: 'Se ha inscrito en la licitación exitosamente'
     }
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error en la capa de servicios')
+    throw handleError(err)
   }
 }
-export const getInfoDashboardProveedorService: Service<DocType<Proveedor>, ErrorResponse|InfoDashboardProveedor> = async (proveedor) => {
+export const getInfoDashboardProveedorService: Service<DocType<Proveedor>, InfoDashboardProveedor> = async (proveedor) => {
   try {
     const licitaciones = await getLicitacionesToProveedorDashboardDao(proveedor._id)
-    if ('error' in licitaciones) throw new Error(licitaciones.message)
     if (licitaciones.length === 0) {
       return {
         numOfertas: 0,
@@ -76,7 +69,6 @@ export const getInfoDashboardProveedorService: Service<DocType<Proveedor>, Error
     })
     console.log('licitacionToExpire', licitacionToExpire)
     const ofertas = await getOfertasToProveedorDashboardDao(proveedor._id)
-    if ('error' in ofertas) throw new Error(ofertas.message)
     return {
       numOfertas: proveedor.licitaciones.length,
       numLicitaciones: licitaciones.length,
@@ -86,31 +78,25 @@ export const getInfoDashboardProveedorService: Service<DocType<Proveedor>, Error
       licitaciones: licitaciones.map((li) => ({ fechaInicioApertura: formatFromStringToDate(li.fechaInicioApertura), fechaFinApertura: formatFromStringToDate(li.fechaFinApertura), empresa: li.empresa, participantes: li.participantes.length }))
     }
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error al obtener la información en la capa de servicios')
+    throw handleError(err)
   }
 }
-export const getProveedoresService: ServiceWithoutParam<ErrorResponse|Array<DocType<Pick<Proveedor, 'razSocial'|'ruc'|'role'|'phone1'|'correo'|'createdAt'|'updatedAt'>>>> = async () => {
+export const getProveedoresService: ServiceWithoutParam<Array<DocType<Pick<Proveedor, 'razSocial'|'ruc'|'role'|'phone1'|'correo'|'createdAt'|'updatedAt'>>>> = async () => {
   try {
     const proveedores = await getProveedoresDao()
-    if ('error' in proveedores) throw new Error(proveedores.message)
     return proveedores
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error en la capa de servicios al listar los proveedores')
+    throw handleError(err)
   }
 }
-export const createProveedorService: Service<ProveedorRegisterFields, ErrorResponse|ResponseParent> = async (fields) => {
+export const createProveedorService: Service<ProveedorRegisterFields, ResponseParent> = async (fields) => {
   try {
     const hash = await encrypt(fields.password)
-    if (typeof hash !== 'string') throw new Error(hash.message)
     const proveedor = await createProveedorDao({ ...fields, password: hash })
-    if ('error' in proveedor) throw new Error()
     return {
       message: `Cuenta ${proveedor.correo} registrada exitosamente`
     }
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error en la capa de servicios al registrar un nuevo proveedor de electricidad')
+    throw handleError(err)
   }
 }

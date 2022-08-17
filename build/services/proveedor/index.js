@@ -23,20 +23,17 @@ const dateFormat_1 = require("../../utils/dateFormat");
 const getProveedoresToUserService = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const proveedores = yield (0, proveedor_1.getProveedoresToUserDao)();
-        if ('error' in proveedores)
-            return (0, handleError_1.handleError)(proveedores.error, proveedores.message);
         return proveedores;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al obtener los proveedores en la capa de servicios');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.getProveedoresToUserService = getProveedoresToUserService;
 const participarLicitacionService = ({ fields, idProveedor }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { potencia, energiaHp, energiaHfp, potenciaFacturar, formulaIndexPotencia, formulaIndexEnergia, potMinFacturable, licitacion, excesoPotencia, excesoEnergiaHp, excesoEnergiaHfp, tarifaEnergiaHfp, tarifaPotencia, tarifaEnergiaHp } = fields;
-        const oferta = yield (0, oferta_1.crearOfertaDao)({
+        yield (0, oferta_1.crearOfertaDao)({
             potencia,
             energiaHfp,
             energiaHp,
@@ -53,29 +50,20 @@ const participarLicitacionService = ({ fields, idProveedor }) => __awaiter(void 
             tarifaEnergiaHfp,
             tarifaEnergiaHp
         });
-        if ('error' in oferta)
-            return (0, handleError_1.handleError)(oferta.error, oferta.message);
-        const result = yield (0, licitacion_1.updateLicitacionDao)({ fields: { $push: { participantes: idProveedor } }, id: licitacion });
-        if ('error' in result)
-            return (0, handleError_1.handleError)(result.error, result.message);
-        const proveedor = yield (0, proveedor_1.updateProveedorDao)({ fields: { $push: { licitaciones: licitacion } }, id: idProveedor });
-        if ('error' in proveedor)
-            return (0, handleError_1.handleError)(proveedor.error, proveedor.message);
+        yield (0, licitacion_1.updateLicitacionDao)({ fields: { $push: { participantes: idProveedor } }, id: licitacion });
+        yield (0, proveedor_1.updateProveedorDao)({ fields: { $push: { licitaciones: licitacion } }, id: idProveedor });
         return {
             message: 'Se ha inscrito en la licitación exitosamente'
         };
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.participarLicitacionService = participarLicitacionService;
 const getInfoDashboardProveedorService = (proveedor) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const licitaciones = yield (0, licitacion_1.getLicitacionesToProveedorDashboardDao)(proveedor._id);
-        if ('error' in licitaciones)
-            throw new Error(licitaciones.message);
         if (licitaciones.length === 0) {
             return {
                 numOfertas: 0,
@@ -94,8 +82,6 @@ const getInfoDashboardProveedorService = (proveedor) => __awaiter(void 0, void 0
         });
         console.log('licitacionToExpire', licitacionToExpire);
         const ofertas = yield (0, oferta_1.getOfertasToProveedorDashboardDao)(proveedor._id);
-        if ('error' in ofertas)
-            throw new Error(ofertas.message);
         return {
             numOfertas: proveedor.licitaciones.length,
             numLicitaciones: licitaciones.length,
@@ -106,39 +92,30 @@ const getInfoDashboardProveedorService = (proveedor) => __awaiter(void 0, void 0
         };
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al obtener la información en la capa de servicios');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.getInfoDashboardProveedorService = getInfoDashboardProveedorService;
 const getProveedoresService = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const proveedores = yield (0, proveedor_1.getProveedoresDao)();
-        if ('error' in proveedores)
-            throw new Error(proveedores.message);
         return proveedores;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al listar los proveedores');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.getProveedoresService = getProveedoresService;
 const createProveedorService = (fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const hash = yield (0, handleBcrypt_1.encrypt)(fields.password);
-        if (typeof hash !== 'string')
-            throw new Error(hash.message);
         const proveedor = yield (0, proveedor_1.createProveedorDao)(Object.assign(Object.assign({}, fields), { password: hash }));
-        if ('error' in proveedor)
-            throw new Error();
         return {
             message: `Cuenta ${proveedor.correo} registrada exitosamente`
         };
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al registrar un nuevo proveedor de electricidad');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.createProveedorService = createProveedorService;

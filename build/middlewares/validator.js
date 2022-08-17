@@ -17,8 +17,7 @@ const validateUserLogin = (req, res, next) => __awaiter(void 0, void 0, void 0, 
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
         return res.status(400).send({
-            message: 'Datos inválidos',
-            error: errors.array()
+            message: 'Datos inválidos'
         });
     }
     return next();
@@ -34,8 +33,7 @@ const validateUserRegister = (req, res, next) => __awaiter(void 0, void 0, void 
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
         return res.status(400).send({
-            message: 'Datos inválidos',
-            error: errors.array()
+            message: 'Datos inválidos'
         });
     }
     return next();
@@ -47,8 +45,7 @@ const validateCode = (req, res, next) => __awaiter(void 0, void 0, void 0, funct
     const errors = (0, express_validator_1.validationResult)(req);
     if (!errors.isEmpty()) {
         return res.status(400).send({
-            message: 'Datos inválidos',
-            error: errors.array()
+            message: 'Datos inválidos'
         });
     }
     return next();

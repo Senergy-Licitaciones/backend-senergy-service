@@ -26,14 +26,11 @@ const updateParametrosService = ({ path }) => __awaiter(void 0, void 0, void 0, 
         const valuesArray = (0, parametrosArray_adapter_1.createParametrosArrayAdapter)(jsons);
         console.log('Hoja de excel', valuesArray);
         const response = yield (0, historial_parametros_1.updateMultipleParametrosDao)(valuesArray);
-        if ('error' in response)
-            return (0, handleError_1.handleError)(response.error, response.message);
         fs_1.default.rmSync(path);
         return response;
     }
     catch (e) {
-        const error = e;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al actualizar los parametros en la capa de servicios');
+        throw (0, handleError_1.handleError)(e);
     }
 });
 exports.updateParametrosService = updateParametrosService;

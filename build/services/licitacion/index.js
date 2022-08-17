@@ -9,90 +9,82 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLicitacionByIdService = exports.getLicitacionesFreeService = exports.getTiposService = exports.updateLicitacionService = exports.crearLicitacionService = exports.mostrarLicitacionesService = void 0;
+exports.getLicitacionesToAdmin = exports.getLicitacionByIdService = exports.getLicitacionesFreeService = exports.getTiposService = exports.updateLicitacionService = exports.crearLicitacionService = exports.mostrarLicitacionesService = void 0;
 const licitacion_1 = require("../../dao/licitacion");
 const handleError_1 = require("../../helpers/handleError");
 const mostrarLicitacionesService = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, licitacion_1.showLicitacionesDao)();
-        if ('error' in result)
-            return (0, handleError_1.handleError)(result.error, result.message);
         return result;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.mostrarLicitacionesService = mostrarLicitacionesService;
 const crearLicitacionService = (fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { title, description, tipoServicio, numLicitacion, requisitos, estado, empresa, fechaInicioApertura, fechaFinApertura, fechaInicio, puntoSum, brg, factorPlanta, meses, fechaFin, usuario, author } = fields;
-        const result = yield (0, licitacion_1.createLicitacionDao)({ title, description, tipoServicio, numLicitacion, requisitos, estado, empresa, fechaInicioApertura, fechaFinApertura, fechaInicio, puntoSum, brg, factorPlanta, meses, fechaFin, usuario, author });
-        if ('error' in result)
-            return (0, handleError_1.handleError)(result.error, result.message);
+        yield (0, licitacion_1.createLicitacionDao)({ title, description, tipoServicio, numLicitacion, requisitos, estado, empresa, fechaInicioApertura, fechaFinApertura, fechaInicio, puntoSum, brg, factorPlanta, meses, fechaFin, usuario, author });
         return {
             message: 'Licitación creada exitosamente'
         };
     }
     catch (err) {
         console.log('error ', err);
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.crearLicitacionService = crearLicitacionService;
 const updateLicitacionService = ({ fields, id }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, licitacion_1.updateLicitacionDao)({ fields, id });
-        if ('error' in result)
-            (0, handleError_1.handleError)(result.error, result.message);
         return {
             message: result.message
         };
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.updateLicitacionService = updateLicitacionService;
 const getTiposService = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, licitacion_1.getTiposDao)(id);
-        if ('error' in result)
-            return (0, handleError_1.handleError)(result.error, result.message);
         return result;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.getTiposService = getTiposService;
 const getLicitacionesFreeService = (proveedorId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const licitaciones = yield (0, licitacion_1.getLicitacionesFreeDao)(proveedorId);
-        if ('error' in licitaciones)
-            return (0, handleError_1.handleError)(licitaciones.error, licitaciones.message);
         return licitaciones;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al mostrar licitaciones libres');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.getLicitacionesFreeService = getLicitacionesFreeService;
 const getLicitacionByIdService = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const licitacion = yield (0, licitacion_1.getLicitacionByIdDao)(id);
-        if ('error' in licitacion)
-            return (0, handleError_1.handleError)(licitacion.error, licitacion.message);
         return licitacion;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al intentar mostrar la licitación');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.getLicitacionByIdService = getLicitacionByIdService;
+const getLicitacionesToAdmin = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const licitaciones = yield (0, licitacion_1.getLicitacionesToAdminDao)();
+        return licitaciones;
+    }
+    catch (e) {
+        throw (0, handleError_1.handleError)(e);
+    }
+});
+exports.getLicitacionesToAdmin = getLicitacionesToAdmin;

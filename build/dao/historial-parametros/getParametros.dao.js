@@ -21,8 +21,7 @@ const getParametrosDao = () => __awaiter(void 0, void 0, void 0, function* () {
         return parametros;
     }
     catch (e) {
-        const error = e;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al obtener los parametros en la capa de datos');
+        throw (0, handleError_1.handleError)(e, 'Ha ocurrido un error al obtener los parametros');
     }
 });
 exports.getParametrosDao = getParametrosDao;

@@ -16,26 +16,20 @@ const getInfoDashboardProveedor = (req, res) => __awaiter(void 0, void 0, void 0
     try {
         const proveedor = req.proveedor;
         const info = yield (0, proveedor_1.getInfoDashboardProveedorService)(proveedor);
-        if ('error' in info)
-            return res.status(400).send(info);
         return res.status(200).send(info);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.getInfoDashboardProveedor = getInfoDashboardProveedor;
 const getProveedoresToUser = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const proveedores = yield (0, proveedor_1.getProveedoresToUserService)();
-        if ('error' in proveedores)
-            return res.status(400).send(proveedores);
         return res.status(200).send(proveedores);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.getProveedoresToUser = getProveedoresToUser;
@@ -44,26 +38,20 @@ const participarLicitacion = (req, res) => __awaiter(void 0, void 0, void 0, fun
         const proveedor = req.proveedor;
         const fields = req.body;
         const result = yield (0, proveedor_1.participarLicitacionService)({ fields, idProveedor: proveedor._id });
-        if ('error' in result)
-            return res.status(400).send(result);
         return res.status(200).send(result);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.participarLicitacion = participarLicitacion;
 const showProveedores = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const proveedores = yield (0, proveedor_1.getProveedoresService)();
-        if ('error' in proveedores)
-            return res.status(400).send(proveedores);
         return res.status(200).send(proveedores);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.showProveedores = showProveedores;
@@ -71,13 +59,10 @@ const createProveedor = (req, res) => __awaiter(void 0, void 0, void 0, function
     try {
         const fields = req.body;
         const response = yield (0, proveedor_1.createProveedorService)(fields);
-        if ('error' in response)
-            return res.status(400).send(response);
         return res.status(200).send(response);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.createProveedor = createProveedor;

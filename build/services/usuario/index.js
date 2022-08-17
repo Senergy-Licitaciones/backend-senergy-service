@@ -24,8 +24,6 @@ const fs_1 = __importDefault(require("fs"));
 const getInfoUserService = (user) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const licitaciones = yield (0, licitacion_1.getLicitacionesByUserDao)(user._id);
-        if ('error' in licitaciones)
-            return (0, handleError_1.handleError)(licitaciones.error, licitaciones.message);
         const numLicitaciones = licitaciones.length;
         const numParticipantes = licitaciones.length > 1 ? licitaciones.map((li) => li.participantes.length).reduce((prev, current) => prev + current) : 0;
         const lastLicitacion = licitaciones.length > 0
@@ -52,8 +50,6 @@ const getInfoUserService = (user) => __awaiter(void 0, void 0, void 0, function*
             if (oneParticipante.length === 1) {
                 idLastProvider = oneParticipante[0].participantes[0]._id;
                 const response = yield (0, proveedor_1.getProveedorNameByIdDao)(idLastProvider);
-                if ('error' in response)
-                    return (0, handleError_1.handleError)(response.error, response.message);
                 lastProvider = response.razSocial;
             }
             else {
@@ -73,49 +69,39 @@ const getInfoUserService = (user) => __awaiter(void 0, void 0, void 0, function*
     }
     catch (err) {
         console.log('error ', err);
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al obtener la información');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.getInfoUserService = getInfoUserService;
 const changeStatusService = ({ status, id }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, licitacion_1.updateLicitacionDao)({ fields: { status }, id });
-        if ('error' in result)
-            (0, handleError_1.handleError)(result.error, result.message);
+        yield (0, licitacion_1.updateLicitacionDao)({ fields: { status }, id });
         return {
             message: 'Estado de la licitación actualizado'
         };
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Error en la capa de servicios');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.changeStatusService = changeStatusService;
 const getUsersService = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const users = yield (0, usuario_1.getUsersDao)();
-        if ('error' in users)
-            throw new Error(users.message);
         return users;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al obtener los usuarios');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.getUsersService = getUsersService;
 const getLicitacionesByUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const licitaciones = yield (0, licitacion_1.getLicitacionesByUserDao)(id);
-        if ('error' in licitaciones)
-            return (0, handleError_1.handleError)(licitaciones.error, licitaciones.message);
         return licitaciones;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al obtener las licitaciones');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.getLicitacionesByUser = getLicitacionesByUser;
@@ -132,8 +118,7 @@ const generateFileToMonthsDetailsService = (meses, user) => {
     }
     catch (err) {
         console.log('error', err);
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al generar el archivo');
+        throw (0, handleError_1.handleError)(err);
     }
 };
 exports.generateFileToMonthsDetailsService = generateFileToMonthsDetailsService;
@@ -146,8 +131,7 @@ const validateFileService = (filename) => {
         return meses;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de servicios al validar el archivo');
+        throw (0, handleError_1.handleError)(err);
     }
 };
 exports.validateFileService = validateFileService;

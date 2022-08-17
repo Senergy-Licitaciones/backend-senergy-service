@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.exportFileToUpdate = exports.updateParametros = exports.addParametros = exports.downloadFile = exports.getFilename = exports.exportFile = void 0;
+exports.getParametros = exports.exportFileToUpdate = exports.updateParametros = exports.addParametros = exports.downloadFile = exports.getFilename = exports.exportFile = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const historial_parametros_1 = require("../../services/historial-parametros");
 /* export const addParametro: RequestHandler = async (req, res) => {
@@ -28,13 +28,10 @@ const exportFile = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         const { _id } = req.admin;
         const { fechaInicio, fechaFin } = req.body;
         const response = yield (0, historial_parametros_1.exportFileService)({ fechaInicio, fechaFin, id: _id });
-        if ('error' in response)
-            return res.status(400).send(response);
         return res.status(200).send(response);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.exportFile = exportFile;
@@ -51,8 +48,7 @@ const downloadFile = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         return res.status(200).download(`uploads/files/admin/${filename}`);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.downloadFile = downloadFile;
@@ -64,14 +60,11 @@ const addParametros = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             return res.status(400).send({ message: 'No se ha subido ningún archivo' });
         const path = 'uploads/files/admin/' + file.filename;
         const response = yield (0, historial_parametros_1.addParametrosService)({ filename: path });
-        if ('error' in response)
-            return res.status(400).send(response);
         console.log('antes del response');
         return res.status(200).send(response);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.addParametros = addParametros;
@@ -83,14 +76,11 @@ const updateParametros = (req, res) => __awaiter(void 0, void 0, void 0, functio
             return res.status(400).send({ message: 'No se ha subido ningún archivo' });
         const path = `uploads/files/admin/${file.filename}`;
         const response = yield (0, historial_parametros_1.updateParametrosService)({ path });
-        if ('error' in response)
-            return res.status(400).send(response);
         console.log('antes del response');
         return res.status(200).send(response);
     }
     catch (e) {
-        const error = e;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, e);
     }
 });
 exports.updateParametros = updateParametros;
@@ -98,13 +88,20 @@ const exportFileToUpdate = (req, res) => __awaiter(void 0, void 0, void 0, funct
     try {
         const { _id } = req.admin;
         const response = yield (0, historial_parametros_1.exportFileToUpdateService)({ id: _id });
-        if ('error' in response)
-            return res.status(400).send(response);
         return res.status(200).send(response);
     }
     catch (e) {
-        const error = e;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, e);
     }
 });
 exports.exportFileToUpdate = exportFileToUpdate;
+const getParametros = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const parametros = yield (0, historial_parametros_1.getParametrosService)();
+        return res.status(200).send(parametros);
+    }
+    catch (e) {
+        return (0, handleError_1.httpError)(res, e);
+    }
+});
+exports.getParametros = getParametros;

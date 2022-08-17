@@ -15,13 +15,10 @@ const brg_1 = require("../../services/brg");
 const getBrg = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, brg_1.getBrgService)();
-        if ('error' in result)
-            return res.status(400).send(result);
         return res.status(200).send(result);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.getBrg = getBrg;
@@ -29,13 +26,10 @@ const addBrg = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const fields = req.body;
         const response = yield (0, brg_1.addBrgService)(fields);
-        if ('error' in response)
-            return res.status(400).send(response);
         return res.status(200).send(response);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.addBrg = addBrg;

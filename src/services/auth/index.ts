@@ -1,21 +1,18 @@
-import { ConfirmAccount, ConfirmProveedor, LoginFields, ProveedorRegisterFields, UserRegisterFields } from '../../types/form'
-import { createCodeDao, verifyCodeDao, removeCodeDao } from '../../dao/code'
-import { createCodeProveedorDao, confirmCodeDao } from '../../dao/codeProveedor'
-import { crearProveedorDao, verifyCorreoProveedorDao, confirmProveedorDao, proveedorEstadoDao } from '../../dao/proveedor'
+import { ConfirmProveedor, LoginFields } from '../../types/form'
+import { confirmCodeDao } from '../../dao/codeProveedor'
+import { confirmProveedorDao, proveedorEstadoDao } from '../../dao/proveedor'
 import { logoutUserDao } from '../../dao/sessionUser'
 import { logoutProveedorDao } from '../../dao/sessionProveedor'
-import { crearUsuarioDao, verifyCorreoDao, confirmUserDao, getUserHashDao } from '../../dao/usuario'
+import { getUserHashDao } from '../../dao/usuario'
 import { tokenSignUser, tokenSignProveedor, tokenSignAdmin } from '../../helpers/generateToken'
-import { compare, encrypt } from '../../helpers/handleBcrypt'
+import { compare } from '../../helpers/handleBcrypt'
 import { handleError } from '../../helpers/handleError'
-import generateCode from '../../utils/generateCode'
-import { sendCodeVerification } from '../emails'
 import { Types } from 'mongoose'
 import { Service } from '../../types/methods'
-import { ErrorResponse, ResponseParent, ResponseRegisterUser } from '../../types/data'
+import { ResponseParent } from '../../types/data'
 import { getAccountDao } from '../../dao/admin'
 
-export const registrarUsuarioService: Service<UserRegisterFields, ErrorResponse|ResponseRegisterUser> = async (fields) => {
+/* export const registrarUsuarioService: Service<UserRegisterFields, ResponseRegisterUser> = async (fields) => {
   try {
     const { correo, password, empresa, ruc, web = 'Sin Página Web', phone, address } = fields
     const isFree = await verifyCorreoDao(correo)
@@ -48,11 +45,10 @@ export const registrarUsuarioService: Service<UserRegisterFields, ErrorResponse|
       message: 'Cuenta por confirmar'
     }
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error en la capa de servicios')
+    throw handleError(err)
   }
-}
-export const confirmAccountService: Service<ConfirmAccount, ResponseParent|ErrorResponse> = async (fields) => {
+} */
+/* export const confirmAccountService: Service<ConfirmAccount, ResponseParent|ErrorResponse> = async (fields) => {
   try {
     const { idUser, code } = fields
     const result = await removeCodeDao({ idUser, code })
@@ -66,8 +62,8 @@ export const confirmAccountService: Service<ConfirmAccount, ResponseParent|Error
     const error = err as Error
     return handleError(error, 'Ha ocurrido un error en la capa de servicios')
   }
-}
-export const registrarProveedorService: Service<ProveedorRegisterFields, ErrorResponse|ResponseParent & {correo: string}> = async (fields) => {
+} */
+/* export const registrarProveedorService: Service<ProveedorRegisterFields, ErrorResponse|ResponseParent & {correo: string}> = async (fields) => {
   try {
     const exist = await verifyCorreoProveedorDao(fields.correo)
     if ('error' in exist) return handleError(exist.error, exist.message)
@@ -88,14 +84,13 @@ export const registrarProveedorService: Service<ProveedorRegisterFields, ErrorRe
     const error = err as Error
     return handleError(error, 'Ha ocurrido un error en la capa de servicios')
   }
-}
-export const loginProveedorService: Service<LoginFields, ErrorResponse|ResponseParent&{token: string}> = async (fields) => {
+} */
+export const loginProveedorService: Service<LoginFields, {message: string, token: string}> = async (fields) => {
   try {
     const proveedor = await proveedorEstadoDao(fields.correo)
     console.log('proveedor ', proveedor)
-    if ('error' in proveedor) return handleError(proveedor.error, proveedor.message)
     const isCorrect = await compare({ password: fields.password, hash: proveedor.password })
-    if (isCorrect === false || typeof isCorrect !== 'boolean') throw new Error('La contraseña es incorrecta')
+    if (!isCorrect) throw new Error('La contraseña es incorrecta')
     const token = tokenSignProveedor(proveedor)
     /* const session = await createSessionProveedor({ proveedorId: proveedor._id, token })
     console.log('session ', session)
@@ -109,17 +104,15 @@ export const loginProveedorService: Service<LoginFields, ErrorResponse|ResponseP
     }
   } catch (err) {
     console.log('error ', err)
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error en la capa de servicios')
+    throw handleError(err)
   }
 }
-export const loginUsuarioService: Service<LoginFields, ErrorResponse|ResponseParent&{token: string}> = async (fields) => {
+export const loginUsuarioService: Service<LoginFields, ResponseParent&{token: string}> = async (fields) => {
   try {
     const { correo, password } = fields
     const user = await getUserHashDao(correo)
-    if ('error' in user) return handleError(user.error, user.message)
     const isCorrect = await compare({ password, hash: user.password })
-    if (isCorrect === false || typeof isCorrect !== 'boolean') throw new Error('La contraseña es incorrecta')
+    if (!isCorrect) throw new Error('La contraseña es incorrecta')
     const token = tokenSignUser(user)
     /* const result = await createSessionUser({ idUser: user._id, token })
     if ('error' in result) return handleError(result.error, result.message)
@@ -133,63 +126,53 @@ export const loginUsuarioService: Service<LoginFields, ErrorResponse|ResponsePar
     }
   } catch (err) {
     console.log('error catch service ', err)
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error en la capa de servicios')
+    throw handleError(err)
   }
 }
-export const logoutUserService: Service<string, ErrorResponse|ResponseParent> = async (id) => {
+export const logoutUserService: Service<string, ResponseParent> = async (id) => {
   try {
     const response = await logoutUserDao(id)
-    if ('error' in response) return handleError(response.error, response.message)
     return response
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error al cerrar sesión')
+    throw handleError(err)
   }
 }
-export const confirmProveedorService: Service<ConfirmProveedor, ErrorResponse|ResponseParent> = async (fields) => {
+export const confirmProveedorService: Service<ConfirmProveedor, ResponseParent> = async (fields) => {
   try {
     const { correo, code } = fields
     const response = await confirmCodeDao({ correo, code })
-    if ('error' in response) return handleError(response.error, response.message)
     const result = await confirmProveedorDao(response._id)
-    if ('error' in result) return handleError(result.error, result.message)
     console.log('response ', response, ' result ', result)
     await response.remove()
     return {
       message: 'Cuenta de proveeedor confirmado'
     }
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error al intentar confirmar la cuenta')
+    throw handleError(err)
   }
 }
-export const logoutProveedorService: Service<Types.ObjectId, ErrorResponse|ResponseParent> = async (proveedorId) => {
+export const logoutProveedorService: Service<Types.ObjectId, ResponseParent> = async (proveedorId) => {
   try {
-    const response = await logoutProveedorDao(proveedorId)
-    if ('error' in response) return handleError(response.error, response.message)
+    await logoutProveedorDao(proveedorId)
     return {
       message: 'Sesión cerrada exitosamente'
     }
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error al cerrar la sesión')
+    throw handleError(err)
   }
 }
-export const loginAdminService: Service<LoginFields, ErrorResponse|ResponseParent&{token: string}> = async (fields) => {
+export const loginAdminService: Service<LoginFields, ResponseParent&{token: string}> = async (fields) => {
   try {
     const { correo, password } = fields
     const admin = await getAccountDao(correo)
-    if ('error' in admin) return handleError(admin.error, admin.message)
     const isCorrect = await compare({ password, hash: admin.password })
-    if (isCorrect === false || typeof isCorrect !== 'boolean') throw new Error('Contraseña incorrecta')
+    if (!isCorrect) throw new Error('Contraseña incorrecta')
     const token = tokenSignAdmin(admin)
     return {
       message: 'Usuario admin logeado exitosamente',
       token
     }
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error al iniciar sesión')
+    throw handleError(err, 'Ha ocurrido un error al iniciar sesión')
   }
 }

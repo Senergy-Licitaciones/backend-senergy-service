@@ -27,14 +27,11 @@ const addParametrosService = ({ filename }) => __awaiter(void 0, void 0, void 0,
         const valuesArray = (0, parametrosArray_adapter_1.createParametrosArrayAdapter)(jsons);
         console.log('Hoja de excel', valuesArray);
         const response = yield (0, historial_parametros_1.insertMultipleParametrosDao)(valuesArray);
-        if ('error' in response)
-            return (0, handleError_1.handleError)(response.error, response.message);
         fs_1.default.rmSync(filename);
         return response;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al agregar los parametros');
+        throw (0, handleError_1.handleError)(err);
     }
 });
 exports.addParametrosService = addParametrosService;

@@ -16,13 +16,10 @@ const getOfertas = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const proveedor = req.proveedor;
         const ofertas = yield (0, oferta_1.getOfertasService)(proveedor._id);
-        if ('error' in ofertas)
-            return res.status(400).send(ofertas);
         return res.status(200).send(ofertas);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.getOfertas = getOfertas;
@@ -30,13 +27,10 @@ const getOfertaById = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const ofertaId = req.ofertaId;
         const oferta = yield (0, oferta_1.getOfertaByIdService)(ofertaId);
-        if ('error' in oferta)
-            return res.status(400).send(oferta);
         return res.status(200).send(oferta);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.getOfertaById = getOfertaById;
@@ -50,13 +44,10 @@ const updateOferta = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         const ofertaId = req.ofertaId;
         const fields = req.body;
         const response = yield (0, oferta_1.updateOfertaService)({ ofertaId, fields });
-        if ('error' in response)
-            return res.status(400).send(response);
         return res.status(200).send(response);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.updateOferta = updateOferta;

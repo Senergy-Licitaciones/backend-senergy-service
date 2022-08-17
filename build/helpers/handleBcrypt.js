@@ -21,8 +21,7 @@ const encrypt = (password) => __awaiter(void 0, void 0, void 0, function* () {
         return hash;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al momento de encriptar la contraseña');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al momento de encriptar la contraseña');
     }
 });
 exports.encrypt = encrypt;
@@ -33,8 +32,7 @@ const compare = (fields) => __awaiter(void 0, void 0, void 0, function* () {
         return res;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al verificar la contraseña');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al verificar la contraseña');
     }
 });
 exports.compare = compare;

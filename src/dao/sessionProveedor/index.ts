@@ -4,7 +4,7 @@ import ProveedorModel from '../../apiServices/proveedor/model'
 import { Estado } from '../../types/data/enums'
 import { Document, Types } from 'mongoose'
 import { Dao } from '../../types/methods'
-import { ErrorResponse, SessionProveedor } from '../../types/data'
+import { SessionProveedor } from '../../types/data'
 SessionProveedorModel.watch().on('change', (change) => {
   if (change.operationType === 'delete') {
     const docKey = change.documentKey as {_id: string}
@@ -15,7 +15,7 @@ SessionProveedorModel.watch().on('change', (change) => {
   }
 })
 
-export const createSessionProveedor: Dao<{proveedorId: Types.ObjectId, token: string}, ErrorResponse|Document<any, any, SessionProveedor> & SessionProveedor & {
+export const createSessionProveedor: Dao<{proveedorId: Types.ObjectId, token: string}, Document<any, any, SessionProveedor> & SessionProveedor & {
   _id: Types.ObjectId
 }> = async ({ proveedorId, token }) => {
   try {
@@ -23,19 +23,17 @@ export const createSessionProveedor: Dao<{proveedorId: Types.ObjectId, token: st
     const session = await response.save()
     return session
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error al crear la sesión ')
+    throw handleError(err, 'Ha ocurrido un error al crear la sesión ')
   }
 }
-export const logoutProveedorDao: Dao<Types.ObjectId, ErrorResponse|Document<any, any, SessionProveedor> & SessionProveedor & {
+export const logoutProveedorDao: Dao<Types.ObjectId, Document<any, any, SessionProveedor> & SessionProveedor & {
   _id: Types.ObjectId}> = async (proveedorId) => {
   try {
     const proveedor = await SessionProveedorModel.findOneAndDelete({ proveedor: proveedorId })
     if (proveedor == null) throw new Error('La sesión no existe')
     return proveedor
   } catch (err) {
-    const error = err as Error
     console.log('error ', err)
-    return handleError(error, 'Ha ocurrido un error al eliminar la sesión')
+    throw handleError(err, 'Ha ocurrido un error al eliminar la sesión')
   }
 }

@@ -9,27 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addPuntoSum = exports.getPuntoSum = void 0;
+exports.getParametrosService = void 0;
+const historial_parametros_1 = require("../../dao/historial-parametros");
 const handleError_1 = require("../../helpers/handleError");
-const puntoSum_1 = require("../../services/puntoSum");
-const getPuntoSum = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getParametrosService = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, puntoSum_1.getPuntoSumService)();
-        return res.status(200).send(result);
+        const parametros = yield (0, historial_parametros_1.getParametrosDao)();
+        return parametros;
     }
-    catch (err) {
-        return (0, handleError_1.httpError)(res, err);
+    catch (e) {
+        throw (0, handleError_1.handleError)(e);
     }
 });
-exports.getPuntoSum = getPuntoSum;
-const addPuntoSum = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const fields = req.body;
-        const response = yield (0, puntoSum_1.addPuntoSumService)(fields);
-        return res.status(200).send(response);
-    }
-    catch (err) {
-        return (0, handleError_1.httpError)(res, err);
-    }
-});
-exports.addPuntoSum = addPuntoSum;
+exports.getParametrosService = getParametrosService;

@@ -1,7 +1,7 @@
 import SessionUserModel from '../../apiServices/sessionUser/model'
 import UsuarioModel from '../../apiServices/usuario/model'
 import { handleError } from '../../helpers/handleError'
-import { ErrorResponse, ResponseId, ResponseParent } from '../../types/data'
+import { ResponseId, ResponseParent } from '../../types/data'
 import { Estado } from '../../types/data/enums'
 import { Dao } from '../../types/methods'
 SessionUserModel.watch().on('change', (change) => {
@@ -13,7 +13,7 @@ SessionUserModel.watch().on('change', (change) => {
     void closeSession()
   }
 })
-export const createSessionUser: Dao<{idUser: string, token: string}, ErrorResponse|ResponseId> = async ({ idUser, token }) => {
+export const createSessionUser: Dao<{idUser: string, token: string}, ResponseId> = async ({ idUser, token }) => {
   try {
     const response = await SessionUserModel.create({ user: idUser, jwt: token })
     const session = await response.save()
@@ -22,11 +22,10 @@ export const createSessionUser: Dao<{idUser: string, token: string}, ErrorRespon
       _id: session._id
     }
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error al crear la sesión')
+    throw handleError(err, 'Ha ocurrido un error al crear la sesión')
   }
 }
-export const logoutUserDao: Dao<string, ErrorResponse|ResponseParent> = async (id) => {
+export const logoutUserDao: Dao<string, ResponseParent> = async (id) => {
   try {
     const response = await SessionUserModel.findOneAndDelete({ user: id })
     console.log('response ', response)
@@ -34,7 +33,6 @@ export const logoutUserDao: Dao<string, ErrorResponse|ResponseParent> = async (i
       message: 'Sesión cerrada exitosamente'
     }
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error al cerrar sesión con los datos')
+    throw handleError(err, 'Ha ocurrido un error al cerrar sesión con los datos')
   }
 }

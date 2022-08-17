@@ -1,12 +1,12 @@
 import { FACTORES } from '../../constants'
 import { getParametrosDao } from '../../dao/historial-parametros'
 import { handleError } from '../../helpers/handleError'
-import { ErrorResponse, ResponseParent } from '../../types/data'
+import { ResponseParent } from '../../types/data'
 import { Service } from '../../types/methods'
 import { generateMesesArray } from '../../utils'
 import { addWorksheetToBook, createFile, createWorkbook, createWorksheetFromArrays } from '../excel'
 
-export const exportFileService: Service<{fechaInicio: Date, fechaFin: Date, id: string}, ErrorResponse|ResponseParent> = async ({ fechaInicio, fechaFin, id }) => {
+export const exportFileService: Service<{fechaInicio: Date, fechaFin: Date, id: string}, ResponseParent> = async ({ fechaInicio, fechaFin, id }) => {
   try {
     const meses = generateMesesArray(fechaInicio, fechaFin)
     const ids = meses.map((_mes, i) => i + 1)
@@ -25,14 +25,12 @@ export const exportFileService: Service<{fechaInicio: Date, fechaFin: Date, id: 
       filename: `base-de-datos-factores-${id}.xlsx`
     }
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error al exportar el archivo')
+    throw handleError(err)
   }
 }
-export const exportFileToUpdateService: Service<{id: string}, ErrorResponse|{message: string, filename: string}> = async ({ id }) => {
+export const exportFileToUpdateService: Service<{id: string}, {message: string, filename: string}> = async ({ id }) => {
   try {
     const parametros = await getParametrosDao()
-    if ('error' in parametros) return handleError(parametros.error, parametros.message)
     const workbook = createWorkbook()
     const worksheet = createWorksheetFromArrays([
       ['Meses', 'Nombre', ...parametros[0].values.map((el) => el.fecha)],
@@ -47,7 +45,6 @@ export const exportFileToUpdateService: Service<{id: string}, ErrorResponse|{mes
       filename: `base-de-datos-factores-${id}.xlsx`
     }
   } catch (e) {
-    const error = e as Error
-    return handleError(error, 'Ha ocurrido un error al exportar el archivo')
+    throw handleError(e)
   }
 }

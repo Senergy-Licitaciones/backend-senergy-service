@@ -40,8 +40,7 @@ const createCodeProveedorDao = (fields) => __awaiter(void 0, void 0, void 0, fun
         return code;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al crear el código');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al crear el código');
     }
 });
 exports.createCodeProveedorDao = createCodeProveedorDao;
@@ -53,8 +52,7 @@ const confirmCodeDao = ({ correo, code }) => __awaiter(void 0, void 0, void 0, f
         return response;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un erro al encontrar el código');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un erro al encontrar el código');
     }
 });
 exports.confirmCodeDao = confirmCodeDao;

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAdminsDao = exports.createAdminDao = exports.getAccountDao = void 0;
+exports.updateAdminDao = exports.deleteAdminDao = exports.getAdminsDao = exports.createAdminDao = exports.getAccountDao = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const model_1 = __importDefault(require("../../apiServices/admin/model"));
 const getAccountDao = (correo) => __awaiter(void 0, void 0, void 0, function* () {
@@ -23,8 +23,7 @@ const getAccountDao = (correo) => __awaiter(void 0, void 0, void 0, function* ()
         return admin;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al obtener la cuenta de tipo Administrativo');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al obtener la cuenta de tipo Administrativo');
     }
 });
 exports.getAccountDao = getAccountDao;
@@ -35,8 +34,7 @@ const createAdminDao = (fields) => __awaiter(void 0, void 0, void 0, function* (
         return response;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al crear un Administrador en la capa de datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al crear un Administrador');
     }
 });
 exports.createAdminDao = createAdminDao;
@@ -46,8 +44,29 @@ const getAdminsDao = () => __awaiter(void 0, void 0, void 0, function* () {
         return admins;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al obtener la lista de administradores');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al obtener la lista de administradores');
     }
 });
 exports.getAdminsDao = getAdminsDao;
+const deleteAdminDao = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield model_1.default.findByIdAndDelete(id);
+        return null;
+    }
+    catch (err) {
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al eliminar la cuenta de tipo Administrador');
+    }
+});
+exports.deleteAdminDao = deleteAdminDao;
+const updateAdminDao = ({ fields, id }) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const admin = yield model_1.default.findByIdAndUpdate(id, fields, { new: true });
+        if (admin == null)
+            throw new Error('Cuenta no encontrada');
+        return admin;
+    }
+    catch (err) {
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al actualizar la cuenta de tipo Administrador');
+    }
+});
+exports.updateAdminDao = updateAdminDao;

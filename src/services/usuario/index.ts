@@ -3,16 +3,15 @@ import { getLicitacionesByUserDao, updateLicitacionDao } from '../../dao/licitac
 import { getProveedorNameByIdDao } from '../../dao/proveedor'
 import { getUsersDao } from '../../dao/usuario'
 import { handleError } from '../../helpers/handleError'
-import { DocType, ErrorResponse, Info, Licitacion, ResponseParent, User } from '../../types/data'
+import { DocType, Info, Licitacion, ResponseParent, User } from '../../types/data'
 import { Estado } from '../../types/form/enums'
 import { Service, ServiceWithoutParam } from '../../types/methods'
 import XLSX from 'xlsx'
 import fs from 'fs'
 
-export const getInfoUserService: Service<DocType<User>, Info|ErrorResponse> = async (user) => {
+export const getInfoUserService: Service<DocType<User>, Info> = async (user) => {
   try {
     const licitaciones = await getLicitacionesByUserDao(user._id)
-    if ('error' in licitaciones) return handleError(licitaciones.error, licitaciones.message)
     const numLicitaciones = licitaciones.length
     const numParticipantes = licitaciones.length > 1 ? licitaciones.map((li) => li.participantes.length).reduce((prev, current) => prev + current) : 0
     const lastLicitacion = licitaciones.length > 0
@@ -38,7 +37,6 @@ export const getInfoUserService: Service<DocType<User>, Info|ErrorResponse> = as
       if (oneParticipante.length === 1) {
         idLastProvider = oneParticipante[0].participantes[0]._id
         const response = await getProveedorNameByIdDao(idLastProvider)
-        if ('error' in response) return handleError(response.error, response.message)
         lastProvider = response.razSocial
       } else { lastProvider = 'Sin Proveedor Actualmente' }
     }
@@ -54,43 +52,36 @@ export const getInfoUserService: Service<DocType<User>, Info|ErrorResponse> = as
     }
   } catch (err) {
     console.log('error ', err)
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error en la capa de servicios al obtener la información')
+    throw handleError(err)
   }
 }
-export const changeStatusService: Service<{status: Estado, id: Types.ObjectId}, ErrorResponse|ResponseParent> = async ({ status, id }) => {
+export const changeStatusService: Service<{status: Estado, id: Types.ObjectId}, ResponseParent> = async ({ status, id }) => {
   try {
-    const result = await updateLicitacionDao({ fields: { status }, id })
-    if ('error' in result)handleError(result.error, result.message)
+    await updateLicitacionDao({ fields: { status }, id })
     return {
       message: 'Estado de la licitación actualizado'
     }
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Error en la capa de servicios')
+    throw handleError(err)
   }
 }
-export const getUsersService: ServiceWithoutParam<ErrorResponse|Array<DocType<Pick<User, 'correo'| 'empresa' |'ruc' |'phone'| 'role'>>>> = async () => {
+export const getUsersService: ServiceWithoutParam<Array<DocType<Pick<User, 'correo'| 'empresa' |'ruc' |'phone'| 'role'>>>> = async () => {
   try {
     const users = await getUsersDao()
-    if ('error' in users) throw new Error(users.message)
     return users
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error en la capa de servicios al obtener los usuarios')
+    throw handleError(err)
   }
 }
-export const getLicitacionesByUser: Service<Types.ObjectId, ErrorResponse|Array<DocType<Licitacion>>> = async (id) => {
+export const getLicitacionesByUser: Service<Types.ObjectId, Array<DocType<Licitacion>>> = async (id) => {
   try {
     const licitaciones = await getLicitacionesByUserDao(id)
-    if ('error' in licitaciones) return handleError(licitaciones.error, licitaciones.message)
     return licitaciones
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error en la capa de servicios al obtener las licitaciones')
+    throw handleError(err)
   }
 }
-export const generateFileToMonthsDetailsService = (meses: Array<{mes: string, hp: number, hfp: number}>, user: DocType<User>): {filename: string}|{error: Error, message: string} => {
+export const generateFileToMonthsDetailsService = (meses: Array<{mes: string, hp: number, hfp: number}>, user: DocType<User>): {filename: string} => {
   try {
     const workbook = XLSX.utils.book_new()
     const worksheet = XLSX.utils.json_to_sheet(meses)
@@ -102,11 +93,10 @@ export const generateFileToMonthsDetailsService = (meses: Array<{mes: string, hp
     }
   } catch (err) {
     console.log('error', err)
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error en la capa de servicios al generar el archivo')
+    throw handleError(err)
   }
 }
-export const validateFileService = (filename: string): Array<{mes: string, hp: number, hfp: number}>|{error: Error, message: string} => {
+export const validateFileService = (filename: string): Array<{mes: string, hp: number, hfp: number}> => {
   try {
     const workbook = XLSX.readFile(`uploads/files/especificacion-mes-ut1/${filename}`)
     const sheet = workbook.Sheets.Meses
@@ -114,7 +104,6 @@ export const validateFileService = (filename: string): Array<{mes: string, hp: n
     fs.rmSync(`uploads/files/especificacion-mes-ut1/${filename}`)
     return meses
   } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error en la capa de servicios al validar el archivo')
+    throw handleError(err)
   }
 }

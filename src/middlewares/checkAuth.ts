@@ -17,8 +17,7 @@ const checkAuth: RequestHandler = async (req, res, next) => {
   } catch (err) {
     console.log('error catch checkauth ', err)
     return res.status(409).send({
-      message: 'Ha ocurrido un error en el proceso de autenticación',
-      error: err
+      message: 'Ha ocurrido un error en el proceso de autenticación'
     })
   }
 }

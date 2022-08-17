@@ -9,48 +9,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginAdmin = exports.logoutProveedor = exports.confirmProveedorAccount = exports.logoutUsuario = exports.confirmAccount = exports.loginUsuario = exports.loginProveedor = exports.registerProveedor = exports.registerUsuario = void 0;
+exports.loginAdmin = exports.logoutProveedor = exports.confirmProveedorAccount = exports.logoutUsuario = exports.loginUsuario = exports.loginProveedor = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const auth_1 = require("../../services/auth");
-const registerUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const fields = req.body;
-        const result = yield (0, auth_1.registrarUsuarioService)(fields);
-        if ('error' in result)
-            return res.status(400).send(result);
-        return res.status(200).send(result);
-    }
-    catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
-    }
-});
-exports.registerUsuario = registerUsuario;
-const registerProveedor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const fields = req.body;
-        const result = yield (0, auth_1.registrarProveedorService)(fields);
-        if ('error' in result)
-            return res.status(400).send(result);
-        return res.status(200).send(result);
-    }
-    catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
-    }
-});
-exports.registerProveedor = registerProveedor;
+/* export const registerUsuario: RequestHandler = async (req, res) => {
+  try {
+    const fields = req.body as UserRegisterFields
+    const result = await registrarUsuarioService(fields)
+    return res.status(200).send(result)
+  } catch (err) {
+    return httpError(res, err)
+  }
+} */
+/* export const registerProveedor: RequestHandler = async (req, res) => {
+  try {
+    const fields = req.body as ProveedorRegisterFields
+    const result = await registrarProveedorService(fields)
+    if ('error' in result) return res.status(400).send(result)
+    return res.status(200).send(result)
+  } catch (err) {
+    const error = err as Error
+    return httpError(res, error)
+  }
+} */
 const loginProveedor = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const fields = req.body;
         const response = yield (0, auth_1.loginProveedorService)(fields);
-        if ('error' in response)
-            return res.status(400).send(response);
         return res.status(200).send(response);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.loginProveedor = loginProveedor;
@@ -58,8 +47,6 @@ const loginUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     try {
         const fields = req.body;
         const response = yield (0, auth_1.loginUsuarioService)(fields);
-        if ('error' in response)
-            return res.status(400).send(response);
         return res.status(200).send(response);
     }
     catch (err) {
@@ -67,31 +54,23 @@ const loginUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.loginUsuario = loginUsuario;
-const confirmAccount = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const fields = req.body;
-        const result = yield (0, auth_1.confirmAccountService)(fields);
-        if ('error' in result)
-            return res.status(400).send(result);
-        return res.status(200).send(result);
-    }
-    catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
-    }
-});
-exports.confirmAccount = confirmAccount;
+/* export const confirmAccount: RequestHandler = async (req, res) => {
+  try {
+    const fields = req.body
+    const result = await confirmAccountService(fields)
+    return res.status(200).send(result)
+  } catch (err) {
+    return httpError(res, err)
+  }
+} */
 const logoutUsuario = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = req.user;
         const response = yield (0, auth_1.logoutUserService)(user._id);
-        if ('error' in response)
-            return res.status(400).send(response);
         return res.status(200).send(response);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.logoutUsuario = logoutUsuario;
@@ -99,13 +78,10 @@ const confirmProveedorAccount = (req, res) => __awaiter(void 0, void 0, void 0, 
     try {
         const fields = req.body;
         const response = yield (0, auth_1.confirmProveedorService)(fields);
-        if ('error' in response)
-            return res.status(400).send(response);
         return res.status(200).send(response);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.confirmProveedorAccount = confirmProveedorAccount;
@@ -113,13 +89,10 @@ const logoutProveedor = (req, res) => __awaiter(void 0, void 0, void 0, function
     try {
         const proveedor = req.proveedor;
         const response = yield (0, auth_1.logoutProveedorService)(proveedor._id);
-        if ('error' in response)
-            return res.status(400).send(response);
         return res.status(200).send(response);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.logoutProveedor = logoutProveedor;
@@ -127,13 +100,10 @@ const loginAdmin = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const fields = req.body;
         const response = yield (0, auth_1.loginAdminService)(fields);
-        if ('error' in response)
-            return res.status(400).send(response);
         return res.status(200).send(response);
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.httpError)(res, error);
+        return (0, handleError_1.httpError)(res, err);
     }
 });
 exports.loginAdmin = loginAdmin;

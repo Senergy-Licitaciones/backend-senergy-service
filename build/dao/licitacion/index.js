@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLicitacionesToProveedorDashboardDao = exports.getLicitacionesByUserDao = exports.getLicitacionByIdDao = exports.getLicitacionesFreeDao = exports.getTiposDao = exports.updateLicitacionDao = exports.createLicitacionDao = exports.showLicitacionesDao = void 0;
+exports.getLicitacionesToAdminDao = exports.getLicitacionesToProveedorDashboardDao = exports.getLicitacionesByUserDao = exports.getLicitacionByIdDao = exports.getLicitacionesFreeDao = exports.getTiposDao = exports.updateLicitacionDao = exports.createLicitacionDao = exports.showLicitacionesDao = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const model_1 = __importDefault(require("../../apiServices/licitacion/model"));
 const enums_1 = require("../../types/form/enums");
@@ -22,8 +22,7 @@ const showLicitacionesDao = () => __awaiter(void 0, void 0, void 0, function* ()
         return licitaciones;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al obtener las licitaciones');
     }
 });
 exports.showLicitacionesDao = showLicitacionesDao;
@@ -36,8 +35,7 @@ const createLicitacionDao = (fields) => __awaiter(void 0, void 0, void 0, functi
     }
     catch (err) {
         console.log('error ', err);
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al crear la licitacion');
     }
 });
 exports.createLicitacionDao = createLicitacionDao;
@@ -51,8 +49,7 @@ const updateLicitacionDao = ({ fields, id }) => __awaiter(void 0, void 0, void 0
         };
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al actualizar la licitación');
     }
 });
 exports.updateLicitacionDao = updateLicitacionDao;
@@ -62,8 +59,7 @@ const getTiposDao = (id) => __awaiter(void 0, void 0, void 0, function* () {
         return result;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al obtener los tipos de licitación');
     }
 });
 exports.getTiposDao = getTiposDao;
@@ -76,8 +72,7 @@ const getLicitacionesFreeDao = (proveedorId) => __awaiter(void 0, void 0, void 0
     }
     catch (err) {
         console.log('error ', err);
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al obtener licitaciones libres');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al obtener las licitaciones libres');
     }
 });
 exports.getLicitacionesFreeDao = getLicitacionesFreeDao;
@@ -88,8 +83,7 @@ const getLicitacionByIdDao = (id) => __awaiter(void 0, void 0, void 0, function*
         return licitacion;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al mostrar la licitación ');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al mostrar la licitación ');
     }
 });
 exports.getLicitacionByIdDao = getLicitacionByIdDao;
@@ -99,8 +93,7 @@ const getLicitacionesByUserDao = (id) => __awaiter(void 0, void 0, void 0, funct
         return licitaciones;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al obtener las licitaciones');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al obtener las licitaciones por usuario');
     }
 });
 exports.getLicitacionesByUserDao = getLicitacionesByUserDao;
@@ -111,8 +104,17 @@ const getLicitacionesToProveedorDashboardDao = (proveedorId) => __awaiter(void 0
         return licitaciones;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al obtener la información en la capa de datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al obtener la información del proveedor');
     }
 });
 exports.getLicitacionesToProveedorDashboardDao = getLicitacionesToProveedorDashboardDao;
+const getLicitacionesToAdminDao = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const licitaciones = yield model_1.default.find().select('createdAt updatedAt author empresa estado fechaInicioApertura fechaFinApertura participantes fechaInicio fechaFin');
+        return licitaciones;
+    }
+    catch (e) {
+        throw (0, handleError_1.handleError)(e, 'Ha courrido un error al obtener las licitaciones');
+    }
+});
+exports.getLicitacionesToAdminDao = getLicitacionesToAdminDao;

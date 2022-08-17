@@ -22,8 +22,7 @@ const crearProveedorDao = (fields) => __awaiter(void 0, void 0, void 0, function
         return proveedor;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al registrar un nuevo proveedor');
     }
 });
 exports.crearProveedorDao = crearProveedorDao;
@@ -38,8 +37,7 @@ const getProveedorNameByIdDao = (id) => __awaiter(void 0, void 0, void 0, functi
         };
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al obtener el nombre del proveedor');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error en la capa de datos al obtener el nombre del proveedor');
     }
 });
 exports.getProveedorNameByIdDao = getProveedorNameByIdDao;
@@ -51,8 +49,7 @@ const updateProveedorDao = ({ fields, id }) => __awaiter(void 0, void 0, void 0,
         return result;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al actualizar el proveedor');
     }
 });
 exports.updateProveedorDao = updateProveedorDao;
@@ -66,8 +63,7 @@ const verifyCorreoProveedorDao = (correo) => __awaiter(void 0, void 0, void 0, f
         };
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al verificar el correo');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al verificar el correo');
     }
 });
 exports.verifyCorreoProveedorDao = verifyCorreoProveedorDao;
@@ -85,8 +81,7 @@ const confirmProveedorDao = (idCode) => __awaiter(void 0, void 0, void 0, functi
         return response;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la actualizacion del proveedor');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al confirmar la cuenta del proveedor');
     }
 });
 exports.confirmProveedorDao = confirmProveedorDao;
@@ -98,8 +93,7 @@ const proveedorEstadoDao = (correo) => __awaiter(void 0, void 0, void 0, functio
         return proveedor;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al verificar la cuenta');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al verificar la cuenta');
     }
 });
 exports.proveedorEstadoDao = proveedorEstadoDao;
@@ -109,8 +103,7 @@ const getProveedoresDao = () => __awaiter(void 0, void 0, void 0, function* () {
         return proveedores;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al listar los proveedores');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error en la capa de datos al listar los proveedores');
     }
 });
 exports.getProveedoresDao = getProveedoresDao;
@@ -120,8 +113,7 @@ const getProveedoresToUserDao = () => __awaiter(void 0, void 0, void 0, function
         return proveedores;
     }
     catch (e) {
-        const error = e;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error en la capa de datos al listar los proveedores');
+        throw (0, handleError_1.handleError)(e, 'Ha ocurrido un error en la capa de datos al listar los proveedores');
     }
 });
 exports.getProveedoresToUserDao = getProveedoresToUserDao;
@@ -132,8 +124,7 @@ const createProveedorDao = (fields) => __awaiter(void 0, void 0, void 0, functio
         return response;
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al crear el proveedor de energía eléctrica en la capa de datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al crear el proveedor de energía eléctrica en la capa de datos');
     }
 });
 exports.createProveedorDao = createProveedorDao;

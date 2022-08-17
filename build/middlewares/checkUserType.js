@@ -67,7 +67,7 @@ const checkUserType = (types) => (req, res, next) => __awaiter(void 0, void 0, v
     }
     catch (err) {
         console.log('error catch user type ', err);
-        return res.status(500).send('Ha ocurrido un error en la autenticación');
+        return res.status(500).send({ message: 'Ha ocurrido un error en la autenticación' });
     }
 });
 exports.default = checkUserType;

@@ -36,8 +36,7 @@ const createSessionUser = ({ idUser, token }) => __awaiter(void 0, void 0, void 
         };
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al crear la sesión');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al crear la sesión');
     }
 });
 exports.createSessionUser = createSessionUser;
@@ -50,8 +49,7 @@ const logoutUserDao = (id) => __awaiter(void 0, void 0, void 0, function* () {
         };
     }
     catch (err) {
-        const error = err;
-        return (0, handleError_1.handleError)(error, 'Ha ocurrido un error al cerrar sesión con los datos');
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al cerrar sesión con los datos');
     }
 });
 exports.logoutUserDao = logoutUserDao;
