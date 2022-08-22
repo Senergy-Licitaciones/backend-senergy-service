@@ -15,6 +15,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./addParametros.service"), exports);
+__exportStar(require("./deleteParametros.service"), exports);
 __exportStar(require("./exportFile.service"), exports);
 __exportStar(require("./getParametros.service"), exports);
 __exportStar(require("./updateParametros.service"), exports);

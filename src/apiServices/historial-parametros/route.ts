@@ -8,11 +8,12 @@ import { checkRoleAdminAuth } from '../../middlewares/roleAdminAuth'
 import { ExportFileAdminData } from '../../types/data'
 import { RoleAdmin, Type } from '../../types/data/enums'
 import { ExportFileAdminRequest } from '../../types/requests'
-import { addParametros, downloadFile, exportFile, exportFileToUpdate, getFilename, getParametros, updateParametros } from './controller'
+import { addParametros, deleteParametros, downloadFile, exportFile, exportFileToUpdate, getFilename, getParametros, updateParametros } from './controller'
 const router = express.Router()
 
 // router.post('/addParametro', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), addParametro)
 router.post('/exportFile', adapter<ExportFileAdminRequest, ExportFileAdminData>(createExportFileDates), checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), exportFile)
+router.delete('/deleteParametros', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Boss]), deleteParametros)
 router.get('/downloadFile/:filename', downloadFile)
 router.post('/exportFileToUpdate', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Boss, RoleAdmin.Employee]), exportFileToUpdate)
 router.param('filename', getFilename)

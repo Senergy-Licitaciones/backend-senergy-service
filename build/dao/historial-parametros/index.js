@@ -14,19 +14,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-// import { DocType, ErrorResponse, HistorialParametros } from '../../types/data'
-/*
-export const addParametroDao: Dao<Omit<HistorialParametros, 'createdAt'|'updatedAt'>, ErrorResponse|DocType<HistorialParametros>> = async (fields) => {
-  try {
-    const parametro = await HistorialParametrosModel.create(fields)
-    const response = await parametro.save()
-    return response
-  } catch (err) {
-    const error = err as Error
-    return handleError(error, 'Ha ocurrido un error al agregar el histórico en la capa de datos')
-  }
-}
-*/
+__exportStar(require("./deleteParametros.dao"), exports);
+__exportStar(require("./getParametros.dao"), exports);
 __exportStar(require("./insertMultipleParametros.dao"), exports);
 __exportStar(require("./updateMultipleParametros.dao"), exports);
-__exportStar(require("./getParametros.dao"), exports);
