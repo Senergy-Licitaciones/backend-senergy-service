@@ -18,3 +18,4 @@ __exportStar(require("./deleteParametros.dao"), exports);
 __exportStar(require("./getParametros.dao"), exports);
 __exportStar(require("./insertMultipleParametros.dao"), exports);
 __exportStar(require("./updateMultipleParametros.dao"), exports);
+__exportStar(require("./updateParametro.dao"), exports);

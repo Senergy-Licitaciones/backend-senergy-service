@@ -18,4 +18,5 @@ __exportStar(require("./addParametros.service"), exports);
 __exportStar(require("./deleteParametros.service"), exports);
 __exportStar(require("./exportFile.service"), exports);
 __exportStar(require("./getParametros.service"), exports);
+__exportStar(require("./updateParametro.service"), exports);
 __exportStar(require("./updateParametros.service"), exports);

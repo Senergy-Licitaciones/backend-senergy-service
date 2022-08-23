@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteParametros = exports.getParametros = exports.exportFileToUpdate = exports.updateParametros = exports.addParametros = exports.downloadFile = exports.getFilename = exports.exportFile = void 0;
+exports.updateParametro = exports.deleteParametros = exports.getParametros = exports.exportFileToUpdate = exports.updateParametros = exports.addParametros = exports.downloadFile = exports.getFilename = exports.exportFile = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const historial_parametros_1 = require("../../services/historial-parametros");
 /* export const addParametro: RequestHandler = async (req, res) => {
@@ -115,3 +115,15 @@ const deleteParametros = (_req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.deleteParametros = deleteParametros;
+const updateParametro = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { idParametro } = req.params;
+        const { value, fecha } = req.body;
+        const response = yield (0, historial_parametros_1.updateParametroService)({ id: idParametro, valor: value, fecha });
+        return res.status(200).send(response);
+    }
+    catch (e) {
+        return (0, handleError_1.httpError)(res, e);
+    }
+});
+exports.updateParametro = updateParametro;

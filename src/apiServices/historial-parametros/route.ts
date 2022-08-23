@@ -8,7 +8,7 @@ import { checkRoleAdminAuth } from '../../middlewares/roleAdminAuth'
 import { ExportFileAdminData } from '../../types/data'
 import { RoleAdmin, Type } from '../../types/data/enums'
 import { ExportFileAdminRequest } from '../../types/requests'
-import { addParametros, deleteParametros, downloadFile, exportFile, exportFileToUpdate, getFilename, getParametros, updateParametros } from './controller'
+import { addParametros, deleteParametros, downloadFile, exportFile, exportFileToUpdate, getFilename, getParametros, updateParametro, updateParametros } from './controller'
 const router = express.Router()
 
 // router.post('/addParametro', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), addParametro)
@@ -19,5 +19,6 @@ router.post('/exportFileToUpdate', checkAuth, checkUserType([Type.Admin]), check
 router.param('filename', getFilename)
 router.post('/addParametros/:filename', uploadParametros, checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), addParametros)
 router.put('/updateParametros/:filename', uploadParametros, checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), updateParametros)
+router.put('/updateParametro/:idParametro', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), updateParametro)
 router.get('/getParametros', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), getParametros)
 export default router

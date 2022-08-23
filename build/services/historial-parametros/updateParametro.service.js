@@ -8,23 +8,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.insertMultipleParametrosDao = void 0;
-const model_1 = __importDefault(require("../../apiServices/historial-parametros/model"));
+exports.updateParametroService = void 0;
+const historial_parametros_1 = require("../../dao/historial-parametros");
 const handleError_1 = require("../../helpers/handleError");
-const insertMultipleParametrosDao = (parametros) => __awaiter(void 0, void 0, void 0, function* () {
+const updateParametroService = (param) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        yield model_1.default.insertMany(parametros);
+        yield (0, historial_parametros_1.updateParametroDao)(param);
         return {
-            message: 'Datos agregados exitosamente'
+            message: 'Parametro actualizado exitosamente'
         };
     }
     catch (e) {
-        console.log(e);
-        throw (0, handleError_1.handleError)(e, 'Ha ocurrido un error al agregar los parametros');
+        throw (0, handleError_1.handleError)(e);
     }
 });
-exports.insertMultipleParametrosDao = insertMultipleParametrosDao;
+exports.updateParametroService = updateParametroService;

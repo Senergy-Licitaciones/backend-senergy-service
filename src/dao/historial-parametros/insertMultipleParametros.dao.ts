@@ -6,7 +6,7 @@ import { handleError } from '../../helpers/handleError'
 
 export const insertMultipleParametrosDao: Dao<HistorialParametroModel[], ResponseParent> = async (parametros: HistorialParametroModel[]) => {
   try {
-    await HistorialParametrosModel.collection.insertMany(parametros)
+    await HistorialParametrosModel.insertMany(parametros)
     return {
       message: 'Datos agregados exitosamente'
     }
