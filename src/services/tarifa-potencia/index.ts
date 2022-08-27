@@ -1,0 +1,6 @@
+export * from './addTarifas.service'
+export * from './deleteTarifas.service'
+export * from './exportFile.service'
+export * from './getTarifas.service'
+export * from './updateTarifa.service'
+export * from './updateTarifas.service'

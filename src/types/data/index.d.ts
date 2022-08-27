@@ -150,3 +150,7 @@ export interface JsonParametroData{
   Nombre: string
   [index: string]: string|number
 }
+export interface JsonTarifasData{
+  Meses: string
+  [index: string]: string|number
+}

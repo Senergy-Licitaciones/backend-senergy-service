@@ -43,10 +43,19 @@ const exportFileToUpdateService = ({ id }) => __awaiter(void 0, void 0, void 0, 
     try {
         const parametros = yield (0, historial_parametros_1.getParametrosDao)();
         const workbook = (0, excel_1.createWorkbook)();
+        const fechas = parametros.reduce((acc, el) => {
+            if (el.values.length > acc.length) {
+                return el.values.map((value) => value.fecha);
+            }
+            return acc;
+        }, parametros[0].values.map((value) => value.fecha));
         const worksheet = (0, excel_1.createWorksheetFromArrays)([
-            ['Meses', 'Nombre', ...parametros[0].values.map((el) => el.fecha)],
-            ['Codigo', 'Id', ...parametros.map((_el, i) => i + 1)],
-            ...parametros.map((el, i) => ([i, el.name, ...el.values.map((value) => value.value)]))
+            ['Meses', 'Nombre', ...fechas],
+            ['Codigo', 'Id', ...fechas.map((_el, i) => i + 1)],
+            ...parametros.map((el, i) => {
+                const restValues = new Array(fechas.length - el.values.length).fill(0);
+                return [i, el.name, ...el.values.map((value) => value.value), ...restValues];
+            })
         ]);
         (0, excel_1.addWorksheetToBook)(workbook, worksheet, 'Base de datos Factores');
         const path = `uploads/files/admin/base-de-datos-factores-${id}.xlsx`;

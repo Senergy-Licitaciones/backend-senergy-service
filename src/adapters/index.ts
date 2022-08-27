@@ -1,3 +1,5 @@
 export * from './bloque.adapter'
-export * from './oferta.adapter'
 export * from './exportFileDates.adapter'
+export * from './oferta.adapter'
+export * from './parametrosArray.adapter'
+export * from './tarifasArray.adapter'
