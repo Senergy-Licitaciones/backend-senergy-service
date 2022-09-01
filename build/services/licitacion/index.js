@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLicitacionesToAdmin = exports.getLicitacionByIdService = exports.getLicitacionesFreeService = exports.getTiposService = exports.updateLicitacionService = exports.crearLicitacionService = exports.mostrarLicitacionesService = void 0;
+exports.makeCalculoService = exports.getLicitacionesToAdmin = exports.getLicitacionByIdService = exports.getLicitacionesFreeService = exports.getTiposService = exports.updateLicitacionService = exports.crearLicitacionService = exports.mostrarLicitacionesService = void 0;
 const licitacion_1 = require("../../dao/licitacion");
+const oferta_1 = require("../../dao/oferta");
 const handleError_1 = require("../../helpers/handleError");
 const mostrarLicitacionesService = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -88,3 +89,25 @@ const getLicitacionesToAdmin = () => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.getLicitacionesToAdmin = getLicitacionesToAdmin;
+const makeCalculoService = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const ofertas = yield (0, oferta_1.getOfertasByLicitacionAndProveedorDao)({ licitacionId: id });
+        let historiaOfertas = {};
+        ofertas.map((oferta) => {
+            historiaOfertas = Object.assign(Object.assign({}, historiaOfertas), { [oferta.proveedor.razSocial]: {
+                    potencia: [],
+                    energiaHp: [],
+                    energiaHfp: [],
+                    monomico: []
+                } });
+            return null;
+        });
+        return {
+            message: 'Calculo hecho exitosamente'
+        };
+    }
+    catch (e) {
+        throw (0, handleError_1.handleError)(e);
+    }
+});
+exports.makeCalculoService = makeCalculoService;

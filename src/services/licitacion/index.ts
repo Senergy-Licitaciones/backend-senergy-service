@@ -1,5 +1,6 @@
 import { Types } from 'mongoose'
 import { showLicitacionesDao, createLicitacionDao, updateLicitacionDao, getTiposDao, getLicitacionesFreeDao, getLicitacionByIdDao, getLicitacionesToAdminDao } from '../../dao/licitacion'
+import { getOfertasByLicitacionAndProveedorDao } from '../../dao/oferta'
 import { handleError } from '../../helpers/handleError'
 import { DocType, Licitacion, ResponseParent } from '../../types/data'
 import { LicitacionRegisterFields } from '../../types/form'
@@ -64,6 +65,29 @@ export const getLicitacionesToAdmin: ServiceWithoutParam<LicitacionToAdmin[]> = 
   try {
     const licitaciones = await getLicitacionesToAdminDao()
     return licitaciones
+  } catch (e) {
+    throw handleError(e)
+  }
+}
+export const makeCalculoService: Service<Types.ObjectId, {message: string}> = async (id) => {
+  try {
+    const ofertas = await getOfertasByLicitacionAndProveedorDao({ licitacionId: id })
+    let historiaOfertas = {}
+    ofertas.map((oferta) => {
+      historiaOfertas = {
+        ...historiaOfertas,
+        [oferta.proveedor.razSocial]: {
+          potencia: [],
+          energiaHp: [],
+          energiaHfp: [],
+          monomico: []
+        }
+      }
+      return null
+    })
+    return {
+      message: 'Calculo hecho exitosamente'
+    }
   } catch (e) {
     throw handleError(e)
   }

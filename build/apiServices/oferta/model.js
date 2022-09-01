@@ -84,7 +84,7 @@ const ofertaSchema = new mongoose_1.default.Schema({
     },
     formulaIndexPotencia: [
         {
-            index: {
+            indexId: {
                 type: String,
                 required: true,
                 trim: true

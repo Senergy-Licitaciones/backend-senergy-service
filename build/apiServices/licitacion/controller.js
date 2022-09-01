@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLicitaciones = exports.licitacionId = exports.showLicitacionById = exports.showLicitacionesFree = exports.getTipos = exports.updateLicitacion = exports.createLicitacion = exports.showLicitaciones = void 0;
+exports.makeCalculo = exports.getLicitaciones = exports.licitacionId = exports.showLicitacionById = exports.showLicitacionesFree = exports.getTipos = exports.updateLicitacion = exports.createLicitacion = exports.showLicitaciones = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const licitacion_1 = require("../../services/licitacion");
 const showLicitaciones = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -93,3 +93,15 @@ const getLicitaciones = (_req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.getLicitaciones = getLicitaciones;
+const makeCalculo = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // const licitacionId = req.licitacionId
+        // const response = await makeCalculoService(licitacionId)
+        // return res.status(200).send(response)
+        return res.send('hola');
+    }
+    catch (e) {
+        return (0, handleError_1.httpError)(res, e);
+    }
+});
+exports.makeCalculo = makeCalculo;

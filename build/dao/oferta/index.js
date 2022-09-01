@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOfertasToProveedorDashboardDao = exports.updateOfertaDao = exports.getOfertaByIdDao = exports.getOfertasDao = exports.crearOfertaDao = void 0;
+exports.getOfertasByLicitacionAndProveedorDao = exports.getOfertasByLicitacionDao = exports.getOfertasToProveedorDashboardDao = exports.updateOfertaDao = exports.getOfertaByIdDao = exports.getOfertasDao = exports.crearOfertaDao = void 0;
 const model_1 = __importDefault(require("../../apiServices/oferta/model"));
 const handleError_1 = require("../../helpers/handleError");
 const crearOfertaDao = (fields) => __awaiter(void 0, void 0, void 0, function* () {
@@ -81,3 +81,23 @@ const getOfertasToProveedorDashboardDao = (idProveedor) => __awaiter(void 0, voi
     }
 });
 exports.getOfertasToProveedorDashboardDao = getOfertasToProveedorDashboardDao;
+const getOfertasByLicitacionDao = (licitacionId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const ofertas = yield model_1.default.find({ licitacion: licitacionId });
+        return ofertas;
+    }
+    catch (err) {
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al obtener las ofertas por licitación');
+    }
+});
+exports.getOfertasByLicitacionDao = getOfertasByLicitacionDao;
+const getOfertasByLicitacionAndProveedorDao = ({ licitacionId }) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const ofertas = yield model_1.default.find({ licitacion: licitacionId }).populate('proveedor').select(' razSocial ');
+        return ofertas;
+    }
+    catch (err) {
+        throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error al obtener las ofertas por licitación');
+    }
+});
+exports.getOfertasByLicitacionAndProveedorDao = getOfertasByLicitacionAndProveedorDao;

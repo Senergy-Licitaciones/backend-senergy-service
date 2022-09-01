@@ -16,6 +16,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./deleteParametros.dao"), exports);
 __exportStar(require("./getParametros.dao"), exports);
+__exportStar(require("./getParametrosName.dao"), exports);
 __exportStar(require("./insertMultipleParametros.dao"), exports);
 __exportStar(require("./updateMultipleParametros.dao"), exports);
 __exportStar(require("./updateParametro.dao"), exports);

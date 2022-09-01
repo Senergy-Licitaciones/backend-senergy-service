@@ -31,7 +31,7 @@ interface EspecificacionMes {
 }
 interface FactorIndex {
   factor: number
-  index: string
+  indexId: string
 }
 export interface LicitacionRegisterFields{
   title: string

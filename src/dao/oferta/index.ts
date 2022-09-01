@@ -1,7 +1,7 @@
 import { Types } from 'mongoose'
 import OfertaModel from '../../apiServices/oferta/model'
 import { handleError } from '../../helpers/handleError'
-import { DocType, Licitacion, Oferta, OfertaData } from '../../types/data'
+import { DocType, Licitacion, Oferta, OfertaData, Proveedor } from '../../types/data'
 import { Dao } from '../../types/methods'
 export const crearOfertaDao: Dao<OfertaData&{proveedor: Types.ObjectId}, DocType<Oferta>> = async (fields) => {
   try {
@@ -56,5 +56,21 @@ export const getOfertasToProveedorDashboardDao: Dao<Types.ObjectId, Array<DocTyp
     return ofertas
   } catch (err) {
     throw handleError(err, 'Ha ocurrido un error al obtener las ofertas')
+  }
+}
+export const getOfertasByLicitacionDao: Dao<Types.ObjectId, Array<DocType<Oferta>>> = async (licitacionId) => {
+  try {
+    const ofertas = await OfertaModel.find({ licitacion: licitacionId })
+    return ofertas
+  } catch (err) {
+    throw handleError(err, 'Ha ocurrido un error al obtener las ofertas por licitación')
+  }
+}
+export const getOfertasByLicitacionAndProveedorDao: Dao<{licitacionId: Types.ObjectId}, Array<DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>} >> = async ({ licitacionId }) => {
+  try {
+    const ofertas = await OfertaModel.find({ licitacion: licitacionId }).populate<{proveedor: Pick<Proveedor, 'razSocial'>}>('proveedor').select(' razSocial ')
+    return ofertas
+  } catch (err) {
+    throw handleError(err, 'Ha ocurrido un error al obtener las ofertas por licitación')
   }
 }

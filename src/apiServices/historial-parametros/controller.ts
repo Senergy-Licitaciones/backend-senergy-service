@@ -1,6 +1,6 @@
 import { RequestHandler, RequestParamHandler } from 'express'
 import { httpError } from '../../helpers/handleError'
-import { addParametrosService, deleteParametrosService, exportFileService, exportFileToUpdateService, getParametrosService, updateParametroService, updateParametrosService } from '../../services/historial-parametros'
+import { addParametrosService, deleteParametrosService, exportFileService, exportFileToUpdateService, getNamesService, getParametrosService, updateParametroService, updateParametrosService } from '../../services/historial-parametros'
 import { Admin, DocType, ExportFileAdminData } from '../../types/data'
 
 /* export const addParametro: RequestHandler = async (req, res) => {
@@ -95,6 +95,14 @@ export const updateParametro: RequestHandler = async (req, res) => {
     const { value, fecha } = req.body as {value: number, fecha: string}
     const response = await updateParametroService({ id: idParametro, valor: value, fecha })
     return res.status(200).send(response)
+  } catch (e) {
+    return httpError(res, e)
+  }
+}
+export const getNames: RequestHandler = async (_req, res) => {
+  try {
+    const parametros = await getNamesService()
+    return res.status(200).send(parametros)
   } catch (e) {
     return httpError(res, e)
   }

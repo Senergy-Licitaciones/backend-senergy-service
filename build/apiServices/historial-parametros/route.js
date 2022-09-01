@@ -10,6 +10,7 @@ const checkAuth_1 = __importDefault(require("../../middlewares/checkAuth"));
 const checkUserType_1 = __importDefault(require("../../middlewares/checkUserType"));
 const uploadParametros_1 = __importDefault(require("../../middlewares/filesUser/uploadParametros"));
 const roleAdminAuth_1 = require("../../middlewares/roleAdminAuth");
+const roleAuth_1 = __importDefault(require("../../middlewares/roleAuth"));
 const enums_1 = require("../../types/data/enums");
 const controller_1 = require("./controller");
 const router = express_1.default.Router();
@@ -23,4 +24,5 @@ router.post('/addParametros/:filename', uploadParametros_1.default, checkAuth_1.
 router.put('/updateParametros/:filename', uploadParametros_1.default, checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Employee, enums_1.RoleAdmin.Boss]), controller_1.updateParametros);
 router.put('/updateParametro/:idParametro', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Employee, enums_1.RoleAdmin.Boss]), controller_1.updateParametro);
 router.get('/getParametros', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Employee, enums_1.RoleAdmin.Boss]), controller_1.getParametros);
+router.get('/getNames', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Proveedor]), (0, roleAuth_1.default)([enums_1.Role.Basico, enums_1.Role.Premium]), controller_1.getNames);
 exports.default = router;

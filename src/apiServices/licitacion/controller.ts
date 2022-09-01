@@ -73,3 +73,13 @@ export const getLicitaciones: RequestHandler = async (_req, res) => {
     return httpError(res, e)
   }
 }
+export const makeCalculo: RequestHandler = async (_req, res) => {
+  try {
+    // const licitacionId = req.licitacionId
+    // const response = await makeCalculoService(licitacionId)
+    // return res.status(200).send(response)
+    return res.send('hola')
+  } catch (e) {
+    return httpError(res, e)
+  }
+}
