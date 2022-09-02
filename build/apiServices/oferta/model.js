@@ -97,7 +97,7 @@ const ofertaSchema = new mongoose_1.default.Schema({
     ],
     formulaIndexEnergia: [
         {
-            index: {
+            indexId: {
                 type: String,
                 required: true,
                 trim: true
