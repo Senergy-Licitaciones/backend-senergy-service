@@ -153,10 +153,13 @@ const makeCalculoService = (id) => __awaiter(void 0, void 0, void 0, function* (
             historialOfertas[i].energiaHfp = (0, utils_1.calcularHistoricoEnergiaHfp)(historicoParametros, bloquesMesesEnergiaHfp, oferta);
             console.log('first energia hfp ', historialOfertas[i].energiaHfp);
             historialOfertas[i].monomico = historialOfertas[i].potencia.map((value, j) => {
-                const precioPotencia = value * 100 * 10 / (720 * 0.79751092507001);
+                const precioPotencia = value.value * 100 * 10 / (720 * 0.79751092507001);
                 console.log('first precio potencia ', precioPotencia);
-                const precioEnergia = (5 * historialOfertas[i].energiaHp[j] / 24) + (19 * historialOfertas[i].energiaHfp[j] / 24);
-                return precioPotencia + precioEnergia;
+                const precioEnergia = (5 * historialOfertas[i].energiaHp[j].value / 24) + (19 * historialOfertas[i].energiaHfp[j].value / 24);
+                return {
+                    fecha: value.fecha,
+                    value: precioPotencia + precioEnergia
+                };
             });
             return null;
         });

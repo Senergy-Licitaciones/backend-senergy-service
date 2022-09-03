@@ -24,7 +24,10 @@ const calcularHistorico = (historicoParametros, bloquesMeses, oferta) => {
             const result = current.factor * valueParametroActual / parametroBase + prev;
             return result;
         }, 0);
-        return potenciaBase * factor;
+        return {
+            fecha: mes,
+            value: potenciaBase * factor
+        };
     });
 };
 exports.calcularHistorico = calcularHistorico;
@@ -51,7 +54,10 @@ const calcularHistoricoEnergiaHp = (historicoParametros, bloquesMeses, oferta) =
             const result = current.factor * valueParametroActual / parametroBase + prev;
             return result;
         }, 0);
-        return energiaBase * factor;
+        return {
+            fecha: mes,
+            value: energiaBase * factor
+        };
     });
 };
 exports.calcularHistoricoEnergiaHp = calcularHistoricoEnergiaHp;
@@ -78,7 +84,10 @@ const calcularHistoricoEnergiaHfp = (historicoParametros, bloquesMeses, oferta) 
             const result = current.factor * valueParametroActual / parametroBase + prev;
             return result;
         }, 0);
-        return energiaBase * factor;
+        return {
+            fecha: mes,
+            value: energiaBase * factor
+        };
     });
 };
 exports.calcularHistoricoEnergiaHfp = calcularHistoricoEnergiaHfp;

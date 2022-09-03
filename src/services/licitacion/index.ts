@@ -79,17 +79,17 @@ export const getOfertasByLicitacionService: Service<Types.ObjectId, Array<DocTyp
     throw handleError(e)
   }
 }
-export const makeCalculoService: Service<Types.ObjectId, Array<{empresa: string, monomico: number[], potencia: number[], energiaHp: number[], energiaHfp: number[]}>> = async (id) => {
+export const makeCalculoService: Service<Types.ObjectId, Array<{empresa: string, monomico: Array<{fecha: string, value: number}>, potencia: Array<{fecha: string, value: number}>, energiaHp: Array<{fecha: string, value: number}>, energiaHfp: Array<{fecha: string, value: number}>}>> = async (id) => {
   try {
     const ofertas = await getOfertasByLicitacionAndProveedorDao({ licitacionId: id })
     console.log('ofertas ', ofertas)
     const parametros: string[] = []
     const historialOfertas: Array<{
       empresa: string
-      monomico: number[]
-      potencia: number[]
-      energiaHp: number[]
-      energiaHfp: number[]
+      monomico: Array<{fecha: string, value: number}>
+      potencia: Array<{fecha: string, value: number}>
+      energiaHp: Array<{fecha: string, value: number}>
+      energiaHfp: Array<{fecha: string, value: number}>
     }> = ofertas.map((oferta) => {
       oferta.formulaIndexPotencia.map((formula) => {
         if (!parametros.includes(formula.indexId)) {
@@ -137,10 +137,13 @@ export const makeCalculoService: Service<Types.ObjectId, Array<{empresa: string,
       historialOfertas[i].energiaHfp = calcularHistoricoEnergiaHfp(historicoParametros, bloquesMesesEnergiaHfp, oferta)
       console.log('first energia hfp ', historialOfertas[i].energiaHfp)
       historialOfertas[i].monomico = historialOfertas[i].potencia.map((value, j) => {
-        const precioPotencia = value * 100 * 10 / (720 * 0.79751092507001)
+        const precioPotencia = value.value * 100 * 10 / (720 * 0.79751092507001)
         console.log('first precio potencia ', precioPotencia)
-        const precioEnergia = (5 * historialOfertas[i].energiaHp[j] / 24) + (19 * historialOfertas[i].energiaHfp[j] / 24)
-        return precioPotencia + precioEnergia
+        const precioEnergia = (5 * historialOfertas[i].energiaHp[j].value / 24) + (19 * historialOfertas[i].energiaHfp[j].value / 24)
+        return {
+          fecha: value.fecha,
+          value: precioPotencia + precioEnergia
+        }
       })
       return null
     })

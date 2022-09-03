@@ -1,7 +1,7 @@
 import { DocType, Oferta, Proveedor } from '../types/data'
 import { HistorialParametroModel } from '../types/models'
 
-export const calcularHistorico = (historicoParametros: Array<DocType<HistorialParametroModel>>, bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): number[] => {
+export const calcularHistorico = (historicoParametros: Array<DocType<HistorialParametroModel>>, bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): Array<{fecha: string, value: number}> => {
   return bloquesMeses.flat().map((mes) => {
     const potenciaBase = bloquesMeses.reduce((prev, curre, j) => {
       const value = curre.filter((el) => el === mes)
@@ -19,10 +19,13 @@ export const calcularHistorico = (historicoParametros: Array<DocType<HistorialPa
       const result = current.factor * valueParametroActual / parametroBase + prev
       return result
     }, 0)
-    return potenciaBase * factor
+    return {
+      fecha: mes,
+      value: potenciaBase * factor
+    }
   })
 }
-export const calcularHistoricoEnergiaHp = (historicoParametros: Array<DocType<HistorialParametroModel>>, bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): number[] => {
+export const calcularHistoricoEnergiaHp = (historicoParametros: Array<DocType<HistorialParametroModel>>, bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): Array<{fecha: string, value: number}> => {
   return bloquesMeses.flat().map((mes) => {
     const energiaBase = bloquesMeses.reduce((prev, curre, j) => {
       const value = curre.filter((el) => el === mes)
@@ -40,10 +43,13 @@ export const calcularHistoricoEnergiaHp = (historicoParametros: Array<DocType<Hi
       const result = current.factor * valueParametroActual / parametroBase + prev
       return result
     }, 0)
-    return energiaBase * factor
+    return {
+      fecha: mes,
+      value: energiaBase * factor
+    }
   })
 }
-export const calcularHistoricoEnergiaHfp = (historicoParametros: Array<DocType<HistorialParametroModel>>, bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): number[] => {
+export const calcularHistoricoEnergiaHfp = (historicoParametros: Array<DocType<HistorialParametroModel>>, bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): Array<{fecha: string, value: number}> => {
   return bloquesMeses.flat().map((mes) => {
     const energiaBase = bloquesMeses.reduce((prev, curre, j) => {
       const value = curre.filter((el) => el === mes)
@@ -61,6 +67,9 @@ export const calcularHistoricoEnergiaHfp = (historicoParametros: Array<DocType<H
       const result = current.factor * valueParametroActual / parametroBase + prev
       return result
     }, 0)
-    return energiaBase * factor
+    return {
+      fecha: mes,
+      value: energiaBase * factor
+    }
   })
 }
