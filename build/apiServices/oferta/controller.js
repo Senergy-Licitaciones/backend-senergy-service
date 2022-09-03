@@ -9,8 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateOferta = exports.ofertaId = exports.getOfertaById = exports.getOfertas = void 0;
+exports.getOfertasByLicitacion = exports.updateOferta = exports.licitacionId = exports.ofertaId = exports.getOfertaById = exports.getOfertas = void 0;
 const handleError_1 = require("../../helpers/handleError");
+const licitacion_1 = require("../../services/licitacion");
 const oferta_1 = require("../../services/oferta");
 const getOfertas = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -39,6 +40,11 @@ const ofertaId = (req, _res, next, id) => {
     next();
 };
 exports.ofertaId = ofertaId;
+const licitacionId = (req, _res, next, id) => {
+    req.licitacionId = id;
+    next();
+};
+exports.licitacionId = licitacionId;
 const updateOferta = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const ofertaId = req.ofertaId;
@@ -51,3 +57,16 @@ const updateOferta = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.updateOferta = updateOferta;
+const getOfertasByLicitacion = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const licitacionId = req.licitacionId;
+        if (licitacionId == null)
+            throw new Error('No se ha enviado la licitación');
+        const ofertas = yield (0, licitacion_1.getOfertasByLicitacionService)(licitacionId);
+        return res.status(200).send(ofertas);
+    }
+    catch (e) {
+        return (0, handleError_1.httpError)(res, e);
+    }
+});
+exports.getOfertasByLicitacion = getOfertasByLicitacion;

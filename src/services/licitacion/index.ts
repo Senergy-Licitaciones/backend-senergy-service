@@ -1,11 +1,13 @@
 import { Types } from 'mongoose'
+import { getHistorialParametrosListDao } from '../../dao/historial-parametros'
 import { showLicitacionesDao, createLicitacionDao, updateLicitacionDao, getTiposDao, getLicitacionesFreeDao, getLicitacionByIdDao, getLicitacionesToAdminDao } from '../../dao/licitacion'
 import { getOfertasByLicitacionAndProveedorDao } from '../../dao/oferta'
 import { handleError } from '../../helpers/handleError'
-import { DocType, Licitacion, ResponseParent } from '../../types/data'
+import { DocType, Licitacion, Oferta, Proveedor, ResponseParent } from '../../types/data'
 import { LicitacionRegisterFields } from '../../types/form'
 import { Service, ServiceWithoutParam } from '../../types/methods'
 import { LicitacionToAdmin } from '../../types/responses'
+import { calcularHistorico, calcularHistoricoEnergiaHfp, calcularHistoricoEnergiaHp, generateMesesArray } from '../../utils'
 
 export const mostrarLicitacionesService: ServiceWithoutParam<Array<DocType<Licitacion>>> = async () => {
   try {
@@ -69,25 +71,80 @@ export const getLicitacionesToAdmin: ServiceWithoutParam<LicitacionToAdmin[]> = 
     throw handleError(e)
   }
 }
-export const makeCalculoService: Service<Types.ObjectId, {message: string}> = async (id) => {
+export const getOfertasByLicitacionService: Service<Types.ObjectId, Array<DocType<Oferta>&{proveedor: Pick<Proveedor, 'razSocial'>}>> = async (idLicitacion) => {
+  try {
+    const ofertas = await getOfertasByLicitacionAndProveedorDao({ licitacionId: idLicitacion })
+    return ofertas
+  } catch (e) {
+    throw handleError(e)
+  }
+}
+export const makeCalculoService: Service<Types.ObjectId, Array<{empresa: string, monomico: number[], potencia: number[], energiaHp: number[], energiaHfp: number[]}>> = async (id) => {
   try {
     const ofertas = await getOfertasByLicitacionAndProveedorDao({ licitacionId: id })
-    let historiaOfertas = {}
-    ofertas.map((oferta) => {
-      historiaOfertas = {
-        ...historiaOfertas,
-        [oferta.proveedor.razSocial]: {
-          potencia: [],
-          energiaHp: [],
-          energiaHfp: [],
-          monomico: []
+    console.log('ofertas ', ofertas)
+    const parametros: string[] = []
+    const historialOfertas: Array<{
+      empresa: string
+      monomico: number[]
+      potencia: number[]
+      energiaHp: number[]
+      energiaHfp: number[]
+    }> = ofertas.map((oferta) => {
+      oferta.formulaIndexPotencia.map((formula) => {
+        if (!parametros.includes(formula.indexId)) {
+          parametros.push(formula.indexId)
         }
+        return null
+      })
+      oferta.formulaIndexEnergia.map((formula) => {
+        if (!parametros.includes(formula.indexId)) {
+          parametros.push(formula.indexId)
+        }
+        return null
+      })
+      return {
+        empresa: oferta.proveedor.razSocial,
+        monomico: [],
+        potencia: [],
+        energiaHp: [],
+        energiaHfp: []
       }
+    })
+    console.log('parametros ', parametros)
+    const historicoParametros = await getHistorialParametrosListDao(parametros)
+    console.log('historicoParametros ', historicoParametros)
+    ofertas.map((oferta, i) => {
+      // para potencia en bloques y más de dos factores de indexación
+      const bloquesMesesPotencia = oferta.potencia.map((bloque) => {
+        const meses = generateMesesArray(bloque.fechaInicio, bloque.fechaFin)
+        return meses
+      })
+      console.log('bloques meses potencia ', bloquesMesesPotencia)
+      const bloquesMesesEnergiaHp = oferta.energiaHp.map((bloque) => {
+        const meses = generateMesesArray(bloque.fechaInicio, bloque.fechaFin)
+        return meses
+      })
+      const bloquesMesesEnergiaHfp = oferta.energiaHfp.map((bloque) => {
+        const meses = generateMesesArray(bloque.fechaInicio, bloque.fechaFin)
+        return meses
+      })
+      console.log('bloques meses energia hp ', bloquesMesesEnergiaHp)
+      historialOfertas[i].potencia = calcularHistorico(historicoParametros, bloquesMesesPotencia, oferta)
+      console.log('first potencia ', historialOfertas[i].potencia)
+      historialOfertas[i].energiaHp = calcularHistoricoEnergiaHp(historicoParametros, bloquesMesesEnergiaHp, oferta)
+      console.log('first energia hp ', historialOfertas[i].energiaHp)
+      historialOfertas[i].energiaHfp = calcularHistoricoEnergiaHfp(historicoParametros, bloquesMesesEnergiaHfp, oferta)
+      console.log('first energia hfp ', historialOfertas[i].energiaHfp)
+      historialOfertas[i].monomico = historialOfertas[i].potencia.map((value, j) => {
+        const precioPotencia = value * 100 * 10 / (720 * 0.79751092507001)
+        console.log('first precio potencia ', precioPotencia)
+        const precioEnergia = (5 * historialOfertas[i].energiaHp[j] / 24) + (19 * historialOfertas[i].energiaHfp[j] / 24)
+        return precioPotencia + precioEnergia
+      })
       return null
     })
-    return {
-      message: 'Calculo hecho exitosamente'
-    }
+    return historialOfertas
   } catch (e) {
     throw handleError(e)
   }

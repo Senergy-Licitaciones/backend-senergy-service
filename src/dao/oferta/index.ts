@@ -68,7 +68,7 @@ export const getOfertasByLicitacionDao: Dao<Types.ObjectId, Array<DocType<Oferta
 }
 export const getOfertasByLicitacionAndProveedorDao: Dao<{licitacionId: Types.ObjectId}, Array<DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>} >> = async ({ licitacionId }) => {
   try {
-    const ofertas = await OfertaModel.find({ licitacion: licitacionId }).populate<{proveedor: Pick<Proveedor, 'razSocial'>}>('proveedor').select(' razSocial ')
+    const ofertas = await OfertaModel.find({ licitacion: licitacionId }).populate<{proveedor: Pick<Proveedor, 'razSocial'>}>('proveedor', 'razSocial')
     return ofertas
   } catch (err) {
     throw handleError(err, 'Ha ocurrido un error al obtener las ofertas por licitación')

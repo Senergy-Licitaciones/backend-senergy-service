@@ -93,7 +93,7 @@ const getOfertasByLicitacionDao = (licitacionId) => __awaiter(void 0, void 0, vo
 exports.getOfertasByLicitacionDao = getOfertasByLicitacionDao;
 const getOfertasByLicitacionAndProveedorDao = ({ licitacionId }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const ofertas = yield model_1.default.find({ licitacion: licitacionId }).populate('proveedor').select(' razSocial ');
+        const ofertas = yield model_1.default.find({ licitacion: licitacionId }).populate('proveedor', 'razSocial');
         return ofertas;
     }
     catch (err) {

@@ -93,12 +93,13 @@ const getLicitaciones = (_req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.getLicitaciones = getLicitaciones;
-const makeCalculo = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const makeCalculo = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // const licitacionId = req.licitacionId
-        // const response = await makeCalculoService(licitacionId)
-        // return res.status(200).send(response)
-        return res.send('hola');
+        const licitacionId = req.licitacionId;
+        if (licitacionId == null)
+            throw new Error('No se proporcionó la licitación');
+        const response = yield (0, licitacion_1.makeCalculoService)(licitacionId);
+        return res.status(200).send(response);
     }
     catch (e) {
         return (0, handleError_1.httpError)(res, e);

@@ -9,7 +9,7 @@ import { licitacionId, showLicitacionById, showLicitaciones, showLicitacionesFre
 const router = express.Router()
 
 router.get('/licitaciones', showLicitaciones)
-router.post('/calculo/:id', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), makeCalculo)
+router.post('/calculo/:id', /* checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), */ makeCalculo)
 router.get('/showLicitaciones', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), getLicitaciones)
 router.get('/licitacionId/:id', checkAuth, checkUserType([Type.Proveedor, Type.User]), checkRoleAuth([Role.Basico, Role.Premium]), showLicitacionById)
 router.get('/licitacionesLibres', checkAuth, checkUserType([Type.Proveedor]), checkRoleAuth([Role.Basico, Role.Premium]), showLicitacionesFree)
