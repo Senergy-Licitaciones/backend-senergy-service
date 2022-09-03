@@ -3,9 +3,14 @@ import { HistorialParametroModel } from '../types/models'
 
 export const calcularHistorico = (historicoParametros: Array<DocType<HistorialParametroModel>>, bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): Array<{fecha: string, value: number}> => {
   return bloquesMeses.flat().map((mes) => {
+    let founded = false
     const potenciaBase = bloquesMeses.reduce((prev, curre, j) => {
+      if (founded) return prev
       const value = curre.filter((el) => el === mes)
-      if (value.length !== 0) return prev
+      if (value.length !== 0) {
+        founded = true
+        return oferta.potencia[j].potencia
+      }
       return oferta.potencia[j].potencia
     }, oferta.potencia[0].potencia)
     const factor = oferta.formulaIndexPotencia.reduce((prev, current) => {
@@ -27,9 +32,14 @@ export const calcularHistorico = (historicoParametros: Array<DocType<HistorialPa
 }
 export const calcularHistoricoEnergiaHp = (historicoParametros: Array<DocType<HistorialParametroModel>>, bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): Array<{fecha: string, value: number}> => {
   return bloquesMeses.flat().map((mes) => {
+    let founded = false
     const energiaBase = bloquesMeses.reduce((prev, curre, j) => {
+      if (founded) return prev
       const value = curre.filter((el) => el === mes)
-      if (value.length !== 0) return prev
+      if (value.length !== 0) {
+        founded = true
+        return oferta.energiaHp[j].energia
+      }
       return oferta.energiaHp[j].energia
     }, oferta.energiaHp[0].energia)
     const factor = oferta.formulaIndexEnergia.reduce((prev, current) => {
@@ -51,9 +61,14 @@ export const calcularHistoricoEnergiaHp = (historicoParametros: Array<DocType<Hi
 }
 export const calcularHistoricoEnergiaHfp = (historicoParametros: Array<DocType<HistorialParametroModel>>, bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): Array<{fecha: string, value: number}> => {
   return bloquesMeses.flat().map((mes) => {
+    let founded = false
     const energiaBase = bloquesMeses.reduce((prev, curre, j) => {
+      if (founded) return prev
       const value = curre.filter((el) => el === mes)
-      if (value.length !== 0) return prev
+      if (value.length !== 0) {
+        founded = true
+        return oferta.energiaHfp[j].energia
+      }
       return oferta.energiaHfp[j].energia
     }, oferta.energiaHfp[0].energia)
     const factor = oferta.formulaIndexEnergia.reduce((prev, current) => {

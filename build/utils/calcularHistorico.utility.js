@@ -3,10 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.calcularHistoricoEnergiaHfp = exports.calcularHistoricoEnergiaHp = exports.calcularHistorico = void 0;
 const calcularHistorico = (historicoParametros, bloquesMeses, oferta) => {
     return bloquesMeses.flat().map((mes) => {
+        let founded = false;
         const potenciaBase = bloquesMeses.reduce((prev, curre, j) => {
-            const value = curre.filter((el) => el === mes);
-            if (value.length !== 0)
+            if (founded)
                 return prev;
+            const value = curre.filter((el) => el === mes);
+            if (value.length !== 0) {
+                founded = true;
+                return oferta.potencia[j].potencia;
+            }
             return oferta.potencia[j].potencia;
         }, oferta.potencia[0].potencia);
         const factor = oferta.formulaIndexPotencia.reduce((prev, current) => {
@@ -33,10 +38,15 @@ const calcularHistorico = (historicoParametros, bloquesMeses, oferta) => {
 exports.calcularHistorico = calcularHistorico;
 const calcularHistoricoEnergiaHp = (historicoParametros, bloquesMeses, oferta) => {
     return bloquesMeses.flat().map((mes) => {
+        let founded = false;
         const energiaBase = bloquesMeses.reduce((prev, curre, j) => {
-            const value = curre.filter((el) => el === mes);
-            if (value.length !== 0)
+            if (founded)
                 return prev;
+            const value = curre.filter((el) => el === mes);
+            if (value.length !== 0) {
+                founded = true;
+                return oferta.energiaHp[j].energia;
+            }
             return oferta.energiaHp[j].energia;
         }, oferta.energiaHp[0].energia);
         const factor = oferta.formulaIndexEnergia.reduce((prev, current) => {
@@ -63,10 +73,15 @@ const calcularHistoricoEnergiaHp = (historicoParametros, bloquesMeses, oferta) =
 exports.calcularHistoricoEnergiaHp = calcularHistoricoEnergiaHp;
 const calcularHistoricoEnergiaHfp = (historicoParametros, bloquesMeses, oferta) => {
     return bloquesMeses.flat().map((mes) => {
+        let founded = false;
         const energiaBase = bloquesMeses.reduce((prev, curre, j) => {
-            const value = curre.filter((el) => el === mes);
-            if (value.length !== 0)
+            if (founded)
                 return prev;
+            const value = curre.filter((el) => el === mes);
+            if (value.length !== 0) {
+                founded = true;
+                return oferta.energiaHfp[j].energia;
+            }
             return oferta.energiaHfp[j].energia;
         }, oferta.energiaHfp[0].energia);
         const factor = oferta.formulaIndexEnergia.reduce((prev, current) => {
