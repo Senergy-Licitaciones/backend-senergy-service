@@ -131,7 +131,8 @@ const getListParametrosUsados = (id) => __awaiter(void 0, void 0, void 0, functi
                 monomico: [],
                 potencia: [],
                 energiaHp: [],
-                energiaHfp: []
+                energiaHfp: [],
+                total: 0
             };
         });
         return {
@@ -181,6 +182,9 @@ const makeCalculoService = ({ historialOfertas, historicoParametros, ofertas }) 
                     value: precioPotencia + precioEnergia
                 };
             });
+            historialOfertas[i].total = historialOfertas[i].monomico.reduce((total, el) => {
+                return total + el.value;
+            }, 0);
             return null;
         });
         return historialOfertas;
@@ -195,7 +199,15 @@ const calculoSimple = (id) => __awaiter(void 0, void 0, void 0, function* () {
         const { historialOfertas, ofertas, parametros } = yield (0, exports.getListParametrosUsados)(id);
         const historicoParametros = yield (0, historial_parametros_1.getHistorialParametrosListDao)(parametros);
         const response = yield (0, exports.makeCalculoService)({ historialOfertas, historicoParametros, ofertas });
-        return response;
+        return {
+            data: response,
+            ganador: response.reduce((ganador, empresa) => {
+                if (empresa.total > ganador.total) {
+                    return empresa;
+                }
+                return ganador;
+            }, { empresa: '', total: 0 }).empresa
+        };
     }
     catch (e) {
         throw (0, handleError_1.handleError)(e);
@@ -216,7 +228,12 @@ const calculoExcel = ({ filename, idLicitacion }) => __awaiter(void 0, void 0, v
         const historicoParametros = (0, exports.getParametrosFromExcel)(parametros, filename);
         const response = yield (0, exports.makeCalculoService)({ historialOfertas, historicoParametros, ofertas });
         fs_1.default.rmSync(filename);
-        return response;
+        return {
+            data: response,
+            ganador: response.reduce((mayor, el) => {
+                return el.total > mayor.total ? el : mayor;
+            }, { empresa: '', total: 0 }).empresa
+        };
     }
     catch (e) {
         throw (0, handleError_1.handleError)(e);

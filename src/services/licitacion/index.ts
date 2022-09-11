@@ -107,7 +107,8 @@ export const getListParametrosUsados = async (id: Types.ObjectId): Promise<{para
         monomico: [],
         potencia: [],
         energiaHp: [],
-        energiaHfp: []
+        energiaHfp: [],
+        total: 0
       }
     })
     return {
@@ -157,6 +158,9 @@ export const makeCalculoService: Service<{ historialOfertas: MetricasEmpresa[], 
           value: precioPotencia + precioEnergia
         }
       })
+      historialOfertas[i].total = historialOfertas[i].monomico.reduce((total, el) => {
+        return total + el.value
+      }, 0)
       return null
     })
     return historialOfertas
@@ -164,12 +168,21 @@ export const makeCalculoService: Service<{ historialOfertas: MetricasEmpresa[], 
     throw handleError(e)
   }
 }
-export const calculoSimple: Service<Types.ObjectId, MetricasEmpresa[]> = async (id) => {
+export const calculoSimple: Service<Types.ObjectId, {data: MetricasEmpresa[], ganador: string}> = async (id) => {
   try {
     const { historialOfertas, ofertas, parametros } = await getListParametrosUsados(id)
     const historicoParametros = await getHistorialParametrosListDao(parametros)
     const response = await makeCalculoService({ historialOfertas, historicoParametros, ofertas })
-    return response
+    return {
+      data: response,
+      ganador: response.reduce((ganador, empresa) => {
+        if (empresa.total > ganador.total) {
+          return empresa
+        }
+        return ganador
+      }
+      , { empresa: '', total: 0 }).empresa
+    }
   } catch (e) {
     throw handleError(e)
   }
@@ -181,13 +194,18 @@ export const getParametrosFromExcel = (parametros: string[], filename: string): 
   const data = createParametrosProyeccionAdapter(json)
   return data.filter((parametro) => parametros.includes(parametro._id))
 }
-export const calculoExcel: Service<{idLicitacion: Types.ObjectId, filename: string}, MetricasEmpresa[]> = async ({ filename, idLicitacion }) => {
+export const calculoExcel: Service<{idLicitacion: Types.ObjectId, filename: string}, {data: MetricasEmpresa[], ganador: string}> = async ({ filename, idLicitacion }) => {
   try {
     const { historialOfertas, ofertas, parametros } = await getListParametrosUsados(idLicitacion)
     const historicoParametros = getParametrosFromExcel(parametros, filename)
     const response = await makeCalculoService({ historialOfertas, historicoParametros, ofertas })
     fs.rmSync(filename)
-    return response
+    return {
+      data: response,
+      ganador: response.reduce((mayor, el) => {
+        return el.total > mayor.total ? el : mayor
+      }, { empresa: '', total: 0 }).empresa
+    }
   } catch (e) {
     throw handleError(e)
   }

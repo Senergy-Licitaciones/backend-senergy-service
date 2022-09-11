@@ -4,4 +4,5 @@ export interface MetricasEmpresa{
   potencia: Array<{fecha: string, value: number}>
   energiaHp: Array<{fecha: string, value: number}>
   energiaHfp: Array<{fecha: string, value: number}>
+  total: number
 }
