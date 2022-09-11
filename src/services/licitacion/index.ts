@@ -176,7 +176,7 @@ export const calculoSimple: Service<Types.ObjectId, {data: MetricasEmpresa[], ga
     return {
       data: response,
       ganador: response.reduce((ganador, empresa) => {
-        if (empresa.total > ganador.total) {
+        if (empresa.total < ganador.total) {
           return empresa
         }
         return ganador
@@ -202,8 +202,8 @@ export const calculoExcel: Service<{idLicitacion: Types.ObjectId, filename: stri
     fs.rmSync(filename)
     return {
       data: response,
-      ganador: response.reduce((mayor, el) => {
-        return el.total > mayor.total ? el : mayor
+      ganador: response.reduce((menor, el) => {
+        return el.total < menor.total ? el : menor
       }, { empresa: '', total: 0 }).empresa
     }
   } catch (e) {
