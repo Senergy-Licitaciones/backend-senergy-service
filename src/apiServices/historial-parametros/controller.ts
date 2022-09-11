@@ -1,6 +1,7 @@
 import { RequestHandler, RequestParamHandler } from 'express'
 import { httpError } from '../../helpers/handleError'
 import { addParametrosService, deleteParametrosService, exportFileService, exportFileToUpdateService, exportProyeccionFileService, getNamesService, getParametrosService, updateParametroService, updateParametrosService } from '../../services/historial-parametros'
+import { getDatesFromLicitacion } from '../../services/licitacion'
 import { Admin, DocType, ExportFileAdminData } from '../../types/data'
 
 /* export const addParametro: RequestHandler = async (req, res) => {
@@ -110,8 +111,8 @@ export const getNames: RequestHandler = async (_req, res) => {
 export const exportProyeccionFile: RequestHandler = async (req, res) => {
   try {
     const { _id } = req.admin as DocType<Admin>
-    const { idLicitacion } = req.params
-    const { fechaInicio, fechaFin } = req.body as ExportFileAdminData
+    const { idLicitacion } = req.params as any
+    const { fechaInicio, fechaFin } = await getDatesFromLicitacion(idLicitacion)
     const response = await exportProyeccionFileService({ fechaInicio, fechaFin, idAdmin: _id, idLicitacion })
     return res.status(200).send(response)
   } catch (e) {

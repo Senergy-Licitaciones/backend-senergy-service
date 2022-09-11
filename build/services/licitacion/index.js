@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.calculoExcel = exports.getParametrosFromExcel = exports.calculoSimple = exports.makeCalculoService = exports.getListParametrosUsados = exports.getOfertasByLicitacionService = exports.getLicitacionesToAdmin = exports.getLicitacionByIdService = exports.getLicitacionesFreeService = exports.getTiposService = exports.updateLicitacionService = exports.crearLicitacionService = exports.mostrarLicitacionesService = void 0;
+exports.getDatesFromLicitacion = exports.calculoExcel = exports.getParametrosFromExcel = exports.calculoSimple = exports.makeCalculoService = exports.getListParametrosUsados = exports.getOfertasByLicitacionService = exports.getLicitacionesToAdmin = exports.getLicitacionByIdService = exports.getLicitacionesFreeService = exports.getTiposService = exports.updateLicitacionService = exports.crearLicitacionService = exports.mostrarLicitacionesService = void 0;
 const adapters_1 = require("../../adapters");
 const historial_parametros_1 = require("../../dao/historial-parametros");
 const licitacion_1 = require("../../dao/licitacion");
@@ -20,6 +20,7 @@ const oferta_1 = require("../../dao/oferta");
 const handleError_1 = require("../../helpers/handleError");
 const utils_1 = require("../../utils");
 const excel_1 = require("../excel");
+const dateFormat_1 = require("../../utils/dateFormat");
 const fs_1 = __importDefault(require("fs"));
 const mostrarLicitacionesService = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -222,3 +223,16 @@ const calculoExcel = ({ filename, idLicitacion }) => __awaiter(void 0, void 0, v
     }
 });
 exports.calculoExcel = calculoExcel;
+const getDatesFromLicitacion = (idLicitacion) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const licitacion = yield (0, licitacion_1.getLicitacionByIdDao)(idLicitacion);
+        return {
+            fechaInicio: (0, dateFormat_1.formatFromStringToDate)(licitacion.fechaInicio),
+            fechaFin: (0, dateFormat_1.formatFromStringToDate)(licitacion.fechaFin)
+        };
+    }
+    catch (e) {
+        throw (0, handleError_1.handleError)(e);
+    }
+});
+exports.getDatesFromLicitacion = getDatesFromLicitacion;

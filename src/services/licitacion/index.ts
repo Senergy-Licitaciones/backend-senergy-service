@@ -12,6 +12,7 @@ import { MetricasEmpresa } from '../../types/models/MetricasEmpresa.model'
 import { LicitacionToAdmin } from '../../types/responses'
 import { calcularHistorico, calcularHistoricoEnergiaHfp, calcularHistoricoEnergiaHp, generateMesesArray } from '../../utils'
 import { getJsonFromSheet, readExcelFile } from '../excel'
+import { formatFromStringToDate } from '../../utils/dateFormat'
 import fs from 'fs'
 export const mostrarLicitacionesService: ServiceWithoutParam<Array<DocType<Licitacion>>> = async () => {
   try {
@@ -187,6 +188,17 @@ export const calculoExcel: Service<{idLicitacion: Types.ObjectId, filename: stri
     const response = await makeCalculoService({ historialOfertas, historicoParametros, ofertas })
     fs.rmSync(filename)
     return response
+  } catch (e) {
+    throw handleError(e)
+  }
+}
+export const getDatesFromLicitacion: Service<Types.ObjectId, {fechaInicio: Date, fechaFin: Date}> = async (idLicitacion) => {
+  try {
+    const licitacion = await getLicitacionByIdDao(idLicitacion)
+    return {
+      fechaInicio: formatFromStringToDate(licitacion.fechaInicio),
+      fechaFin: formatFromStringToDate(licitacion.fechaFin)
+    }
   } catch (e) {
     throw handleError(e)
   }

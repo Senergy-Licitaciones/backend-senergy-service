@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.exportProyeccionFile = exports.getNames = exports.updateParametro = exports.deleteParametros = exports.getParametros = exports.exportFileToUpdate = exports.updateParametros = exports.addParametros = exports.downloadFile = exports.getFilename = exports.exportFile = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const historial_parametros_1 = require("../../services/historial-parametros");
+const licitacion_1 = require("../../services/licitacion");
 /* export const addParametro: RequestHandler = async (req, res) => {
   try {
     const fields = req.body as {name: Parametro, unidad: Unidad, valor: number, fecha: string}
@@ -141,7 +142,7 @@ const exportProyeccionFile = (req, res) => __awaiter(void 0, void 0, void 0, fun
     try {
         const { _id } = req.admin;
         const { idLicitacion } = req.params;
-        const { fechaInicio, fechaFin } = req.body;
+        const { fechaInicio, fechaFin } = yield (0, licitacion_1.getDatesFromLicitacion)(idLicitacion);
         const response = yield (0, historial_parametros_1.exportProyeccionFileService)({ fechaInicio, fechaFin, idAdmin: _id, idLicitacion });
         return res.status(200).send(response);
     }
