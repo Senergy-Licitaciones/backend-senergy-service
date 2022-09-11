@@ -8,6 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.calculoExcel = exports.getParametrosFromExcel = exports.calculoSimple = exports.makeCalculoService = exports.getListParametrosUsados = exports.getOfertasByLicitacionService = exports.getLicitacionesToAdmin = exports.getLicitacionByIdService = exports.getLicitacionesFreeService = exports.getTiposService = exports.updateLicitacionService = exports.crearLicitacionService = exports.mostrarLicitacionesService = void 0;
 const adapters_1 = require("../../adapters");
@@ -17,6 +20,7 @@ const oferta_1 = require("../../dao/oferta");
 const handleError_1 = require("../../helpers/handleError");
 const utils_1 = require("../../utils");
 const excel_1 = require("../excel");
+const fs_1 = __importDefault(require("fs"));
 const mostrarLicitacionesService = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, licitacion_1.showLicitacionesDao)();
@@ -210,6 +214,7 @@ const calculoExcel = ({ filename, idLicitacion }) => __awaiter(void 0, void 0, v
         const { historialOfertas, ofertas, parametros } = yield (0, exports.getListParametrosUsados)(idLicitacion);
         const historicoParametros = (0, exports.getParametrosFromExcel)(parametros, filename);
         const response = yield (0, exports.makeCalculoService)({ historialOfertas, historicoParametros, ofertas });
+        fs_1.default.rmSync(filename);
         return response;
     }
     catch (e) {

@@ -12,7 +12,7 @@ import { MetricasEmpresa } from '../../types/models/MetricasEmpresa.model'
 import { LicitacionToAdmin } from '../../types/responses'
 import { calcularHistorico, calcularHistoricoEnergiaHfp, calcularHistoricoEnergiaHp, generateMesesArray } from '../../utils'
 import { getJsonFromSheet, readExcelFile } from '../excel'
-
+import fs from 'fs'
 export const mostrarLicitacionesService: ServiceWithoutParam<Array<DocType<Licitacion>>> = async () => {
   try {
     const result = await showLicitacionesDao()
@@ -185,6 +185,7 @@ export const calculoExcel: Service<{idLicitacion: Types.ObjectId, filename: stri
     const { historialOfertas, ofertas, parametros } = await getListParametrosUsados(idLicitacion)
     const historicoParametros = getParametrosFromExcel(parametros, filename)
     const response = await makeCalculoService({ historialOfertas, historicoParametros, ofertas })
+    fs.rmSync(filename)
     return response
   } catch (e) {
     throw handleError(e)

@@ -109,10 +109,13 @@ exports.makeCalculo = makeCalculo;
 const makeCalculoExcel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const licitacionId = req.licitacionId;
-        const { filename } = req.body;
+        const file = req.file;
         if (licitacionId == null)
             throw new Error('No se proporcionó la licitación');
-        const response = yield (0, licitacion_1.calculoExcel)({ idLicitacion: licitacionId, filename });
+        if (file == null)
+            return res.status(400).send({ message: 'No se ha subido ningún archivo' });
+        const path = 'uploads/files/admin/' + file.filename;
+        const response = yield (0, licitacion_1.calculoExcel)({ idLicitacion: licitacionId, filename: path });
         return res.status(200).send(response);
     }
     catch (e) {
