@@ -9,12 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeCalculoService = exports.getOfertasByLicitacionService = exports.getLicitacionesToAdmin = exports.getLicitacionByIdService = exports.getLicitacionesFreeService = exports.getTiposService = exports.updateLicitacionService = exports.crearLicitacionService = exports.mostrarLicitacionesService = void 0;
+exports.calculoExcel = exports.getParametrosFromExcel = exports.calculoSimple = exports.makeCalculoService = exports.getListParametrosUsados = exports.getOfertasByLicitacionService = exports.getLicitacionesToAdmin = exports.getLicitacionByIdService = exports.getLicitacionesFreeService = exports.getTiposService = exports.updateLicitacionService = exports.crearLicitacionService = exports.mostrarLicitacionesService = void 0;
+const adapters_1 = require("../../adapters");
 const historial_parametros_1 = require("../../dao/historial-parametros");
 const licitacion_1 = require("../../dao/licitacion");
 const oferta_1 = require("../../dao/oferta");
 const handleError_1 = require("../../helpers/handleError");
 const utils_1 = require("../../utils");
+const excel_1 = require("../excel");
 const mostrarLicitacionesService = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, licitacion_1.showLicitacionesDao)();
@@ -101,7 +103,7 @@ const getOfertasByLicitacionService = (idLicitacion) => __awaiter(void 0, void 0
     }
 });
 exports.getOfertasByLicitacionService = getOfertasByLicitacionService;
-const makeCalculoService = (id) => __awaiter(void 0, void 0, void 0, function* () {
+const getListParametrosUsados = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const ofertas = yield (0, oferta_1.getOfertasByLicitacionAndProveedorDao)({ licitacionId: id });
         console.log('ofertas ', ofertas);
@@ -127,8 +129,21 @@ const makeCalculoService = (id) => __awaiter(void 0, void 0, void 0, function* (
                 energiaHfp: []
             };
         });
-        console.log('parametros ', parametros);
-        const historicoParametros = yield (0, historial_parametros_1.getHistorialParametrosListDao)(parametros);
+        return {
+            parametros,
+            historialOfertas,
+            ofertas
+        };
+    }
+    catch (e) {
+        throw (0, handleError_1.handleError)(e);
+    }
+});
+exports.getListParametrosUsados = getListParametrosUsados;
+const makeCalculoService = ({ historialOfertas, historicoParametros, ofertas }) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // historico sacado de la proyeccion hecha del historico base de parametros
+        // const historicoParametros = await getHistorialParametrosListDao(parametros)
         console.log('historicoParametros ', historicoParametros);
         ofertas.map((oferta, i) => {
             // para potencia en bloques y más de dos factores de indexación
@@ -170,3 +185,35 @@ const makeCalculoService = (id) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.makeCalculoService = makeCalculoService;
+const calculoSimple = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { historialOfertas, ofertas, parametros } = yield (0, exports.getListParametrosUsados)(id);
+        const historicoParametros = yield (0, historial_parametros_1.getHistorialParametrosListDao)(parametros);
+        const response = yield (0, exports.makeCalculoService)({ historialOfertas, historicoParametros, ofertas });
+        return response;
+    }
+    catch (e) {
+        throw (0, handleError_1.handleError)(e);
+    }
+});
+exports.calculoSimple = calculoSimple;
+const getParametrosFromExcel = (parametros, filename) => {
+    const workbook = (0, excel_1.readExcelFile)(filename);
+    const sheet = workbook.Sheets['Parametros Proyeccion'];
+    const json = (0, excel_1.getJsonFromSheet)(sheet);
+    const data = (0, adapters_1.createParametrosProyeccionAdapter)(json);
+    return data.filter((parametro) => parametros.includes(parametro._id));
+};
+exports.getParametrosFromExcel = getParametrosFromExcel;
+const calculoExcel = ({ filename, idLicitacion }) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { historialOfertas, ofertas, parametros } = yield (0, exports.getListParametrosUsados)(idLicitacion);
+        const historicoParametros = (0, exports.getParametrosFromExcel)(parametros, filename);
+        const response = yield (0, exports.makeCalculoService)({ historialOfertas, historicoParametros, ofertas });
+        return response;
+    }
+    catch (e) {
+        throw (0, handleError_1.handleError)(e);
+    }
+});
+exports.calculoExcel = calculoExcel;

@@ -1,5 +1,5 @@
 import { httpError } from '../../helpers/handleError'
-import { mostrarLicitacionesService, crearLicitacionService, updateLicitacionService, getTiposService, getLicitacionesFreeService, getLicitacionByIdService, getLicitacionesToAdmin, makeCalculoService } from '../../services/licitacion'
+import { mostrarLicitacionesService, crearLicitacionService, updateLicitacionService, getTiposService, getLicitacionesFreeService, getLicitacionByIdService, getLicitacionesToAdmin, calculoSimple, calculoExcel } from '../../services/licitacion'
 // import { formatFileLicitacion } from "../../utils/nameFormat";
 // import fs from "fs";
 // import { sendEmails } from "../../services/emails";
@@ -77,7 +77,18 @@ export const makeCalculo: RequestHandler = async (req, res) => {
   try {
     const licitacionId = req.licitacionId
     if (licitacionId == null) throw new Error('No se proporcionó la licitación')
-    const response = await makeCalculoService(licitacionId)
+    const response = await calculoSimple(licitacionId)
+    return res.status(200).send(response)
+  } catch (e) {
+    return httpError(res, e)
+  }
+}
+export const makeCalculoExcel: RequestHandler = async (req, res) => {
+  try {
+    const licitacionId = req.licitacionId
+    const { filename } = req.body
+    if (licitacionId == null) throw new Error('No se proporcionó la licitación')
+    const response = await calculoExcel({ idLicitacion: licitacionId, filename })
     return res.status(200).send(response)
   } catch (e) {
     return httpError(res, e)

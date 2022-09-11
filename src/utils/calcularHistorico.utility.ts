@@ -1,7 +1,7 @@
 import { DocType, Oferta, Proveedor } from '../types/data'
-import { HistorialParametroModel } from '../types/models'
+import { ParametrosProyeccion } from '../types/models'
 
-export const calcularHistorico = (historicoParametros: Array<DocType<HistorialParametroModel>>, bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): Array<{fecha: string, value: number}> => {
+export const calcularHistorico = (historicoParametros: ParametrosProyeccion[], bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): Array<{fecha: string, value: number}> => {
   return bloquesMeses.flat().map((mes) => {
     let founded = false
     const potenciaBase = bloquesMeses.reduce((prev, curre, j) => {
@@ -30,7 +30,7 @@ export const calcularHistorico = (historicoParametros: Array<DocType<HistorialPa
     }
   })
 }
-export const calcularHistoricoEnergiaHp = (historicoParametros: Array<DocType<HistorialParametroModel>>, bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): Array<{fecha: string, value: number}> => {
+export const calcularHistoricoEnergiaHp = (historicoParametros: ParametrosProyeccion[], bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): Array<{fecha: string, value: number}> => {
   return bloquesMeses.flat().map((mes) => {
     let founded = false
     const energiaBase = bloquesMeses.reduce((prev, curre, j) => {
@@ -59,7 +59,7 @@ export const calcularHistoricoEnergiaHp = (historicoParametros: Array<DocType<Hi
     }
   })
 }
-export const calcularHistoricoEnergiaHfp = (historicoParametros: Array<DocType<HistorialParametroModel>>, bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): Array<{fecha: string, value: number}> => {
+export const calcularHistoricoEnergiaHfp = (historicoParametros: ParametrosProyeccion[], bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): Array<{fecha: string, value: number}> => {
   return bloquesMeses.flat().map((mes) => {
     let founded = false
     const energiaBase = bloquesMeses.reduce((prev, curre, j) => {

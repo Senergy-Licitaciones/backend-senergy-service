@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getNames = exports.updateParametro = exports.deleteParametros = exports.getParametros = exports.exportFileToUpdate = exports.updateParametros = exports.addParametros = exports.downloadFile = exports.getFilename = exports.exportFile = void 0;
+exports.exportProyeccionFile = exports.getNames = exports.updateParametro = exports.deleteParametros = exports.getParametros = exports.exportFileToUpdate = exports.updateParametros = exports.addParametros = exports.downloadFile = exports.getFilename = exports.exportFile = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const historial_parametros_1 = require("../../services/historial-parametros");
 /* export const addParametro: RequestHandler = async (req, res) => {
@@ -137,3 +137,16 @@ const getNames = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getNames = getNames;
+const exportProyeccionFile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { _id } = req.admin;
+        const { idLicitacion } = req.params;
+        const { fechaInicio, fechaFin } = req.body;
+        const response = yield (0, historial_parametros_1.exportProyeccionFileService)({ fechaInicio, fechaFin, idAdmin: _id, idLicitacion });
+        return res.status(200).send(response);
+    }
+    catch (e) {
+        return (0, handleError_1.httpError)(res, e);
+    }
+});
+exports.exportProyeccionFile = exportProyeccionFile;

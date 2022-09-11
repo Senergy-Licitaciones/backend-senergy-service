@@ -1,5 +1,5 @@
 import { FACTORES } from '../../constants'
-import { getParametrosDao } from '../../dao/historial-parametros'
+import { getParametrosDao, getParametrosNameDao } from '../../dao/historial-parametros'
 import { handleError } from '../../helpers/handleError'
 import { ResponseParent } from '../../types/data'
 import { Service } from '../../types/methods'
@@ -52,6 +52,29 @@ export const exportFileToUpdateService: Service<{id: string}, {message: string, 
     return {
       message: 'Se ha exportado el archivo exitosamente',
       filename: `base-de-datos-factores-${id}.xlsx`
+    }
+  } catch (e) {
+    throw handleError(e)
+  }
+}
+export const exportProyeccionFileService: Service<{fechaInicio: Date, fechaFin: Date, idAdmin: string, idLicitacion: string}, {message: string, filename: string}> = async ({ fechaInicio, fechaFin, idAdmin, idLicitacion }) => {
+  try {
+    const parametros = await getParametrosNameDao()
+    const meses = generateMesesArray(fechaInicio, fechaFin)
+    const ids = meses.map((_mes, i) => i + 1)
+    const values = meses.map((_mes) => 0)
+    const workbook = createWorkbook()
+    const worksheet = createWorksheetFromArrays([
+      ['Meses', 'Nombre', ...meses],
+      ['Codigo', 'Id', ...ids],
+      ...parametros.map((el) => ([el._id, el.name, ...values]))
+    ])
+    addWorksheetToBook(workbook, worksheet, 'Parametros Proyeccion')
+    const path = `uploads/files/admin/proyeccion-${idAdmin}-${idLicitacion}.xlsx`
+    createFile(workbook, path)
+    return {
+      message: 'Se ha exportado el archivo exitosamente',
+      filename: `proyeccion-${idAdmin}-${idLicitacion}.xlsx`
     }
   } catch (e) {
     throw handleError(e)

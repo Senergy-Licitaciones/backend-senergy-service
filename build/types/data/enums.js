@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Unidad = exports.Parametro = exports.RoleAdmin = exports.Estado = exports.Type = exports.Role = void 0;
+exports.TipoCalculo = exports.Unidad = exports.Parametro = exports.RoleAdmin = exports.Estado = exports.Type = exports.Role = void 0;
 var Role;
 (function (Role) {
     Role["Basico"] = "basico";
@@ -36,3 +36,8 @@ var Unidad;
 (function (Unidad) {
     Unidad["Dolar"] = "US$/MMBTU";
 })(Unidad = exports.Unidad || (exports.Unidad = {}));
+var TipoCalculo;
+(function (TipoCalculo) {
+    TipoCalculo["Simple"] = "simple";
+    TipoCalculo["Excel"] = "excel";
+})(TipoCalculo = exports.TipoCalculo || (exports.TipoCalculo = {}));

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.exportFileToUpdateService = exports.exportFileService = void 0;
+exports.exportProyeccionFileService = exports.exportFileToUpdateService = exports.exportFileService = void 0;
 const constants_1 = require("../../constants");
 const historial_parametros_1 = require("../../dao/historial-parametros");
 const handleError_1 = require("../../helpers/handleError");
@@ -70,3 +70,28 @@ const exportFileToUpdateService = ({ id }) => __awaiter(void 0, void 0, void 0, 
     }
 });
 exports.exportFileToUpdateService = exportFileToUpdateService;
+const exportProyeccionFileService = ({ fechaInicio, fechaFin, idAdmin, idLicitacion }) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const parametros = yield (0, historial_parametros_1.getParametrosNameDao)();
+        const meses = (0, utils_1.generateMesesArray)(fechaInicio, fechaFin);
+        const ids = meses.map((_mes, i) => i + 1);
+        const values = meses.map((_mes) => 0);
+        const workbook = (0, excel_1.createWorkbook)();
+        const worksheet = (0, excel_1.createWorksheetFromArrays)([
+            ['Meses', 'Nombre', ...meses],
+            ['Codigo', 'Id', ...ids],
+            ...parametros.map((el) => ([el._id, el.name, ...values]))
+        ]);
+        (0, excel_1.addWorksheetToBook)(workbook, worksheet, 'Parametros Proyeccion');
+        const path = `uploads/files/admin/proyeccion-${idAdmin}-${idLicitacion}.xlsx`;
+        (0, excel_1.createFile)(workbook, path);
+        return {
+            message: 'Se ha exportado el archivo exitosamente',
+            filename: `proyeccion-${idAdmin}-${idLicitacion}.xlsx`
+        };
+    }
+    catch (e) {
+        throw (0, handleError_1.handleError)(e);
+    }
+});
+exports.exportProyeccionFileService = exportProyeccionFileService;

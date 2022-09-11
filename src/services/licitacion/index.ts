@@ -1,4 +1,5 @@
 import { Types } from 'mongoose'
+import { createParametrosProyeccionAdapter } from '../../adapters'
 import { getHistorialParametrosListDao } from '../../dao/historial-parametros'
 import { showLicitacionesDao, createLicitacionDao, updateLicitacionDao, getTiposDao, getLicitacionesFreeDao, getLicitacionByIdDao, getLicitacionesToAdminDao } from '../../dao/licitacion'
 import { getOfertasByLicitacionAndProveedorDao } from '../../dao/oferta'
@@ -6,8 +7,11 @@ import { handleError } from '../../helpers/handleError'
 import { DocType, Licitacion, Oferta, Proveedor, ResponseParent } from '../../types/data'
 import { LicitacionRegisterFields } from '../../types/form'
 import { Service, ServiceWithoutParam } from '../../types/methods'
+import { ParametrosProyeccion } from '../../types/models'
+import { MetricasEmpresa } from '../../types/models/MetricasEmpresa.model'
 import { LicitacionToAdmin } from '../../types/responses'
 import { calcularHistorico, calcularHistoricoEnergiaHfp, calcularHistoricoEnergiaHp, generateMesesArray } from '../../utils'
+import { getJsonFromSheet, readExcelFile } from '../excel'
 
 export const mostrarLicitacionesService: ServiceWithoutParam<Array<DocType<Licitacion>>> = async () => {
   try {
@@ -79,18 +83,12 @@ export const getOfertasByLicitacionService: Service<Types.ObjectId, Array<DocTyp
     throw handleError(e)
   }
 }
-export const makeCalculoService: Service<Types.ObjectId, Array<{empresa: string, monomico: Array<{fecha: string, value: number}>, potencia: Array<{fecha: string, value: number}>, energiaHp: Array<{fecha: string, value: number}>, energiaHfp: Array<{fecha: string, value: number}>}>> = async (id) => {
+export const getListParametrosUsados = async (id: Types.ObjectId): Promise<{parametros: string[], ofertas: Array<DocType<Oferta>&{proveedor: Pick<Proveedor, 'razSocial'>}>, historialOfertas: MetricasEmpresa[]}> => {
   try {
     const ofertas = await getOfertasByLicitacionAndProveedorDao({ licitacionId: id })
     console.log('ofertas ', ofertas)
     const parametros: string[] = []
-    const historialOfertas: Array<{
-      empresa: string
-      monomico: Array<{fecha: string, value: number}>
-      potencia: Array<{fecha: string, value: number}>
-      energiaHp: Array<{fecha: string, value: number}>
-      energiaHfp: Array<{fecha: string, value: number}>
-    }> = ofertas.map((oferta) => {
+    const historialOfertas: MetricasEmpresa[] = ofertas.map((oferta) => {
       oferta.formulaIndexPotencia.map((formula) => {
         if (!parametros.includes(formula.indexId)) {
           parametros.push(formula.indexId)
@@ -111,8 +109,21 @@ export const makeCalculoService: Service<Types.ObjectId, Array<{empresa: string,
         energiaHfp: []
       }
     })
-    console.log('parametros ', parametros)
-    const historicoParametros = await getHistorialParametrosListDao(parametros)
+    return {
+      parametros,
+      historialOfertas,
+      ofertas
+    }
+  } catch (e) {
+    throw handleError(e)
+  }
+}
+export const makeCalculoService: Service<{ historialOfertas: MetricasEmpresa[], ofertas: Array<DocType<Oferta>&{proveedor: Pick<Proveedor, 'razSocial'>}>, historicoParametros: ParametrosProyeccion[]}, MetricasEmpresa[]> = async ({ historialOfertas, historicoParametros, ofertas }) => {
+  try {
+    // historico sacado de la proyeccion hecha del historico base de parametros
+
+    // const historicoParametros = await getHistorialParametrosListDao(parametros)
+
     console.log('historicoParametros ', historicoParametros)
     ofertas.map((oferta, i) => {
       // para potencia en bloques y más de dos factores de indexación
@@ -148,6 +159,33 @@ export const makeCalculoService: Service<Types.ObjectId, Array<{empresa: string,
       return null
     })
     return historialOfertas
+  } catch (e) {
+    throw handleError(e)
+  }
+}
+export const calculoSimple: Service<Types.ObjectId, MetricasEmpresa[]> = async (id) => {
+  try {
+    const { historialOfertas, ofertas, parametros } = await getListParametrosUsados(id)
+    const historicoParametros = await getHistorialParametrosListDao(parametros)
+    const response = await makeCalculoService({ historialOfertas, historicoParametros, ofertas })
+    return response
+  } catch (e) {
+    throw handleError(e)
+  }
+}
+export const getParametrosFromExcel = (parametros: string[], filename: string): ParametrosProyeccion[] => {
+  const workbook = readExcelFile(filename)
+  const sheet = workbook.Sheets['Parametros Proyeccion']
+  const json = getJsonFromSheet<{Meses: string, Nombre: string, [index: string]: number|string}>(sheet)
+  const data = createParametrosProyeccionAdapter(json)
+  return data.filter((parametro) => parametros.includes(parametro._id))
+}
+export const calculoExcel: Service<{idLicitacion: Types.ObjectId, filename: string}, MetricasEmpresa[]> = async ({ filename, idLicitacion }) => {
+  try {
+    const { historialOfertas, ofertas, parametros } = await getListParametrosUsados(idLicitacion)
+    const historicoParametros = getParametrosFromExcel(parametros, filename)
+    const response = await makeCalculoService({ historialOfertas, historicoParametros, ofertas })
+    return response
   } catch (e) {
     throw handleError(e)
   }

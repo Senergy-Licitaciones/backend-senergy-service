@@ -27,3 +27,7 @@ export enum Parametro{
 export enum Unidad{
   Dolar='US$/MMBTU'
 }
+export enum TipoCalculo{
+  Simple='simple',
+  Excel='excel'
+}

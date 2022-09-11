@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.makeCalculo = exports.getLicitaciones = exports.licitacionId = exports.showLicitacionById = exports.showLicitacionesFree = exports.getTipos = exports.updateLicitacion = exports.createLicitacion = exports.showLicitaciones = void 0;
+exports.makeCalculoExcel = exports.makeCalculo = exports.getLicitaciones = exports.licitacionId = exports.showLicitacionById = exports.showLicitacionesFree = exports.getTipos = exports.updateLicitacion = exports.createLicitacion = exports.showLicitaciones = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const licitacion_1 = require("../../services/licitacion");
 const showLicitaciones = (_req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -98,7 +98,7 @@ const makeCalculo = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const licitacionId = req.licitacionId;
         if (licitacionId == null)
             throw new Error('No se proporcionó la licitación');
-        const response = yield (0, licitacion_1.makeCalculoService)(licitacionId);
+        const response = yield (0, licitacion_1.calculoSimple)(licitacionId);
         return res.status(200).send(response);
     }
     catch (e) {
@@ -106,3 +106,17 @@ const makeCalculo = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.makeCalculo = makeCalculo;
+const makeCalculoExcel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const licitacionId = req.licitacionId;
+        const { filename } = req.body;
+        if (licitacionId == null)
+            throw new Error('No se proporcionó la licitación');
+        const response = yield (0, licitacion_1.calculoExcel)({ idLicitacion: licitacionId, filename });
+        return res.status(200).send(response);
+    }
+    catch (e) {
+        return (0, handleError_1.httpError)(res, e);
+    }
+});
+exports.makeCalculoExcel = makeCalculoExcel;
