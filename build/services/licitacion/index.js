@@ -206,7 +206,7 @@ const calculoSimple = (id) => __awaiter(void 0, void 0, void 0, function* () {
                     return empresa;
                 }
                 return ganador;
-            }, { empresa: '', total: 0 }).empresa
+            }, { empresa: '', total: Infinity }).empresa
         };
     }
     catch (e) {
@@ -232,7 +232,7 @@ const calculoExcel = ({ filename, idLicitacion }) => __awaiter(void 0, void 0, v
             data: response,
             ganador: response.reduce((menor, el) => {
                 return el.total < menor.total ? el : menor;
-            }, { empresa: '', total: 0 }).empresa
+            }, { empresa: '', total: Infinity }).empresa
         };
     }
     catch (e) {

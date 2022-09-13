@@ -181,7 +181,7 @@ export const calculoSimple: Service<Types.ObjectId, {data: MetricasEmpresa[], ga
         }
         return ganador
       }
-      , { empresa: '', total: 0 }).empresa
+      , { empresa: '', total: Infinity }).empresa
     }
   } catch (e) {
     throw handleError(e)
@@ -204,7 +204,7 @@ export const calculoExcel: Service<{idLicitacion: Types.ObjectId, filename: stri
       data: response,
       ganador: response.reduce((menor, el) => {
         return el.total < menor.total ? el : menor
-      }, { empresa: '', total: 0 }).empresa
+      }, { empresa: '', total: Infinity }).empresa
     }
   } catch (e) {
     throw handleError(e)
