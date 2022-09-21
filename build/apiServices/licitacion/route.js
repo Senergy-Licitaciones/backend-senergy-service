@@ -15,7 +15,7 @@ const controller_1 = require("./controller");
 const router = express_1.default.Router();
 router.get('/licitaciones', controller_1.showLicitaciones);
 router.post('/calculo/:id', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Employee, enums_1.RoleAdmin.Boss]), controller_1.makeCalculo);
-router.post('/calculoExcel/:id', uploadParametros_1.default, checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Boss]), controller_1.makeCalculoExcel);
+router.post('/calculoExcel/:id', uploadParametros_1.default, checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Boss, enums_1.RoleAdmin.Employee]), controller_1.makeCalculoExcel);
 router.get('/showLicitaciones', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Employee, enums_1.RoleAdmin.Boss]), controller_1.getLicitaciones);
 router.get('/licitacionId/:id', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Proveedor, enums_1.Type.User]), (0, roleAuth_1.default)([enums_1.Role.Basico, enums_1.Role.Premium]), controller_1.showLicitacionById);
 router.get('/licitacionesLibres', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Proveedor]), (0, roleAuth_1.default)([enums_1.Role.Basico, enums_1.Role.Premium]), controller_1.showLicitacionesFree);

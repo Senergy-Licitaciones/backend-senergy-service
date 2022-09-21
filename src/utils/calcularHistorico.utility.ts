@@ -30,7 +30,7 @@ export const calcularHistorico = (historicoParametros: ParametrosProyeccion[], b
     }
   })
 }
-export const calcularHistoricoEnergiaHp = (historicoParametros: ParametrosProyeccion[], bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): Array<{fecha: string, value: number}> => {
+export const calcularHistoricoEnergiaHp = (margenEnergia: number, historicoParametros: ParametrosProyeccion[], bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): Array<{fecha: string, value: number}> => {
   return bloquesMeses.flat().map((mes) => {
     let founded = false
     const energiaBase = bloquesMeses.reduce((prev, curre, j) => {
@@ -55,11 +55,11 @@ export const calcularHistoricoEnergiaHp = (historicoParametros: ParametrosProyec
     }, 0)
     return {
       fecha: mes,
-      value: energiaBase * factor
+      value: energiaBase * factor + margenEnergia
     }
   })
 }
-export const calcularHistoricoEnergiaHfp = (historicoParametros: ParametrosProyeccion[], bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): Array<{fecha: string, value: number}> => {
+export const calcularHistoricoEnergiaHfp = (margenEnergia: number, historicoParametros: ParametrosProyeccion[], bloquesMeses: string[][], oferta: DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>}): Array<{fecha: string, value: number}> => {
   return bloquesMeses.flat().map((mes) => {
     let founded = false
     const energiaBase = bloquesMeses.reduce((prev, curre, j) => {
@@ -84,7 +84,7 @@ export const calcularHistoricoEnergiaHfp = (historicoParametros: ParametrosProye
     }, 0)
     return {
       fecha: mes,
-      value: energiaBase * factor
+      value: energiaBase * factor + margenEnergia
     }
   })
 }

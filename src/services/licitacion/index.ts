@@ -1,7 +1,7 @@
 import { Types } from 'mongoose'
 import { createParametrosProyeccionAdapter } from '../../adapters'
 import { getHistorialParametrosListDao } from '../../dao/historial-parametros'
-import { showLicitacionesDao, createLicitacionDao, updateLicitacionDao, getTiposDao, getLicitacionesFreeDao, getLicitacionByIdDao, getLicitacionesToAdminDao } from '../../dao/licitacion'
+import { showLicitacionesDao, createLicitacionDao, updateLicitacionDao, getTiposDao, getLicitacionesFreeDao, getLicitacionByIdDao, getLicitacionesToAdminDao, getDataFromLicitacionToCalculo } from '../../dao/licitacion'
 import { getOfertasByLicitacionAndProveedorDao } from '../../dao/oferta'
 import { handleError } from '../../helpers/handleError'
 import { DocType, Licitacion, Oferta, Proveedor, ResponseParent } from '../../types/data'
@@ -120,7 +120,12 @@ export const getListParametrosUsados = async (id: Types.ObjectId): Promise<{para
     throw handleError(e)
   }
 }
-export const makeCalculoService: Service<{ historialOfertas: MetricasEmpresa[], ofertas: Array<DocType<Oferta>&{proveedor: Pick<Proveedor, 'razSocial'>}>, historicoParametros: ParametrosProyeccion[]}, MetricasEmpresa[]> = async ({ historialOfertas, historicoParametros, ofertas }) => {
+export const getEnergiaToAdd = (potenciaOferta: number, potenciaContratadaHp: number, potenciaMinimaFact: number, factorPlanta: number): number => {
+  const energiaMes = factorPlanta * potenciaContratadaHp * 24 * 30 / 1000
+  const pagoPotencia = potenciaContratadaHp * potenciaMinimaFact * potenciaOferta
+  return pagoPotencia / (energiaMes * 12)
+}
+export const makeCalculoService: Service<{ historialOfertas: MetricasEmpresa[], ofertas: Array<DocType<Oferta>&{proveedor: Pick<Proveedor, 'razSocial'>}>, historicoParametros: ParametrosProyeccion[], licitacion: {potenciaContratadaHp: number, factorPlanta: number}}, MetricasEmpresa[]> = async ({ historialOfertas, historicoParametros, ofertas, licitacion }) => {
   try {
     // historico sacado de la proyeccion hecha del historico base de parametros
 
@@ -134,6 +139,8 @@ export const makeCalculoService: Service<{ historialOfertas: MetricasEmpresa[], 
         return meses
       })
       console.log('bloques meses potencia ', bloquesMesesPotencia)
+      // calcular equivalente en energia
+      const energia = getEnergiaToAdd(oferta.potencia[0].potencia, licitacion.potenciaContratadaHp, oferta.potMinFacturable, licitacion.factorPlanta)
       const bloquesMesesEnergiaHp = oferta.energiaHp.map((bloque) => {
         const meses = generateMesesArray(bloque.fechaInicio, bloque.fechaFin)
         return meses
@@ -145,9 +152,9 @@ export const makeCalculoService: Service<{ historialOfertas: MetricasEmpresa[], 
       console.log('bloques meses energia hp ', bloquesMesesEnergiaHp)
       historialOfertas[i].potencia = calcularHistorico(historicoParametros, bloquesMesesPotencia, oferta)
       console.log('first potencia ', historialOfertas[i].potencia)
-      historialOfertas[i].energiaHp = calcularHistoricoEnergiaHp(historicoParametros, bloquesMesesEnergiaHp, oferta)
+      historialOfertas[i].energiaHp = calcularHistoricoEnergiaHp(energia, historicoParametros, bloquesMesesEnergiaHp, oferta)
       console.log('first energia hp ', historialOfertas[i].energiaHp)
-      historialOfertas[i].energiaHfp = calcularHistoricoEnergiaHfp(historicoParametros, bloquesMesesEnergiaHfp, oferta)
+      historialOfertas[i].energiaHfp = calcularHistoricoEnergiaHfp(energia, historicoParametros, bloquesMesesEnergiaHfp, oferta)
       console.log('first energia hfp ', historialOfertas[i].energiaHfp)
       historialOfertas[i].monomico = historialOfertas[i].potencia.map((value, j) => {
         const precioPotencia = value.value * 100 * 10 / (720 * 0.79751092507001)
@@ -171,8 +178,8 @@ export const makeCalculoService: Service<{ historialOfertas: MetricasEmpresa[], 
 export const calculoSimple: Service<Types.ObjectId, {data: MetricasEmpresa[], ganador: string}> = async (id) => {
   try {
     const { historialOfertas, ofertas, parametros } = await getListParametrosUsados(id)
-    const historicoParametros = await getHistorialParametrosListDao(parametros)
-    const response = await makeCalculoService({ historialOfertas, historicoParametros, ofertas })
+    const [historicoParametros, data] = await Promise.all([getHistorialParametrosListDao(parametros), getDataFromLicitacionToCalculo(id)])
+    const response = await makeCalculoService({ historialOfertas, historicoParametros, ofertas, licitacion: { factorPlanta: data.factorPlanta, potenciaContratadaHp: data.meses[0].hp } })
     return {
       data: response,
       ganador: response.reduce((ganador, empresa) => {
@@ -196,9 +203,9 @@ export const getParametrosFromExcel = (parametros: string[], filename: string): 
 }
 export const calculoExcel: Service<{idLicitacion: Types.ObjectId, filename: string}, {data: MetricasEmpresa[], ganador: string}> = async ({ filename, idLicitacion }) => {
   try {
-    const { historialOfertas, ofertas, parametros } = await getListParametrosUsados(idLicitacion)
+    const [{ historialOfertas, ofertas, parametros }, data] = await Promise.all([getListParametrosUsados(idLicitacion), getDataFromLicitacionToCalculo(idLicitacion)])
     const historicoParametros = getParametrosFromExcel(parametros, filename)
-    const response = await makeCalculoService({ historialOfertas, historicoParametros, ofertas })
+    const response = await makeCalculoService({ historialOfertas, historicoParametros, ofertas, licitacion: { factorPlanta: data.factorPlanta, potenciaContratadaHp: data.meses[0].hp } })
     fs.rmSync(filename)
     return {
       data: response,

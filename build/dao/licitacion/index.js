@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLicitacionesToAdminDao = exports.getLicitacionesToProveedorDashboardDao = exports.getLicitacionesByUserDao = exports.getLicitacionByIdDao = exports.getLicitacionesFreeDao = exports.getTiposDao = exports.updateLicitacionDao = exports.createLicitacionDao = exports.showLicitacionesDao = void 0;
+exports.getDataFromLicitacionToCalculo = exports.getLicitacionesToAdminDao = exports.getLicitacionesToProveedorDashboardDao = exports.getLicitacionesByUserDao = exports.getLicitacionByIdDao = exports.getLicitacionesFreeDao = exports.getTiposDao = exports.updateLicitacionDao = exports.createLicitacionDao = exports.showLicitacionesDao = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const model_1 = __importDefault(require("../../apiServices/licitacion/model"));
 const enums_1 = require("../../types/form/enums");
@@ -118,3 +118,15 @@ const getLicitacionesToAdminDao = () => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.getLicitacionesToAdminDao = getLicitacionesToAdminDao;
+const getDataFromLicitacionToCalculo = (idLicitacion) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield model_1.default.findById(idLicitacion).select('factorPlanta meses');
+        if (response == null)
+            throw new Error('Licitacion no encontrada');
+        return response;
+    }
+    catch (e) {
+        throw (0, handleError_1.handleError)(e, 'Ha ocurrido un error al obtener las licitaciones');
+    }
+});
+exports.getDataFromLicitacionToCalculo = getDataFromLicitacionToCalculo;

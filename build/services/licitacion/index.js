@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDatesFromLicitacion = exports.calculoExcel = exports.getParametrosFromExcel = exports.calculoSimple = exports.makeCalculoService = exports.getListParametrosUsados = exports.getOfertasByLicitacionService = exports.getLicitacionesToAdmin = exports.getLicitacionByIdService = exports.getLicitacionesFreeService = exports.getTiposService = exports.updateLicitacionService = exports.crearLicitacionService = exports.mostrarLicitacionesService = void 0;
+exports.getDatesFromLicitacion = exports.calculoExcel = exports.getParametrosFromExcel = exports.calculoSimple = exports.makeCalculoService = exports.getEnergiaToAdd = exports.getListParametrosUsados = exports.getOfertasByLicitacionService = exports.getLicitacionesToAdmin = exports.getLicitacionByIdService = exports.getLicitacionesFreeService = exports.getTiposService = exports.updateLicitacionService = exports.crearLicitacionService = exports.mostrarLicitacionesService = void 0;
 const adapters_1 = require("../../adapters");
 const historial_parametros_1 = require("../../dao/historial-parametros");
 const licitacion_1 = require("../../dao/licitacion");
@@ -146,7 +146,13 @@ const getListParametrosUsados = (id) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.getListParametrosUsados = getListParametrosUsados;
-const makeCalculoService = ({ historialOfertas, historicoParametros, ofertas }) => __awaiter(void 0, void 0, void 0, function* () {
+const getEnergiaToAdd = (potenciaOferta, potenciaContratadaHp, potenciaMinimaFact, factorPlanta) => {
+    const energiaMes = factorPlanta * potenciaContratadaHp * 24 * 30 / 1000;
+    const pagoPotencia = potenciaContratadaHp * potenciaMinimaFact * potenciaOferta;
+    return pagoPotencia / (energiaMes * 12);
+};
+exports.getEnergiaToAdd = getEnergiaToAdd;
+const makeCalculoService = ({ historialOfertas, historicoParametros, ofertas, licitacion }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // historico sacado de la proyeccion hecha del historico base de parametros
         // const historicoParametros = await getHistorialParametrosListDao(parametros)
@@ -158,6 +164,8 @@ const makeCalculoService = ({ historialOfertas, historicoParametros, ofertas }) 
                 return meses;
             });
             console.log('bloques meses potencia ', bloquesMesesPotencia);
+            // calcular equivalente en energia
+            const energia = (0, exports.getEnergiaToAdd)(oferta.potencia[0].potencia, licitacion.potenciaContratadaHp, oferta.potMinFacturable, licitacion.factorPlanta);
             const bloquesMesesEnergiaHp = oferta.energiaHp.map((bloque) => {
                 const meses = (0, utils_1.generateMesesArray)(bloque.fechaInicio, bloque.fechaFin);
                 return meses;
@@ -169,9 +177,9 @@ const makeCalculoService = ({ historialOfertas, historicoParametros, ofertas }) 
             console.log('bloques meses energia hp ', bloquesMesesEnergiaHp);
             historialOfertas[i].potencia = (0, utils_1.calcularHistorico)(historicoParametros, bloquesMesesPotencia, oferta);
             console.log('first potencia ', historialOfertas[i].potencia);
-            historialOfertas[i].energiaHp = (0, utils_1.calcularHistoricoEnergiaHp)(historicoParametros, bloquesMesesEnergiaHp, oferta);
+            historialOfertas[i].energiaHp = (0, utils_1.calcularHistoricoEnergiaHp)(energia, historicoParametros, bloquesMesesEnergiaHp, oferta);
             console.log('first energia hp ', historialOfertas[i].energiaHp);
-            historialOfertas[i].energiaHfp = (0, utils_1.calcularHistoricoEnergiaHfp)(historicoParametros, bloquesMesesEnergiaHfp, oferta);
+            historialOfertas[i].energiaHfp = (0, utils_1.calcularHistoricoEnergiaHfp)(energia, historicoParametros, bloquesMesesEnergiaHfp, oferta);
             console.log('first energia hfp ', historialOfertas[i].energiaHfp);
             historialOfertas[i].monomico = historialOfertas[i].potencia.map((value, j) => {
                 const precioPotencia = value.value * 100 * 10 / (720 * 0.79751092507001);
@@ -197,8 +205,8 @@ exports.makeCalculoService = makeCalculoService;
 const calculoSimple = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { historialOfertas, ofertas, parametros } = yield (0, exports.getListParametrosUsados)(id);
-        const historicoParametros = yield (0, historial_parametros_1.getHistorialParametrosListDao)(parametros);
-        const response = yield (0, exports.makeCalculoService)({ historialOfertas, historicoParametros, ofertas });
+        const [historicoParametros, data] = yield Promise.all([(0, historial_parametros_1.getHistorialParametrosListDao)(parametros), (0, licitacion_1.getDataFromLicitacionToCalculo)(id)]);
+        const response = yield (0, exports.makeCalculoService)({ historialOfertas, historicoParametros, ofertas, licitacion: { factorPlanta: data.factorPlanta, potenciaContratadaHp: data.meses[0].hp } });
         return {
             data: response,
             ganador: response.reduce((ganador, empresa) => {
@@ -224,9 +232,9 @@ const getParametrosFromExcel = (parametros, filename) => {
 exports.getParametrosFromExcel = getParametrosFromExcel;
 const calculoExcel = ({ filename, idLicitacion }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { historialOfertas, ofertas, parametros } = yield (0, exports.getListParametrosUsados)(idLicitacion);
+        const [{ historialOfertas, ofertas, parametros }, data] = yield Promise.all([(0, exports.getListParametrosUsados)(idLicitacion), (0, licitacion_1.getDataFromLicitacionToCalculo)(idLicitacion)]);
         const historicoParametros = (0, exports.getParametrosFromExcel)(parametros, filename);
-        const response = yield (0, exports.makeCalculoService)({ historialOfertas, historicoParametros, ofertas });
+        const response = yield (0, exports.makeCalculoService)({ historialOfertas, historicoParametros, ofertas, licitacion: { factorPlanta: data.factorPlanta, potenciaContratadaHp: data.meses[0].hp } });
         fs_1.default.rmSync(filename);
         return {
             data: response,
