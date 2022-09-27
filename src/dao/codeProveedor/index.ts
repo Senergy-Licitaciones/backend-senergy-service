@@ -1,11 +1,10 @@
 import { handleError } from '../../helpers/handleError'
-import ProveedorModel from '../../apiServices/proveedor/model'
 import CodeProveedorModel from '../../apiServices/codeProveedor/model'
 import { CodeProveedorFields } from '../../types/form'
 import { CodeProveedor } from '../../types/data'
 import { Dao } from '../../types/methods'
 import { Document, Types } from 'mongoose'
-CodeProveedorModel.watch().on('change', (change) => {
+/* CodeProveedorModel.watch().on('change', (change) => {
   if (change.operationType === 'delete') {
     const docKey = change.documentKey as {_id: string}
     const removeProveedorAccount = async (): Promise<void> => {
@@ -19,7 +18,7 @@ CodeProveedorModel.watch().on('change', (change) => {
     }
     void removeProveedorAccount()
   }
-})
+}) */
 export const createCodeProveedorDao: Dao<CodeProveedorFields, Document<any, any, CodeProveedor> & CodeProveedor & {
   _id: Types.ObjectId}> = async (fields) => {
   try {

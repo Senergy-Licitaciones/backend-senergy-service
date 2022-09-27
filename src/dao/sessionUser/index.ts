@@ -1,10 +1,8 @@
 import SessionUserModel from '../../apiServices/sessionUser/model'
-import UsuarioModel from '../../apiServices/usuario/model'
 import { handleError } from '../../helpers/handleError'
 import { ResponseId, ResponseParent } from '../../types/data'
-import { Estado } from '../../types/data/enums'
 import { Dao } from '../../types/methods'
-SessionUserModel.watch().on('change', (change) => {
+/* SessionUserModel.watch().on('change', (change) => {
   if (change.operationType === 'delete') {
     const docKey = change.documentKey as {_id: string}
     const closeSession = async (): Promise<void> => {
@@ -12,7 +10,7 @@ SessionUserModel.watch().on('change', (change) => {
     }
     void closeSession()
   }
-})
+}) */
 export const createSessionUser: Dao<{idUser: string, token: string}, ResponseId> = async ({ idUser, token }) => {
   try {
     const response = await SessionUserModel.create({ user: idUser, jwt: token })

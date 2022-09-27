@@ -15,17 +15,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.logoutProveedorDao = exports.createSessionProveedor = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const model_1 = __importDefault(require("../../apiServices/sessionProveedor/model"));
-const model_2 = __importDefault(require("../../apiServices/proveedor/model"));
-const enums_1 = require("../../types/data/enums");
-model_1.default.watch().on('change', (change) => {
-    if (change.operationType === 'delete') {
-        const docKey = change.documentKey;
-        const closeSession = () => __awaiter(void 0, void 0, void 0, function* () {
-            yield model_2.default.findOneAndUpdate({ session: docKey._id }, { estado: enums_1.Estado.Offline, session: '' });
-        });
-        void closeSession();
+/* SessionProveedorModel.watch().on('change', (change) => {
+  if (change.operationType === 'delete') {
+    const docKey = change.documentKey as {_id: string}
+    const closeSession = async (): Promise<void> => {
+      await ProveedorModel.findOneAndUpdate({ session: docKey._id }, { estado: Estado.Offline, session: '' })
     }
-});
+    void closeSession()
+  }
+})
+*/
 const createSessionProveedor = ({ proveedorId, token }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield model_1.default.create({ proveedor: proveedorId, jwt: token });

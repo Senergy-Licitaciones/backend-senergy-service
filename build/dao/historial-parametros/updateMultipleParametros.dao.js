@@ -34,7 +34,7 @@ const updateMultipleParametrosDao = (parametros) => __awaiter(void 0, void 0, vo
                 }
             };
         }));
-        //    await HistorialParametrosModel.collection.updateMany({}, parametros)
+        //  await HistorialParametrosModel.collection.updateMany({}, parametros)
         return {
             message: 'Datos actualizados exitosamente'
         };

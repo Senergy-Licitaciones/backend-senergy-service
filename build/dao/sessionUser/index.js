@@ -14,18 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logoutUserDao = exports.createSessionUser = void 0;
 const model_1 = __importDefault(require("../../apiServices/sessionUser/model"));
-const model_2 = __importDefault(require("../../apiServices/usuario/model"));
 const handleError_1 = require("../../helpers/handleError");
-const enums_1 = require("../../types/data/enums");
-model_1.default.watch().on('change', (change) => {
-    if (change.operationType === 'delete') {
-        const docKey = change.documentKey;
-        const closeSession = () => __awaiter(void 0, void 0, void 0, function* () {
-            yield model_2.default.findOneAndUpdate({ sessionId: docKey._id }, { estado: enums_1.Estado.Offline, sessionId: null });
-        });
-        void closeSession();
+/* SessionUserModel.watch().on('change', (change) => {
+  if (change.operationType === 'delete') {
+    const docKey = change.documentKey as {_id: string}
+    const closeSession = async (): Promise<void> => {
+      await UsuarioModel.findOneAndUpdate({ sessionId: docKey._id }, { estado: Estado.Offline, sessionId: null })
     }
-});
+    void closeSession()
+  }
+}) */
 const createSessionUser = ({ idUser, token }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const response = yield model_1.default.create({ user: idUser, jwt: token });

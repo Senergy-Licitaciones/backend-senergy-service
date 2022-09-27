@@ -4,6 +4,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
+const swagger_1 = __importDefault(require("./docs/swagger"));
 const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
 const route_1 = __importDefault(require("./apiServices/auth/route"));
@@ -37,4 +39,5 @@ app.use('/api/brg', route_5.default);
 app.use('/api/puntoSum', route_6.default);
 app.use('/api/servicio', route_7.default);
 app.use('/api/oferta', route_8.default);
+app.use('/documentation', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default));
 exports.default = app;

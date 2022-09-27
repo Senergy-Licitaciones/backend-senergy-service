@@ -165,7 +165,7 @@ const makeCalculoService = ({ historialOfertas, historicoParametros, ofertas, li
             });
             console.log('bloques meses potencia ', bloquesMesesPotencia);
             // calcular equivalente en energia
-            const energia = (0, exports.getEnergiaToAdd)(oferta.potencia[0].potencia, licitacion.potenciaContratadaHp, oferta.potMinFacturable, licitacion.factorPlanta);
+            const energia = (0, exports.getEnergiaToAdd)(oferta.potencia[0].potencia, licitacion.potenciaContratadaHp, oferta.potMinFacturable / 100, licitacion.factorPlanta);
             const bloquesMesesEnergiaHp = oferta.energiaHp.map((bloque) => {
                 const meses = (0, utils_1.generateMesesArray)(bloque.fechaInicio, bloque.fechaFin);
                 return meses;

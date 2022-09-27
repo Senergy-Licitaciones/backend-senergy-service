@@ -19,7 +19,7 @@ export const updateMultipleTarifasDao: Dao<Tarifa[], ResponseParent> = async (ta
         }
         return {
           insertOne: {
-            document: tarifa
+            document: tarifa as any
           }
         }
       })

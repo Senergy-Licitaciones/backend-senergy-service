@@ -1,4 +1,6 @@
 import express from 'express'
+import swaggerUi from 'swagger-ui-express'
+import swaggerSetup from './docs/swagger'
 import morgan from 'morgan'
 import cors from 'cors'
 import routerAuth from './apiServices/auth/route'
@@ -33,5 +35,5 @@ app.use('/api/brg', routerBrg)
 app.use('/api/puntoSum', routerPuntoSum)
 app.use('/api/servicio', routerServicio)
 app.use('/api/oferta', routerOferta)
-
+app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerSetup))
 export default app

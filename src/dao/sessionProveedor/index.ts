@@ -1,11 +1,9 @@
 import { handleError } from '../../helpers/handleError'
 import SessionProveedorModel from '../../apiServices/sessionProveedor/model'
-import ProveedorModel from '../../apiServices/proveedor/model'
-import { Estado } from '../../types/data/enums'
 import { Document, Types } from 'mongoose'
 import { Dao } from '../../types/methods'
 import { SessionProveedor } from '../../types/data'
-SessionProveedorModel.watch().on('change', (change) => {
+/* SessionProveedorModel.watch().on('change', (change) => {
   if (change.operationType === 'delete') {
     const docKey = change.documentKey as {_id: string}
     const closeSession = async (): Promise<void> => {
@@ -14,7 +12,7 @@ SessionProveedorModel.watch().on('change', (change) => {
     void closeSession()
   }
 })
-
+*/
 export const createSessionProveedor: Dao<{proveedorId: Types.ObjectId, token: string}, Document<any, any, SessionProveedor> & SessionProveedor & {
   _id: Types.ObjectId
 }> = async ({ proveedorId, token }) => {

@@ -59,7 +59,7 @@ export const getLicitacionesFreeDao: Dao<Types.ObjectId, Array<Document<any, any
 }
 export const getLicitacionByIdDao: Dao<Types.ObjectId, DocType<Licitacion>> = async (id) => {
   try {
-    const licitacion = await LicitacionModel.findById(id).select('-usuario -participantes').populate('tipoServicio puntoSum brg')
+    const licitacion = await LicitacionModel.findById(id).select('-usuario -participantes').populate('tipoServicio puntoSum brg') as DocType<Licitacion>
     // if (!licitacion) throw new Error('La licitación no existe')
     return licitacion
   } catch (err) {

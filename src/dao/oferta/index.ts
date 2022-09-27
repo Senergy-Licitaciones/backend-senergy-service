@@ -39,7 +39,7 @@ export const updateOfertaDao: Dao<{ofertaId: Types.ObjectId, fields: Partial<Omi
   licitacion: Licitacion}> = async ({ ofertaId, fields }) => {
   try {
     const date = Date.now()
-    const oferta = await OfertaModel.findById(ofertaId).populate<{licitacion: Licitacion}>('licitacion')
+    const oferta = await OfertaModel.findById(ofertaId).populate<{licitacion: Licitacion}>('licitacion') as DocType<Oferta> & {licitacion: Licitacion}
     // if (!oferta) throw new Error('La oferta seleccionada no existe')
     if (new Date(oferta.licitacion.fechaFinApertura).getMilliseconds() > date) throw new Error('El plazo de tiempo para modificar esta oferta ya culminó')
     const result = await oferta.update(fields)
@@ -51,7 +51,7 @@ export const updateOfertaDao: Dao<{ofertaId: Types.ObjectId, fields: Partial<Omi
 }
 export const getOfertasToProveedorDashboardDao: Dao<Types.ObjectId, Array<DocType<Pick<Oferta, 'licitacion' | 'createdAt' | 'updatedAt'>> & {licitacion: Pick<Licitacion, 'participantes'| 'empresa'|'fechaInicio'>}>> = async (idProveedor) => {
   try {
-    const ofertas = await OfertaModel.find({ proveedor: idProveedor }).select('licitacion createdAt updatedAt').populate<{licitacion: Pick<Licitacion, 'participantes'| 'empresa'|'fechaInicio'>}>('licitacion').select('fechaInicio empresa') as Array<DocType<Pick<Oferta, 'licitacion' | 'createdAt' | 'updatedAt'>> & {licitacion: Pick<Licitacion, 'participantes'| 'empresa'|'fechaInicio'>}>
+    const ofertas = await OfertaModel.find({ proveedor: idProveedor }).select('licitacion createdAt updatedAt').populate<{licitacion: Pick<Licitacion, 'participantes'| 'empresa'|'fechaInicio'>}>('licitacion').select('fechaInicio empresa') as any
     console.log('ofertas', ofertas)
     return ofertas
   } catch (err) {
@@ -68,7 +68,7 @@ export const getOfertasByLicitacionDao: Dao<Types.ObjectId, Array<DocType<Oferta
 }
 export const getOfertasByLicitacionAndProveedorDao: Dao<{licitacionId: Types.ObjectId}, Array<DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>} >> = async ({ licitacionId }) => {
   try {
-    const ofertas = await OfertaModel.find({ licitacion: licitacionId }).populate<{proveedor: Pick<Proveedor, 'razSocial'>}>('proveedor', 'razSocial')
+    const ofertas = await OfertaModel.find({ licitacion: licitacionId }).populate<{proveedor: Pick<Proveedor, 'razSocial'>}>('proveedor', 'razSocial') as Array<DocType<Oferta> & {proveedor: Pick<Proveedor, 'razSocial'>} >
     return ofertas
   } catch (err) {
     throw handleError(err, 'Ha ocurrido un error al obtener las ofertas por licitación')

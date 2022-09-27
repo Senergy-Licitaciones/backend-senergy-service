@@ -140,7 +140,7 @@ export const makeCalculoService: Service<{ historialOfertas: MetricasEmpresa[], 
       })
       console.log('bloques meses potencia ', bloquesMesesPotencia)
       // calcular equivalente en energia
-      const energia = getEnergiaToAdd(oferta.potencia[0].potencia, licitacion.potenciaContratadaHp, oferta.potMinFacturable, licitacion.factorPlanta)
+      const energia = getEnergiaToAdd(oferta.potencia[0].potencia, licitacion.potenciaContratadaHp, oferta.potMinFacturable / 100, licitacion.factorPlanta)
       const bloquesMesesEnergiaHp = oferta.energiaHp.map((bloque) => {
         const meses = generateMesesArray(bloque.fechaInicio, bloque.fechaFin)
         return meses

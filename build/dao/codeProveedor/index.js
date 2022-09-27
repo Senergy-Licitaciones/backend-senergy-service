@@ -14,28 +14,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.confirmCodeDao = exports.createCodeProveedorDao = void 0;
 const handleError_1 = require("../../helpers/handleError");
-const model_1 = __importDefault(require("../../apiServices/proveedor/model"));
-const model_2 = __importDefault(require("../../apiServices/codeProveedor/model"));
-model_2.default.watch().on('change', (change) => {
-    if (change.operationType === 'delete') {
-        const docKey = change.documentKey;
-        const removeProveedorAccount = () => __awaiter(void 0, void 0, void 0, function* () {
-            try {
-                const response = yield model_1.default.findOneAndDelete({ codeToOCnfirm: docKey._id, verified: false });
-                if (response === null)
-                    console.log('no existe la cuenta ', response);
-                console.log('response ', response);
-            }
-            catch (err) {
-                console.log('error ocurrido al eliminar cuenta de proveedor ', err);
-            }
-        });
-        void removeProveedorAccount();
+const model_1 = __importDefault(require("../../apiServices/codeProveedor/model"));
+/* CodeProveedorModel.watch().on('change', (change) => {
+  if (change.operationType === 'delete') {
+    const docKey = change.documentKey as {_id: string}
+    const removeProveedorAccount = async (): Promise<void> => {
+      try {
+        const response = await ProveedorModel.findOneAndDelete({ codeToOCnfirm: docKey._id, verified: false })
+        if (response === null) console.log('no existe la cuenta ', response)
+        console.log('response ', response)
+      } catch (err) {
+        console.log('error ocurrido al eliminar cuenta de proveedor ', err)
+      }
     }
-});
+    void removeProveedorAccount()
+  }
+}) */
 const createCodeProveedorDao = (fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const response = yield model_2.default.create(fields);
+        const response = yield model_1.default.create(fields);
         const code = yield response.save();
         return code;
     }
@@ -46,7 +43,7 @@ const createCodeProveedorDao = (fields) => __awaiter(void 0, void 0, void 0, fun
 exports.createCodeProveedorDao = createCodeProveedorDao;
 const confirmCodeDao = ({ correo, code }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const response = yield model_2.default.findOne({ proveedor: correo, code });
+        const response = yield model_1.default.findOne({ proveedor: correo, code });
         if (response == null)
             throw new Error('Código inválido');
         return response;

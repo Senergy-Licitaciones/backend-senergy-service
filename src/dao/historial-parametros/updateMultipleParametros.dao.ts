@@ -20,12 +20,12 @@ export const updateMultipleParametrosDao: Dao<HistorialParametroModel[], Respons
         }
         return {
           insertOne: {
-            document: parametro
+            document: parametro as any
           }
         }
       })
     )
-    //    await HistorialParametrosModel.collection.updateMany({}, parametros)
+    //  await HistorialParametrosModel.collection.updateMany({}, parametros)
     return {
       message: 'Datos actualizados exitosamente'
     }
