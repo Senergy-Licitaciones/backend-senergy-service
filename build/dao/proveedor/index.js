@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createProveedorDao = exports.getProveedoresToUserDao = exports.getProveedoresDao = exports.proveedorEstadoDao = exports.confirmProveedorDao = exports.verifyCorreoProveedorDao = exports.updateProveedorDao = exports.getProveedorNameByIdDao = exports.crearProveedorDao = void 0;
+exports.createProveedorDao = exports.getProveedoresDao = exports.proveedorEstadoDao = exports.confirmProveedorDao = exports.verifyCorreoProveedorDao = exports.updateProveedorDao = exports.getProveedorNameByIdDao = exports.getProveedoresToUserDao = exports.crearProveedorDao = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const model_1 = __importDefault(require("../../apiServices/proveedor/model"));
 const crearProveedorDao = (fields) => __awaiter(void 0, void 0, void 0, function* () {
@@ -26,6 +26,16 @@ const crearProveedorDao = (fields) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.crearProveedorDao = crearProveedorDao;
+const getProveedoresToUserDao = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield model_1.default.find().select('createdAt updatedAt correo razSocial ruc web address phone1');
+        return response;
+    }
+    catch (e) {
+        throw (0, handleError_1.handleError)(e, 'Ha ocurrido un error al obtener la información de los generadores');
+    }
+});
+exports.getProveedoresToUserDao = getProveedoresToUserDao;
 const getProveedorNameByIdDao = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const proveedor = yield model_1.default.findById(id).select('razSocial ruc');
@@ -107,16 +117,6 @@ const getProveedoresDao = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getProveedoresDao = getProveedoresDao;
-const getProveedoresToUserDao = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const proveedores = yield model_1.default.find().select('razSocial ruc address web createdAt updatedAt correo phone1');
-        return proveedores;
-    }
-    catch (e) {
-        throw (0, handleError_1.handleError)(e, 'Ha ocurrido un error en la capa de datos al listar los proveedores');
-    }
-});
-exports.getProveedoresToUserDao = getProveedoresToUserDao;
 const createProveedorDao = (fields) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const proveedor = yield model_1.default.create(fields);

@@ -1,8 +1,9 @@
 import { FACTORES } from '../../constants'
 import { getParametrosDao, getParametrosNameDao } from '../../dao/historial-parametros'
 import { handleError } from '../../helpers/handleError'
-import { ResponseParent } from '../../types/data'
+import { DocType, ResponseParent } from '../../types/data'
 import { Service } from '../../types/methods'
+import { HistorialParametroModel } from '../../types/models'
 import { generateMesesArray } from '../../utils'
 import { addWorksheetToBook, createFile, createWorkbook, createWorksheetFromArrays } from '../excel'
 
@@ -26,6 +27,30 @@ export const exportFileService: Service<{fechaInicio: Date, fechaFin: Date, id: 
     }
   } catch (err) {
     throw handleError(err)
+  }
+}
+export const exportFileProyeccionParametros = (parametros: Array<DocType<HistorialParametroModel>>, id: string): {message: string, filename: string} => {
+  const workbook = createWorkbook()
+  const fechas = parametros.reduce((acc, el) => {
+    if (el.values.length > acc.length) {
+      return el.values.map((value) => value.fecha)
+    }
+    return acc
+  }, parametros[0].values.map((value) => value.fecha))
+  const worksheet = createWorksheetFromArrays([
+    ['Meses', 'Nombre', ...fechas],
+    ['Codigo', 'Id', ...fechas.map((_el, i) => i + 1)],
+    ...parametros.map((el, i) => {
+      const restValues = new Array(fechas.length - el.values.length).fill(0)
+      return [i, el.name, ...el.values.map((value) => value.value), ...restValues]
+    })
+  ])
+  addWorksheetToBook(workbook, worksheet, 'Proyección Parámetros')
+  const path = `uploads/files/admin/proyeccion-parametros-${id}.xlsx`
+  createFile(workbook, path)
+  return {
+    message: 'Se ha exportado el archivo exitosamente',
+    filename: `proyeccion-parametros-${id}.xlsx`
   }
 }
 export const exportFileToUpdateService: Service<{id: string}, {message: string, filename: string}> = async ({ id }) => {

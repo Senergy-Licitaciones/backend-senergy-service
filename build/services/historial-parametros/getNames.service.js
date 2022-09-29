@@ -15,7 +15,7 @@ const handleError_1 = require("../../helpers/handleError");
 const getNamesService = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const parametros = yield (0, historial_parametros_1.getParametrosNameDao)();
-        return parametros.filter((parametro) => !parametro.name.includes('US$') && !parametro.name.includes('Incremento_Anual') && !parametro.name.includes('R500') && !parametro.name.includes('TC'));
+        return parametros.filter((parametro) => !parametro.name.includes('S/.') && !parametro.name.includes('Incremento_Anual') && !parametro.name.includes('R500') && !parametro.name.includes('TC'));
     }
     catch (e) {
         throw (0, handleError_1.handleError)(e);

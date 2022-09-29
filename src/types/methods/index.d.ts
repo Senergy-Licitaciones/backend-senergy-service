@@ -5,7 +5,7 @@ import { UserRegisterFields } from '../form'
 
 export type Dao<Param, Return> =(fields: Param) => Promise<Return>
 export type Service<Param, Return> =(fields: Param) => Promise<Return>
-export type ServiceWithoutParam<Return> =() => Promis<Return>
+export type ServiceWithoutParam<Return> =() => Promise<Return>
 export type DaoWithoutParam<Return> =() => Promise<Return>
 export type RegisterUsuarioService=(fields: UserRegisterFields) => Promise<ErrorResponse|ResponseRegisterUser>
 export type SignToken=(user: DocType<User|Proveedor|Admin>) => string

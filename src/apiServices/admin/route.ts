@@ -7,32 +7,47 @@ import { createAdminUser, deleteAdmin, getAdmins, updateAdmin } from './controll
 const router = express.Router()
 router.post('/createAdmin', createAdminUser)
 /**
- * Post track
- * @openapi
- * /admins/createAdmin:
- *    post:
- *      tags:
- *        - admins
+ * @swagger
+ * /api/admin/createAdmin:
+ *  post:
  *      summary: "Crear Perfil de Administrador"
- *      description: Este endpoint es para registrar un nuevo perfil de administrador
+ *      tags: [Admin]
  *      requestBody:
- *          content:
- *            application/json:
- *              schema:
- *                $ref: "#/components/schemas/admin"
- *      responses:
- *        '200':
- *          description: Retorna un mensaje de respuesta exitosa.
+ *          required: true
  *          content:
  *              application/json:
-                    schema:
-                    $ref: '#/components/schemas/responseMessage'
- *        '400':
- *          description: Datos inválidos enviados.
+ *                  schema:
+ *                      $ref: '#components/schemas/admin'
+ *      responses:
+ *          200:
+ *              description: Nuevo Perfil de Administrador creado
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/responseMessage'
  *      security:
- *       - bearerAuth: []
+ *          - bearerAuth: []
  */
+
 router.put('/updateAdmin', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Boss]), updateAdmin)
 router.delete('/deleteAdmin/:id', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Boss]), deleteAdmin)
 router.get('/admins', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), getAdmins)
+/**
+ * @swagger
+ * /api/admin/admins:
+ *  get:
+ *      summary: "Lista de Perfiles de Administradores"
+ *      tags: [Admin]
+ *      responses:
+ *          200:
+ *              description: "Arreglo de Perfiles de Administradores registrados"
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                                $ref: '#/components/schemas/responseAdmin'
+ *      security:
+ *          - bearerAuth: []
+ */
 export default router

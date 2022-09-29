@@ -7,13 +7,15 @@ import { handleError } from '../../helpers/handleError'
 import { DocType, Licitacion, Oferta, Proveedor, ResponseParent } from '../../types/data'
 import { LicitacionRegisterFields } from '../../types/form'
 import { Service, ServiceWithoutParam } from '../../types/methods'
-import { ParametrosProyeccion } from '../../types/models'
+import { HistorialParametroModel, ParametrosProyeccion } from '../../types/models'
 import { MetricasEmpresa } from '../../types/models/MetricasEmpresa.model'
 import { LicitacionToAdmin } from '../../types/responses'
 import { calcularHistorico, calcularHistoricoEnergiaHfp, calcularHistoricoEnergiaHp, generateMesesArray } from '../../utils'
 import { getJsonFromSheet, readExcelFile } from '../excel'
-import { formatFromStringToDate } from '../../utils/dateFormat'
+import { formatFromStringToDate, formatMesDateToString, formatMesStringToDate } from '../../utils/dateFormat'
 import fs from 'fs'
+import { ValueByFecha } from '../../types/schemas'
+import { proyeccionIPC, proyeccionPCBandPR6, proyeccionPGNDolarCoes, proyeccionPGNDolarOsinergmin, proyeccionPGNSolesOsinergmin, proyeccionPPI, proyeccionTarifaChiclayo } from '../../utils/formulasProyeccion'
 export const mostrarLicitacionesService: ServiceWithoutParam<Array<DocType<Licitacion>>> = async () => {
   try {
     const result = await showLicitacionesDao()
@@ -171,6 +173,81 @@ export const makeCalculoService: Service<{ historialOfertas: MetricasEmpresa[], 
       return null
     })
     return historialOfertas
+  } catch (e) {
+    throw handleError(e)
+  }
+}
+// TODO: Histrial Parametros Proyeccion fechas en formato "[Mes sin 0]-[Año completo]". Ejemplo: 8/2022
+export const getProyeccionHistorialParametros = async (fechaOferta: string, fechaFinal: string, listIdsParametros: string[]): Promise<Array<DocType<HistorialParametroModel>>> => {
+  try {
+    const parametrosBase = await getHistorialParametrosListDao(listIdsParametros)
+    const parametrosProyectados = parametrosBase.map((parametro) => {
+      let valorBase = 0
+      const mesesProyectados: string[] = generateMesesArray(formatMesStringToDate(fechaOferta), formatMesStringToDate(fechaFinal))
+      if (parametro.values[parametro.values.length - 1].fecha === fechaOferta) {
+        // existe parametro para la fecha en la que se hizo la oferta
+        mesesProyectados.shift()
+        valorBase = parametro.values[parametro.values.length - 1].value
+      }
+      // no existe parametro para la fecha en la que se hizo la oferta
+      valorBase = valorBase === 0 ? parametro.values[parametro.values.length - 2].value : valorBase
+      const valoresParametrosProyectados: ValueByFecha[] = mesesProyectados.map((mes) => {
+        let value = 0
+        if (parametro.name.includes('PPI')) {
+          value = proyeccionPPI(valorBase)
+        }
+        if (parametro.name.includes('IPC')) {
+          value = proyeccionIPC(valorBase)
+        }
+        if (parametro.name.includes('PGN(US$/MMBTU) (OSINERGMIN)')) {
+          value = proyeccionPGNDolarOsinergmin(valorBase)
+        }
+        if (parametro.name.includes('PGN(S/./MMBTU) (OSINERGMIN)')) {
+          value = proyeccionPGNSolesOsinergmin(valorBase)
+        }
+        if (parametro.name.includes('PGN(US$/MMBTU)(COES)')) {
+          value = proyeccionPGNDolarCoes(valorBase)
+        }
+        if (parametro.name.includes('PCB') || parametro.name.includes('PR6')) {
+          value = proyeccionPCBandPR6(valorBase)
+        }
+        if (parametro.name.includes('TBarra')) {
+          value = proyeccionTarifaChiclayo(valorBase)
+        }
+        return {
+          fecha: mes,
+          value
+        }
+      })
+      return {
+        ...parametro,
+        values: valoresParametrosProyectados
+      }
+    }) as Array<DocType<HistorialParametroModel>>
+    return parametrosProyectados
+  } catch (e) {
+    throw handleError(e)
+  }
+}
+// FIXME: expotFileProyeccionParamtros() para exportar excel
+export const calculoFormulaConstante: Service<Types.ObjectId, {data: MetricasEmpresa[], ganador: string, proyeccionParametros: Array<DocType<HistorialParametroModel>>}> = async (id) => {
+  try {
+    const { historialOfertas, ofertas, parametros } = await getListParametrosUsados(id)
+    const data = await getDataFromLicitacionToCalculo(id)
+    if (ofertas.length === 0) throw new Error('No existen ofertas para esta licitación')
+    const historicoParametros = await getProyeccionHistorialParametros(formatMesDateToString(formatFromStringToDate(data.fechaInicioApertura)), formatMesDateToString(formatFromStringToDate(data.fechaFin)), parametros)
+    const response = await makeCalculoService({ historialOfertas, historicoParametros, ofertas, licitacion: { factorPlanta: data.factorPlanta, potenciaContratadaHp: data.meses[0].hp } })
+    return {
+      data: response,
+      proyeccionParametros: historicoParametros,
+      ganador: response.reduce((ganador, empresa) => {
+        if (empresa.total < ganador.total) {
+          return empresa
+        }
+        return ganador
+      }
+      , { empresa: '', total: Infinity }).empresa
+    }
   } catch (e) {
     throw handleError(e)
   }

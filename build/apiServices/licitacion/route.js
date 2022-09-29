@@ -14,7 +14,28 @@ const enums_1 = require("../../types/data/enums");
 const controller_1 = require("./controller");
 const router = express_1.default.Router();
 router.get('/licitaciones', controller_1.showLicitaciones);
-router.post('/calculo/:id', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Employee, enums_1.RoleAdmin.Boss]), controller_1.makeCalculo);
+router.get('/calculo/:id', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Employee, enums_1.RoleAdmin.Boss]), controller_1.makeCalculo);
+/**
+ * @swagger
+ *  /api/licitacion/calculo/{id}:
+ *  get:
+ *      summary: "Precios proyectados y Generador ganador del cálculo"
+ *      description: "Realiza el cálculo de los precios para las ofertas dadas para una Licitación"
+ *      tags: [Licitación]
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: string
+ *            required: true
+ *            description: "Id de la Licitación"
+ *      responses:
+ *          200:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/responseCalculo'
+ */
 router.post('/calculoExcel/:id', uploadParametros_1.default, checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Boss, enums_1.RoleAdmin.Employee]), controller_1.makeCalculoExcel);
 router.get('/showLicitaciones', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Employee, enums_1.RoleAdmin.Boss]), controller_1.getLicitaciones);
 router.get('/licitacionId/:id', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Proveedor, enums_1.Type.User]), (0, roleAuth_1.default)([enums_1.Role.Basico, enums_1.Role.Premium]), controller_1.showLicitacionById);

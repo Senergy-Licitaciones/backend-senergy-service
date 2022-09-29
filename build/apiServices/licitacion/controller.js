@@ -98,7 +98,8 @@ const makeCalculo = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         const licitacionId = req.licitacionId;
         if (licitacionId == null)
             throw new Error('No se proporcionó la licitación');
-        const response = yield (0, licitacion_1.calculoSimple)(licitacionId);
+        // const response = await calculoSimple(licitacionId)
+        const response = yield (0, licitacion_1.calculoFormulaConstante)(licitacionId);
         return res.status(200).send(response);
     }
     catch (e) {

@@ -120,7 +120,7 @@ const getLicitacionesToAdminDao = () => __awaiter(void 0, void 0, void 0, functi
 exports.getLicitacionesToAdminDao = getLicitacionesToAdminDao;
 const getDataFromLicitacionToCalculo = (idLicitacion) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const response = yield model_1.default.findById(idLicitacion).select('factorPlanta meses');
+        const response = yield model_1.default.findById(idLicitacion).select('factorPlanta meses fechaFin fechaInicioApertura');
         if (response == null)
             throw new Error('Licitacion no encontrada');
         return response;

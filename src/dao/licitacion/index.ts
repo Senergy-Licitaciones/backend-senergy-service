@@ -91,9 +91,9 @@ export const getLicitacionesToAdminDao: DaoWithoutParam<LicitacionToAdmin[]> = a
     throw handleError(e, 'Ha courrido un error al obtener las licitaciones')
   }
 }
-export const getDataFromLicitacionToCalculo: Dao<Types.ObjectId, Pick<Licitacion, 'factorPlanta'|'meses'>> = async (idLicitacion) => {
+export const getDataFromLicitacionToCalculo: Dao<Types.ObjectId, Pick<Licitacion, 'factorPlanta'|'meses'|'fechaFin'|'fechaInicioApertura'>> = async (idLicitacion) => {
   try {
-    const response = await LicitacionModel.findById(idLicitacion).select('factorPlanta meses') as DocType<Pick<Licitacion, 'factorPlanta'|'meses'>>
+    const response = await LicitacionModel.findById(idLicitacion).select('factorPlanta meses fechaFin fechaInicioApertura') as DocType<Pick<Licitacion, 'factorPlanta'|'meses'|'fechaFin'|'fechaInicioApertura'>>
     if (response == null) throw new Error('Licitacion no encontrada')
     return response
   } catch (e) {

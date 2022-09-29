@@ -1,6 +1,6 @@
 import { handleError } from '../../helpers/handleError'
 import ProveedorModel from '../../apiServices/proveedor/model'
-import { DaoProveedorRegister, InfoBasicaProveedor, ProveedorRegisterFields } from '../../types/form'
+import { DaoProveedorRegister, ProveedorRegisterFields } from '../../types/form'
 import { DocType, Proveedor, ResponseParent } from '../../types/data'
 import { Document, Types, UpdateQuery } from 'mongoose'
 import { Dao, DaoWithoutParam } from '../../types/methods'
@@ -12,6 +12,14 @@ export const crearProveedorDao: Dao<DaoProveedorRegister, Document<any, any, Pro
     return proveedor
   } catch (err) {
     throw handleError(err, 'Ha ocurrido un error al registrar un nuevo proveedor')
+  }
+}
+export const getProveedoresToUserDao: DaoWithoutParam<Array<DocType<Pick<Proveedor, 'createdAt'|'updatedAt'|'correo' |'razSocial'|'ruc'|'web'|'address'|'phone1'>>>> = async () => {
+  try {
+    const response = await ProveedorModel.find().select('createdAt updatedAt correo razSocial ruc web address phone1') as Array<DocType<Pick<Proveedor, 'createdAt'|'updatedAt'|'correo' |'razSocial'|'ruc'|'web'|'address'|'phone1'>>>
+    return response
+  } catch (e) {
+    throw handleError(e, 'Ha ocurrido un error al obtener la información de los generadores')
   }
 }
 export const getProveedorNameByIdDao: Dao<Types.ObjectId, {razSocial: string, ruc: number}> = async (id) => {
@@ -72,20 +80,12 @@ export const proveedorEstadoDao: Dao<string, DocType<Proveedor>> = async (correo
     throw handleError(err, 'Ha ocurrido un error al verificar la cuenta')
   }
 }
-export const getProveedoresDao: DaoWithoutParam<Array<DocType<Pick<Proveedor, 'razSocial'|'ruc'|'role'|'updatedAt'|'phone1'|'correo'>>>> = async () => {
+export const getProveedoresDao: DaoWithoutParam<Array<DocType<Pick<Proveedor, 'razSocial'|'ruc'|'role'|'createdAt'|'updatedAt'|'phone1'|'correo'>>>> = async () => {
   try {
     const proveedores = await ProveedorModel.find().select('razSocial ruc role createdAt updatedAt correo phone1') as Array<DocType<Pick<Proveedor, 'phone1'|'updatedAt'|'createdAt'| 'razSocial'|'ruc'|'role'|'correo'>>>
     return proveedores
   } catch (err) {
     throw handleError(err, 'Ha ocurrido un error en la capa de datos al listar los proveedores')
-  }
-}
-export const getProveedoresToUserDao: DaoWithoutParam<Array<DocType<InfoBasicaProveedor>>> = async () => {
-  try {
-    const proveedores = await ProveedorModel.find().select('razSocial ruc address web createdAt updatedAt correo phone1') as Array<DocType<InfoBasicaProveedor>>
-    return proveedores
-  } catch (e) {
-    throw handleError(e, 'Ha ocurrido un error en la capa de datos al listar los proveedores')
   }
 }
 export const createProveedorDao: Dao<ProveedorRegisterFields, DocType<Proveedor>> = async (fields) => {

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.exportProyeccionFileService = exports.exportFileToUpdateService = exports.exportFileService = void 0;
+exports.exportProyeccionFileService = exports.exportFileToUpdateService = exports.exportFileProyeccionParametros = exports.exportFileService = void 0;
 const constants_1 = require("../../constants");
 const historial_parametros_1 = require("../../dao/historial-parametros");
 const handleError_1 = require("../../helpers/handleError");
@@ -39,6 +39,31 @@ const exportFileService = ({ fechaInicio, fechaFin, id }) => __awaiter(void 0, v
     }
 });
 exports.exportFileService = exportFileService;
+const exportFileProyeccionParametros = (parametros, id) => {
+    const workbook = (0, excel_1.createWorkbook)();
+    const fechas = parametros.reduce((acc, el) => {
+        if (el.values.length > acc.length) {
+            return el.values.map((value) => value.fecha);
+        }
+        return acc;
+    }, parametros[0].values.map((value) => value.fecha));
+    const worksheet = (0, excel_1.createWorksheetFromArrays)([
+        ['Meses', 'Nombre', ...fechas],
+        ['Codigo', 'Id', ...fechas.map((_el, i) => i + 1)],
+        ...parametros.map((el, i) => {
+            const restValues = new Array(fechas.length - el.values.length).fill(0);
+            return [i, el.name, ...el.values.map((value) => value.value), ...restValues];
+        })
+    ]);
+    (0, excel_1.addWorksheetToBook)(workbook, worksheet, 'Proyección Parámetros');
+    const path = `uploads/files/admin/proyeccion-parametros-${id}.xlsx`;
+    (0, excel_1.createFile)(workbook, path);
+    return {
+        message: 'Se ha exportado el archivo exitosamente',
+        filename: `proyeccion-parametros-${id}.xlsx`
+    };
+};
+exports.exportFileProyeccionParametros = exportFileProyeccionParametros;
 const exportFileToUpdateService = ({ id }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const parametros = yield (0, historial_parametros_1.getParametrosDao)();

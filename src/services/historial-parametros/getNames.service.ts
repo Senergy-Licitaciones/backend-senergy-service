@@ -7,7 +7,7 @@ import { HistorialParametroModel } from '../../types/models'
 export const getNamesService: ServiceWithoutParam<Array<DocType<Pick<HistorialParametroModel, 'name'>>>> = async () => {
   try {
     const parametros = await getParametrosNameDao()
-    return parametros.filter((parametro) => !parametro.name.includes('US$') && !parametro.name.includes('Incremento_Anual') && !parametro.name.includes('R500') && !parametro.name.includes('TC'))
+    return parametros.filter((parametro) => !parametro.name.includes('S/.') && !parametro.name.includes('Incremento_Anual') && !parametro.name.includes('R500') && !parametro.name.includes('TC'))
   } catch (e) {
     throw handleError(e)
   }

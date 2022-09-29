@@ -12,32 +12,46 @@ const controller_1 = require("./controller");
 const router = express_1.default.Router();
 router.post('/createAdmin', controller_1.createAdminUser);
 /**
- * Post track
- * @openapi
- * /admins/createAdmin:
- *    post:
- *      tags:
- *        - admins
+ * @swagger
+ * /api/admin/createAdmin:
+ *  post:
  *      summary: "Crear Perfil de Administrador"
- *      description: Este endpoint es para registrar un nuevo perfil de administrador
+ *      tags: [Admin]
  *      requestBody:
- *          content:
- *            application/json:
- *              schema:
- *                $ref: "#/components/schemas/admin"
- *      responses:
- *        '200':
- *          description: Retorna un mensaje de respuesta exitosa.
+ *          required: true
  *          content:
  *              application/json:
-                    schema:
-                    $ref: '#/components/schemas/responseMessage'
- *        '400':
- *          description: Datos inválidos enviados.
+ *                  schema:
+ *                      $ref: '#components/schemas/admin'
+ *      responses:
+ *          200:
+ *              description: Nuevo Perfil de Administrador creado
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/responseMessage'
  *      security:
- *       - bearerAuth: []
+ *          - bearerAuth: []
  */
 router.put('/updateAdmin', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Boss]), controller_1.updateAdmin);
 router.delete('/deleteAdmin/:id', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Boss]), controller_1.deleteAdmin);
 router.get('/admins', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Employee, enums_1.RoleAdmin.Boss]), controller_1.getAdmins);
+/**
+ * @swagger
+ * /api/admin/admins:
+ *  get:
+ *      summary: "Lista de Perfiles de Administradores"
+ *      tags: [Admin]
+ *      responses:
+ *          200:
+ *              description: "Arreglo de Perfiles de Administradores registrados"
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                                $ref: '#/components/schemas/responseAdmin'
+ *      security:
+ *          - bearerAuth: []
+ */
 exports.default = router;

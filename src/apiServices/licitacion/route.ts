@@ -10,7 +10,28 @@ import { licitacionId, showLicitacionById, showLicitaciones, showLicitacionesFre
 const router = express.Router()
 
 router.get('/licitaciones', showLicitaciones)
-router.post('/calculo/:id', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), makeCalculo)
+router.get('/calculo/:id', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), makeCalculo)
+/**
+ * @swagger
+ *  /api/licitacion/calculo/{id}:
+ *  get:
+ *      summary: "Precios proyectados y Generador ganador del cálculo"
+ *      description: "Realiza el cálculo de los precios para las ofertas dadas para una Licitación"
+ *      tags: [Licitación]
+ *      parameters:
+ *          - in: path
+ *            name: id
+ *            schema:
+ *              type: string
+ *            required: true
+ *            description: "Id de la Licitación"
+ *      responses:
+ *          200:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/responseCalculo'
+ */
 router.post('/calculoExcel/:id', uploadParametros, checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Boss, RoleAdmin.Employee]), makeCalculoExcel)
 router.get('/showLicitaciones', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), getLicitaciones)
 router.get('/licitacionId/:id', checkAuth, checkUserType([Type.Proveedor, Type.User]), checkRoleAuth([Role.Basico, Role.Premium]), showLicitacionById)

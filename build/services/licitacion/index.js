@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDatesFromLicitacion = exports.calculoExcel = exports.getParametrosFromExcel = exports.calculoSimple = exports.makeCalculoService = exports.getEnergiaToAdd = exports.getListParametrosUsados = exports.getOfertasByLicitacionService = exports.getLicitacionesToAdmin = exports.getLicitacionByIdService = exports.getLicitacionesFreeService = exports.getTiposService = exports.updateLicitacionService = exports.crearLicitacionService = exports.mostrarLicitacionesService = void 0;
+exports.getDatesFromLicitacion = exports.calculoExcel = exports.getParametrosFromExcel = exports.calculoSimple = exports.calculoFormulaConstante = exports.getProyeccionHistorialParametros = exports.makeCalculoService = exports.getEnergiaToAdd = exports.getListParametrosUsados = exports.getOfertasByLicitacionService = exports.getLicitacionesToAdmin = exports.getLicitacionByIdService = exports.getLicitacionesFreeService = exports.getTiposService = exports.updateLicitacionService = exports.crearLicitacionService = exports.mostrarLicitacionesService = void 0;
 const adapters_1 = require("../../adapters");
 const historial_parametros_1 = require("../../dao/historial-parametros");
 const licitacion_1 = require("../../dao/licitacion");
@@ -22,6 +22,7 @@ const utils_1 = require("../../utils");
 const excel_1 = require("../excel");
 const dateFormat_1 = require("../../utils/dateFormat");
 const fs_1 = __importDefault(require("fs"));
+const formulasProyeccion_1 = require("../../utils/formulasProyeccion");
 const mostrarLicitacionesService = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, licitacion_1.showLicitacionesDao)();
@@ -202,6 +203,82 @@ const makeCalculoService = ({ historialOfertas, historicoParametros, ofertas, li
     }
 });
 exports.makeCalculoService = makeCalculoService;
+// TODO: Histrial Parametros Proyeccion fechas en formato "[Mes sin 0]-[Año completo]". Ejemplo: 8/2022
+const getProyeccionHistorialParametros = (fechaOferta, fechaFinal, listIdsParametros) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const parametrosBase = yield (0, historial_parametros_1.getHistorialParametrosListDao)(listIdsParametros);
+        const parametrosProyectados = parametrosBase.map((parametro) => {
+            let valorBase = 0;
+            const mesesProyectados = (0, utils_1.generateMesesArray)((0, dateFormat_1.formatMesStringToDate)(fechaOferta), (0, dateFormat_1.formatMesStringToDate)(fechaFinal));
+            if (parametro.values[parametro.values.length - 1].fecha === fechaOferta) {
+                // existe parametro para la fecha en la que se hizo la oferta
+                mesesProyectados.shift();
+                valorBase = parametro.values[parametro.values.length - 1].value;
+            }
+            // no existe parametro para la fecha en la que se hizo la oferta
+            valorBase = valorBase === 0 ? parametro.values[parametro.values.length - 2].value : valorBase;
+            const valoresParametrosProyectados = mesesProyectados.map((mes) => {
+                let value = 0;
+                if (parametro.name.includes('PPI')) {
+                    value = (0, formulasProyeccion_1.proyeccionPPI)(valorBase);
+                }
+                if (parametro.name.includes('IPC')) {
+                    value = (0, formulasProyeccion_1.proyeccionIPC)(valorBase);
+                }
+                if (parametro.name.includes('PGN(US$/MMBTU) (OSINERGMIN)')) {
+                    value = (0, formulasProyeccion_1.proyeccionPGNDolarOsinergmin)(valorBase);
+                }
+                if (parametro.name.includes('PGN(S/./MMBTU) (OSINERGMIN)')) {
+                    value = (0, formulasProyeccion_1.proyeccionPGNSolesOsinergmin)(valorBase);
+                }
+                if (parametro.name.includes('PGN(US$/MMBTU)(COES)')) {
+                    value = (0, formulasProyeccion_1.proyeccionPGNDolarCoes)(valorBase);
+                }
+                if (parametro.name.includes('PCB') || parametro.name.includes('PR6')) {
+                    value = (0, formulasProyeccion_1.proyeccionPCBandPR6)(valorBase);
+                }
+                if (parametro.name.includes('TBarra')) {
+                    value = (0, formulasProyeccion_1.proyeccionTarifaChiclayo)(valorBase);
+                }
+                return {
+                    fecha: mes,
+                    value
+                };
+            });
+            return Object.assign(Object.assign({}, parametro), { values: valoresParametrosProyectados });
+        });
+        return parametrosProyectados;
+    }
+    catch (e) {
+        throw (0, handleError_1.handleError)(e);
+    }
+});
+exports.getProyeccionHistorialParametros = getProyeccionHistorialParametros;
+// FIXME: expotFileProyeccionParamtros() para exportar excel
+const calculoFormulaConstante = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { historialOfertas, ofertas, parametros } = yield (0, exports.getListParametrosUsados)(id);
+        const data = yield (0, licitacion_1.getDataFromLicitacionToCalculo)(id);
+        if (ofertas.length === 0)
+            throw new Error('No existen ofertas para esta licitación');
+        const historicoParametros = yield (0, exports.getProyeccionHistorialParametros)((0, dateFormat_1.formatMesDateToString)((0, dateFormat_1.formatFromStringToDate)(data.fechaInicioApertura)), (0, dateFormat_1.formatMesDateToString)((0, dateFormat_1.formatFromStringToDate)(data.fechaFin)), parametros);
+        const response = yield (0, exports.makeCalculoService)({ historialOfertas, historicoParametros, ofertas, licitacion: { factorPlanta: data.factorPlanta, potenciaContratadaHp: data.meses[0].hp } });
+        return {
+            data: response,
+            proyeccionParametros: historicoParametros,
+            ganador: response.reduce((ganador, empresa) => {
+                if (empresa.total < ganador.total) {
+                    return empresa;
+                }
+                return ganador;
+            }, { empresa: '', total: Infinity }).empresa
+        };
+    }
+    catch (e) {
+        throw (0, handleError_1.handleError)(e);
+    }
+});
+exports.calculoFormulaConstante = calculoFormulaConstante;
 const calculoSimple = (id) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { historialOfertas, ofertas, parametros } = yield (0, exports.getListParametrosUsados)(id);

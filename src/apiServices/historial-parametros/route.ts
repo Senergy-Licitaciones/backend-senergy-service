@@ -24,4 +24,22 @@ router.put('/updateParametros/:filename', uploadParametros, checkAuth, checkUser
 router.put('/updateParametro/:idParametro', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), updateParametro)
 router.get('/getParametros', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), getParametros)
 router.get('/getNames', checkAuth, checkUserType([Type.Proveedor]), checkRoleAuth([Role.Basico, Role.Premium]), getNames)
+/**
+ * @swagger
+ * /api/historial-parametros/getNames:
+ *  get:
+ *      summary: "Nombres de Parámetros"
+ *      tags: [Historial de Parámetros Base]
+ *      description: "Lista de Nombres de Parámetros ocupados por el Generador al enviar su oferta"
+ *      responses:
+ *          200:
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          type: array
+ *                          items:
+ *                              $ref: '#/components/schemas/parametroName'
+ *      security:
+ *          - bearerAuth: []
+ */
 export default router

@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
+const path_1 = __importDefault(require("path"));
 const swaggerDefinition = {
     openapi: '3.0.3',
     info: {
@@ -12,9 +13,9 @@ const swaggerDefinition = {
         description: 'API para la Gestión de Licitaciones de Suministros de Energía Eléctrica'
     },
     servers: [{
-            url: 'https://senergy-backend.herokuapp.com/api'
+            url: 'https://senergy-backend.herokuapp.com'
         }, {
-            url: 'http://localhost:4000/api'
+            url: 'http://localhost:4000'
         }],
     externalDocs: {
         url: 'https://senergy-frontend.vercel.app/',
@@ -33,10 +34,44 @@ const swaggerDefinition = {
                 required: ['name', 'correo', 'password', 'role'],
                 properties: {
                     name: {
+                        type: 'string'
+                    },
+                    correo: {
+                        type: 'string'
+                    },
+                    password: {
+                        type: 'string'
+                    },
+                    role: {
                         type: 'string',
-                        correo: 'string',
-                        password: 'string',
-                        role: 'jefe | empleado'
+                        enum: ['jefe | empleado']
+                    }
+                }
+            },
+            responseAdmin: {
+                type: 'object',
+                properties: {
+                    _id: {
+                        type: 'string'
+                    },
+                    name: {
+                        type: 'string'
+                    },
+                    correo: {
+                        type: 'string'
+                    },
+                    password: {
+                        type: 'string'
+                    },
+                    role: {
+                        type: 'string',
+                        enum: ['jefe | empleado']
+                    },
+                    createdAt: {
+                        type: 'string'
+                    },
+                    updatedAt: {
+                        type: 'string'
                     }
                 }
             },
@@ -47,12 +82,129 @@ const swaggerDefinition = {
                         type: 'string'
                     }
                 }
+            },
+            responseCalculo: {
+                type: 'object',
+                properties: {
+                    ganador: {
+                        type: 'string'
+                    },
+                    data: {
+                        type: 'array',
+                        items: {
+                            type: 'object',
+                            properties: {
+                                empresa: {
+                                    type: 'string'
+                                },
+                                total: {
+                                    type: 'number'
+                                },
+                                monomico: {
+                                    type: 'array',
+                                    items: {
+                                        type: 'object',
+                                        properties: {
+                                            fecha: {
+                                                type: 'string'
+                                            },
+                                            value: {
+                                                type: 'number'
+                                            }
+                                        }
+                                    }
+                                },
+                                potencia: {
+                                    type: 'array',
+                                    items: {
+                                        type: 'object',
+                                        properties: {
+                                            fecha: {
+                                                type: 'string'
+                                            },
+                                            value: {
+                                                type: 'number'
+                                            }
+                                        }
+                                    }
+                                },
+                                energiaHp: {
+                                    type: 'array',
+                                    items: {
+                                        type: 'object',
+                                        properties: {
+                                            fecha: {
+                                                type: 'string'
+                                            },
+                                            value: {
+                                                type: 'number'
+                                            }
+                                        }
+                                    }
+                                },
+                                energiaHfp: {
+                                    type: 'array',
+                                    items: {
+                                        type: 'object',
+                                        properties: {
+                                            fecha: {
+                                                type: 'string'
+                                            },
+                                            value: {
+                                                type: 'number'
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    proyeccionParametros: {
+                        type: 'array',
+                        items: {
+                            type: 'object',
+                            properties: {
+                                _id: {
+                                    type: 'string'
+                                },
+                                name: {
+                                    type: 'string'
+                                },
+                                values: {
+                                    type: 'array',
+                                    items: {
+                                        type: 'object',
+                                        properties: {
+                                            fecha: {
+                                                type: 'string'
+                                            },
+                                            value: {
+                                                type: 'number'
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            parametroName: {
+                type: 'object',
+                properties: {
+                    _id: {
+                        type: 'string'
+                    },
+                    name: {
+                        type: 'string'
+                    }
+                }
             }
         }
     }
 };
 const swaggerOptions = {
     swaggerDefinition,
-    apis: ['../apiServices/admin/route.ts']
+    apis: [`${path_1.default.join(__dirname, '../apiServices/*/route.ts')}`]
 };
 exports.default = (0, swagger_jsdoc_1.default)(swaggerOptions);
