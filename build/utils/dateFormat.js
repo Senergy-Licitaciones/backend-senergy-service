@@ -8,7 +8,7 @@ const formatFromStringToDate = (fecha) => {
 exports.formatFromStringToDate = formatFromStringToDate;
 const formatMesStringToDate = (mes) => {
     const arrayFecha = mes.split('-');
-    return new Date(parseInt(arrayFecha[1]), parseInt(arrayFecha[0]));
+    return new Date(parseInt(arrayFecha[1]), parseInt(arrayFecha[0]) - 1);
 };
 exports.formatMesStringToDate = formatMesStringToDate;
 const formatMesDateToString = (fecha) => {

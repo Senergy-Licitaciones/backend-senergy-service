@@ -4,7 +4,7 @@ export const formatFromStringToDate = (fecha: string): Date => {
 }
 export const formatMesStringToDate = (mes: string): Date => {
   const arrayFecha = mes.split('-')
-  return new Date(parseInt(arrayFecha[1]), parseInt(arrayFecha[0]))
+  return new Date(parseInt(arrayFecha[1]), parseInt(arrayFecha[0]) - 1)
 }
 export const formatMesDateToString = (fecha: Date): string => {
   const mes = (fecha.getMonth() + 1).toString()

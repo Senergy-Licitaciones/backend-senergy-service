@@ -164,7 +164,6 @@ const makeCalculoService = ({ historialOfertas, historicoParametros, ofertas, li
                 const meses = (0, utils_1.generateMesesArray)(bloque.fechaInicio, bloque.fechaFin);
                 return meses;
             });
-            console.log('bloques meses potencia ', bloquesMesesPotencia);
             // calcular equivalente en energia
             const energia = (0, exports.getEnergiaToAdd)(oferta.potencia[0].potencia, licitacion.potenciaContratadaHp, oferta.potMinFacturable / 100, licitacion.factorPlanta);
             const bloquesMesesEnergiaHp = oferta.energiaHp.map((bloque) => {
@@ -175,13 +174,9 @@ const makeCalculoService = ({ historialOfertas, historicoParametros, ofertas, li
                 const meses = (0, utils_1.generateMesesArray)(bloque.fechaInicio, bloque.fechaFin);
                 return meses;
             });
-            console.log('bloques meses energia hp ', bloquesMesesEnergiaHp);
             historialOfertas[i].potencia = (0, utils_1.calcularHistorico)(historicoParametros, bloquesMesesPotencia, oferta);
-            console.log('first potencia ', historialOfertas[i].potencia);
             historialOfertas[i].energiaHp = (0, utils_1.calcularHistoricoEnergiaHp)(energia, historicoParametros, bloquesMesesEnergiaHp, oferta);
-            console.log('first energia hp ', historialOfertas[i].energiaHp);
             historialOfertas[i].energiaHfp = (0, utils_1.calcularHistoricoEnergiaHfp)(energia, historicoParametros, bloquesMesesEnergiaHfp, oferta);
-            console.log('first energia hfp ', historialOfertas[i].energiaHfp);
             historialOfertas[i].monomico = historialOfertas[i].potencia.map((value, j) => {
                 const precioPotencia = value.value * 100 * 10 / (720 * 0.79751092507001);
                 console.log('first precio potencia ', precioPotencia);
@@ -206,6 +201,7 @@ exports.makeCalculoService = makeCalculoService;
 // TODO: Histrial Parametros Proyeccion fechas en formato "[Mes sin 0]-[Año completo]". Ejemplo: 8/2022
 const getProyeccionHistorialParametros = (fechaOferta, fechaFinal, listIdsParametros) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log('fechaOferta', fechaOferta, 'fecha final', fechaFinal);
         const parametrosBase = yield (0, historial_parametros_1.getHistorialParametrosListDao)(listIdsParametros);
         const parametrosProyectados = parametrosBase.map((parametro) => {
             let valorBase = 0;
@@ -247,7 +243,11 @@ const getProyeccionHistorialParametros = (fechaOferta, fechaFinal, listIdsParame
                     value: existBase && i === 0 ? valorBase : value
                 };
             });
-            return Object.assign(Object.assign({}, parametro), { values: valoresParametrosProyectados });
+            return {
+                _id: parametro._id,
+                name: parametro.name,
+                values: valoresParametrosProyectados
+            };
         });
         return parametrosProyectados;
     }

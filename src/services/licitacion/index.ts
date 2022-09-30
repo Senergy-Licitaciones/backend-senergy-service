@@ -140,7 +140,6 @@ export const makeCalculoService: Service<{ historialOfertas: MetricasEmpresa[], 
         const meses = generateMesesArray(bloque.fechaInicio, bloque.fechaFin)
         return meses
       })
-      console.log('bloques meses potencia ', bloquesMesesPotencia)
       // calcular equivalente en energia
       const energia = getEnergiaToAdd(oferta.potencia[0].potencia, licitacion.potenciaContratadaHp, oferta.potMinFacturable / 100, licitacion.factorPlanta)
       const bloquesMesesEnergiaHp = oferta.energiaHp.map((bloque) => {
@@ -151,13 +150,9 @@ export const makeCalculoService: Service<{ historialOfertas: MetricasEmpresa[], 
         const meses = generateMesesArray(bloque.fechaInicio, bloque.fechaFin)
         return meses
       })
-      console.log('bloques meses energia hp ', bloquesMesesEnergiaHp)
       historialOfertas[i].potencia = calcularHistorico(historicoParametros, bloquesMesesPotencia, oferta)
-      console.log('first potencia ', historialOfertas[i].potencia)
       historialOfertas[i].energiaHp = calcularHistoricoEnergiaHp(energia, historicoParametros, bloquesMesesEnergiaHp, oferta)
-      console.log('first energia hp ', historialOfertas[i].energiaHp)
       historialOfertas[i].energiaHfp = calcularHistoricoEnergiaHfp(energia, historicoParametros, bloquesMesesEnergiaHfp, oferta)
-      console.log('first energia hfp ', historialOfertas[i].energiaHfp)
       historialOfertas[i].monomico = historialOfertas[i].potencia.map((value, j) => {
         const precioPotencia = value.value * 100 * 10 / (720 * 0.79751092507001)
         console.log('first precio potencia ', precioPotencia)
@@ -180,6 +175,7 @@ export const makeCalculoService: Service<{ historialOfertas: MetricasEmpresa[], 
 // TODO: Histrial Parametros Proyeccion fechas en formato "[Mes sin 0]-[Año completo]". Ejemplo: 8/2022
 export const getProyeccionHistorialParametros = async (fechaOferta: string, fechaFinal: string, listIdsParametros: string[]): Promise<Array<DocType<HistorialParametroModel>>> => {
   try {
+    console.log('fechaOferta', fechaOferta, 'fecha final', fechaFinal)
     const parametrosBase = await getHistorialParametrosListDao(listIdsParametros)
     const parametrosProyectados = parametrosBase.map((parametro) => {
       let valorBase = 0
@@ -222,7 +218,8 @@ export const getProyeccionHistorialParametros = async (fechaOferta: string, fech
         }
       })
       return {
-        ...parametro,
+        _id: parametro._id,
+        name: parametro.name,
         values: valoresParametrosProyectados
       }
     }) as Array<DocType<HistorialParametroModel>>
