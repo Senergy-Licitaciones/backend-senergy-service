@@ -209,40 +209,42 @@ const getProyeccionHistorialParametros = (fechaOferta, fechaFinal, listIdsParame
         const parametrosBase = yield (0, historial_parametros_1.getHistorialParametrosListDao)(listIdsParametros);
         const parametrosProyectados = parametrosBase.map((parametro) => {
             let valorBase = 0;
+            let existBase = false;
             const mesesProyectados = (0, utils_1.generateMesesArray)((0, dateFormat_1.formatMesStringToDate)(fechaOferta), (0, dateFormat_1.formatMesStringToDate)(fechaFinal));
             if (parametro.values[parametro.values.length - 1].fecha === fechaOferta) {
                 // existe parametro para la fecha en la que se hizo la oferta
-                mesesProyectados.shift();
-                valorBase = parametro.values[parametro.values.length - 1].value;
+                existBase = true;
             }
             // no existe parametro para la fecha en la que se hizo la oferta
-            valorBase = valorBase === 0 ? parametro.values[parametro.values.length - 2].value : valorBase;
-            const valoresParametrosProyectados = mesesProyectados.map((mes) => {
+            valorBase = parametro.values[parametro.values.length - 1].value;
+            let valuePrev = valorBase;
+            const valoresParametrosProyectados = mesesProyectados.map((mes, i) => {
                 let value = 0;
                 if (parametro.name.includes('PPI')) {
-                    value = (0, formulasProyeccion_1.proyeccionPPI)(valorBase);
+                    value = (0, formulasProyeccion_1.proyeccionPPI)(valuePrev);
                 }
                 if (parametro.name.includes('IPC')) {
-                    value = (0, formulasProyeccion_1.proyeccionIPC)(valorBase);
+                    value = (0, formulasProyeccion_1.proyeccionIPC)(valuePrev);
                 }
                 if (parametro.name.includes('PGN(US$/MMBTU) (OSINERGMIN)')) {
-                    value = (0, formulasProyeccion_1.proyeccionPGNDolarOsinergmin)(valorBase);
+                    value = (0, formulasProyeccion_1.proyeccionPGNDolarOsinergmin)(valuePrev);
                 }
                 if (parametro.name.includes('PGN(S/./MMBTU) (OSINERGMIN)')) {
-                    value = (0, formulasProyeccion_1.proyeccionPGNSolesOsinergmin)(valorBase);
+                    value = (0, formulasProyeccion_1.proyeccionPGNSolesOsinergmin)(valuePrev);
                 }
                 if (parametro.name.includes('PGN(US$/MMBTU)(COES)')) {
-                    value = (0, formulasProyeccion_1.proyeccionPGNDolarCoes)(valorBase);
+                    value = (0, formulasProyeccion_1.proyeccionPGNDolarCoes)(valuePrev);
                 }
                 if (parametro.name.includes('PCB') || parametro.name.includes('PR6')) {
-                    value = (0, formulasProyeccion_1.proyeccionPCBandPR6)(valorBase);
+                    value = (0, formulasProyeccion_1.proyeccionPCBandPR6)(valuePrev);
                 }
                 if (parametro.name.includes('TBarra')) {
-                    value = (0, formulasProyeccion_1.proyeccionTarifaChiclayo)(valorBase);
+                    value = (0, formulasProyeccion_1.proyeccionTarifaChiclayo)(valuePrev);
                 }
+                valuePrev = value;
                 return {
                     fecha: mes,
-                    value
+                    value: existBase && i === 0 ? valorBase : value
                 };
             });
             return Object.assign(Object.assign({}, parametro), { values: valoresParametrosProyectados });

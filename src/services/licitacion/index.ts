@@ -183,40 +183,42 @@ export const getProyeccionHistorialParametros = async (fechaOferta: string, fech
     const parametrosBase = await getHistorialParametrosListDao(listIdsParametros)
     const parametrosProyectados = parametrosBase.map((parametro) => {
       let valorBase = 0
+      let existBase = false
       const mesesProyectados: string[] = generateMesesArray(formatMesStringToDate(fechaOferta), formatMesStringToDate(fechaFinal))
       if (parametro.values[parametro.values.length - 1].fecha === fechaOferta) {
         // existe parametro para la fecha en la que se hizo la oferta
-        mesesProyectados.shift()
-        valorBase = parametro.values[parametro.values.length - 1].value
+        existBase = true
       }
       // no existe parametro para la fecha en la que se hizo la oferta
-      valorBase = valorBase === 0 ? parametro.values[parametro.values.length - 2].value : valorBase
-      const valoresParametrosProyectados: ValueByFecha[] = mesesProyectados.map((mes) => {
+      valorBase = parametro.values[parametro.values.length - 1].value
+      let valuePrev = valorBase
+      const valoresParametrosProyectados: ValueByFecha[] = mesesProyectados.map((mes, i) => {
         let value = 0
         if (parametro.name.includes('PPI')) {
-          value = proyeccionPPI(valorBase)
+          value = proyeccionPPI(valuePrev)
         }
         if (parametro.name.includes('IPC')) {
-          value = proyeccionIPC(valorBase)
+          value = proyeccionIPC(valuePrev)
         }
         if (parametro.name.includes('PGN(US$/MMBTU) (OSINERGMIN)')) {
-          value = proyeccionPGNDolarOsinergmin(valorBase)
+          value = proyeccionPGNDolarOsinergmin(valuePrev)
         }
         if (parametro.name.includes('PGN(S/./MMBTU) (OSINERGMIN)')) {
-          value = proyeccionPGNSolesOsinergmin(valorBase)
+          value = proyeccionPGNSolesOsinergmin(valuePrev)
         }
         if (parametro.name.includes('PGN(US$/MMBTU)(COES)')) {
-          value = proyeccionPGNDolarCoes(valorBase)
+          value = proyeccionPGNDolarCoes(valuePrev)
         }
         if (parametro.name.includes('PCB') || parametro.name.includes('PR6')) {
-          value = proyeccionPCBandPR6(valorBase)
+          value = proyeccionPCBandPR6(valuePrev)
         }
         if (parametro.name.includes('TBarra')) {
-          value = proyeccionTarifaChiclayo(valorBase)
+          value = proyeccionTarifaChiclayo(valuePrev)
         }
+        valuePrev = value
         return {
           fecha: mes,
-          value
+          value: existBase && i === 0 ? valorBase : value
         }
       })
       return {
