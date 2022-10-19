@@ -5,7 +5,7 @@ import { checkRoleAdminAuth } from '../../middlewares/roleAdminAuth'
 import { RoleAdmin, Type } from '../../types/data/enums'
 import { createAdminUser, deleteAdmin, getAdmins, updateAdmin } from './controller'
 const router = express.Router()
-router.post('/createAdmin', createAdminUser)
+router.post('/createAdmin', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Boss]), createAdminUser)
 /**
  * @swagger
  * /api/admin/createAdmin:

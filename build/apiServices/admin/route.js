@@ -10,7 +10,7 @@ const roleAdminAuth_1 = require("../../middlewares/roleAdminAuth");
 const enums_1 = require("../../types/data/enums");
 const controller_1 = require("./controller");
 const router = express_1.default.Router();
-router.post('/createAdmin', controller_1.createAdminUser);
+router.post('/createAdmin', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Boss]), controller_1.createAdminUser);
 /**
  * @swagger
  * /api/admin/createAdmin:
