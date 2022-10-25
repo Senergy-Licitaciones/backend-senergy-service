@@ -1,8 +1,9 @@
 import { RequestHandler, RequestParamHandler } from 'express'
 import { httpError } from '../../helpers/handleError'
-import { addParametrosService, deleteParametrosService, exportFileService, exportFileToUpdateService, exportProyeccionFileService, getNamesService, getParametrosService, updateParametroService, updateParametrosService } from '../../services/historial-parametros'
+import { addParametrosService, deleteParametrosService, exportFileService, exportFileToUpdateService, exportProyeccionFileService, getNamesService, getParametrosService, updateParametrosByDateService, updateParametroService, updateParametrosService } from '../../services/historial-parametros'
 import { getDatesFromLicitacion } from '../../services/licitacion'
 import { Admin, DocType, ExportFileAdminData } from '../../types/data'
+import { ParametroValue } from '../../types/models'
 
 /* export const addParametro: RequestHandler = async (req, res) => {
   try {
@@ -114,6 +115,15 @@ export const exportProyeccionFile: RequestHandler = async (req, res) => {
     const { idLicitacion } = req.params as any
     const { fechaInicio, fechaFin } = await getDatesFromLicitacion(idLicitacion)
     const response = await exportProyeccionFileService({ fechaInicio, fechaFin, idAdmin: _id, idLicitacion })
+    return res.status(200).send(response)
+  } catch (e) {
+    return httpError(res, e)
+  }
+}
+export const updateParametrosByDate: RequestHandler = async (req, res) => {
+  try {
+    const { fecha, parametros } = req.body as {fecha: string, parametros: ParametroValue[]}
+    const response = await updateParametrosByDateService({ fecha, parametros })
     return res.status(200).send(response)
   } catch (e) {
     return httpError(res, e)

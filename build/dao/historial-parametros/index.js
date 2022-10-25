@@ -21,3 +21,4 @@ __exportStar(require("./getParametrosName.dao"), exports);
 __exportStar(require("./insertMultipleParametros.dao"), exports);
 __exportStar(require("./updateMultipleParametros.dao"), exports);
 __exportStar(require("./updateParametro.dao"), exports);
+__exportStar(require("./updateParametrosByDate.dao"), exports);

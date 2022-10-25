@@ -21,3 +21,4 @@ __exportStar(require("./getNames.service"), exports);
 __exportStar(require("./getParametros.service"), exports);
 __exportStar(require("./updateParametro.service"), exports);
 __exportStar(require("./updateParametros.service"), exports);
+__exportStar(require("./updateParametrosByDate.service"), exports);
