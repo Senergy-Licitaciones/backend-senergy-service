@@ -30,8 +30,7 @@ const checkUserType = (types) => (req, res, next) => __awaiter(void 0, void 0, v
         console.log('verificando token');
         const tokenData = (0, generateToken_1.verifyToken)(token);
         if (tokenData == null) {
-            return res.status(400).send({
-                error: true,
+            return res.status(409).send({
                 message: 'Token inválido'
             });
         }
@@ -40,28 +39,27 @@ const checkUserType = (types) => (req, res, next) => __awaiter(void 0, void 0, v
             if (tokenData.type === enums_1.Type.User) {
                 const user = yield model_2.default.findById(tokenData._id);
                 if (user == null)
-                    return res.status(400).send({ message: 'Usuario sin permisos', error: true });
+                    return res.status(409).send({ message: 'Usuario sin permisos', error: true });
                 // if (user.estado === 'offline') return res.status(400).send({ message: 'Debe iniciar sesión', error: true })
                 req.user = user;
             }
             if (tokenData.type === enums_1.Type.Proveedor) {
                 const proveedor = yield model_3.default.findById(tokenData._id);
                 if (proveedor == null)
-                    return res.status(400).send({ message: 'Usuario sin permisos', error: true });
+                    return res.status(409).send({ message: 'Usuario sin permisos' });
                 req.proveedor = proveedor;
             }
             if (tokenData.type === enums_1.Type.Admin) {
                 const admin = yield model_1.default.findById(tokenData._id);
                 if (admin == null)
-                    return res.status(400).send({ message: 'Cuenta no encontrada', error: true });
+                    return res.status(409).send({ message: 'Cuenta no encontrada' });
                 req.admin = admin;
             }
             console.log('antes del next en user type');
             return next();
         }
         console.log('else antes del res status en checkuser type');
-        return res.status(400).send({
-            error: true,
+        return res.status(409).send({
             message: 'No tiene permisos para realizar esta acción'
         });
     }

@@ -25,6 +25,47 @@ router.post('/addParametros/:filename', uploadParametros_1.default, checkAuth_1.
 router.put('/updateParametros/:filename', uploadParametros_1.default, checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Employee, enums_1.RoleAdmin.Boss]), controller_1.updateParametros);
 router.put('/updateParametro/:idParametro', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Employee, enums_1.RoleAdmin.Boss]), controller_1.updateParametro);
 router.put('/updateParametrosByDate', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Employee, enums_1.RoleAdmin.Boss]), controller_1.updateParametrosByDate);
+/**
+ * @swagger
+ * /api/historial-parametros/updateParametrosByDate:
+ *  put:
+ *      summary: "Actualizar Parámetros Base por Fecha"
+ *      tags: [Historial de Parámetros Base]
+ *      description: "Endpoint para actualizar parámetros base de una nueva fecha"
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schemas/updateParametersByDateRequest'
+ *      responses:
+ *          200:
+ *              description: 'Proceso exitoso'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#components/schemas/responseMessage'
+ *          400:
+ *              description: 'Errores durante el servicio'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#components/schemas/responseMessage'
+ *          409:
+ *              description: 'Usuario no autenticado'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#components/schemas/responseMessage'
+ *          500:
+ *              description: 'Conexión de DB o servicios externos perdidos'
+ *              content:
+ *                  application/json:
+ *                       schema:
+ *                          $ref: '#components/schemas/responseMessage'
+ *      security:
+ *          - bearerAuth: []
+ */
 router.get('/getParametros', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Employee, enums_1.RoleAdmin.Boss]), controller_1.getParametros);
 router.get('/getNames', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Proveedor]), (0, roleAuth_1.default)([enums_1.Role.Basico, enums_1.Role.Premium]), controller_1.getNames);
 /**

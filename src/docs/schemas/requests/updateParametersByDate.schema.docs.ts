@@ -1,0 +1,28 @@
+export const UpdateParametersByDateSchemaRequest = {
+  type: 'object',
+  properties: {
+    date: {
+      type: 'string',
+      example: '8-2022',
+      description: 'El formato debe ser de la siguiente manera {Mes}-{Año}'
+    },
+    parameters: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          _id: {
+            type: 'string',
+            example: '631120f339bbb3cee9cb7ed6',
+            description: 'Id del parámetro'
+          },
+          value: {
+            type: 'number',
+            example: 221.493492,
+            description: 'Valor del parámetro'
+          }
+        }
+      }
+    }
+  }
+}

@@ -15,8 +15,7 @@ const checkUserType: CheckUserType = (types) => async (req, res, next) => {
     console.log('verificando token')
     const tokenData = verifyToken(token)
     if (tokenData == null) {
-      return res.status(400).send({
-        error: true,
+      return res.status(409).send({
         message: 'Token inválido'
       })
     }
@@ -24,26 +23,25 @@ const checkUserType: CheckUserType = (types) => async (req, res, next) => {
     if (types.includes(tokenData.type)) {
       if (tokenData.type === Type.User) {
         const user = await UsuarioModel.findById(tokenData._id)
-        if (user == null) return res.status(400).send({ message: 'Usuario sin permisos', error: true })
+        if (user == null) return res.status(409).send({ message: 'Usuario sin permisos', error: true })
         // if (user.estado === 'offline') return res.status(400).send({ message: 'Debe iniciar sesión', error: true })
         req.user = user
       }
       if (tokenData.type === Type.Proveedor) {
         const proveedor = await ProveedorModel.findById(tokenData._id)
-        if (proveedor == null) return res.status(400).send({ message: 'Usuario sin permisos', error: true })
+        if (proveedor == null) return res.status(409).send({ message: 'Usuario sin permisos' })
         req.proveedor = proveedor
       }
       if (tokenData.type === Type.Admin) {
         const admin = await AdminModel.findById(tokenData._id)
-        if (admin == null) return res.status(400).send({ message: 'Cuenta no encontrada', error: true })
+        if (admin == null) return res.status(409).send({ message: 'Cuenta no encontrada' })
         req.admin = admin
       }
       console.log('antes del next en user type')
       return next()
     }
     console.log('else antes del res status en checkuser type')
-    return res.status(400).send({
-      error: true,
+    return res.status(409).send({
       message: 'No tiene permisos para realizar esta acción'
     })
   } catch (err) {

@@ -23,6 +23,47 @@ router.post('/addParametros/:filename', uploadParametros, checkAuth, checkUserTy
 router.put('/updateParametros/:filename', uploadParametros, checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), updateParametros)
 router.put('/updateParametro/:idParametro', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), updateParametro)
 router.put('/updateParametrosByDate', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), updateParametrosByDate)
+/**
+ * @swagger
+ * /api/historial-parametros/updateParametrosByDate:
+ *  put:
+ *      summary: "Actualizar Parámetros Base por Fecha"
+ *      tags: [Historial de Parámetros Base]
+ *      description: "Endpoint para actualizar parámetros base de una nueva fecha"
+ *      requestBody:
+ *          required: true
+ *          content:
+ *              application/json:
+ *                  schema:
+ *                      $ref: '#components/schemas/updateParametersByDateRequest'
+ *      responses:
+ *          200:
+ *              description: 'Proceso exitoso'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#components/schemas/responseMessage'
+ *          400:
+ *              description: 'Errores durante el servicio'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#components/schemas/responseMessage'
+ *          409:
+ *              description: 'Usuario no autenticado'
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#components/schemas/responseMessage'
+ *          500:
+ *              description: 'Conexión de DB o servicios externos perdidos'
+ *              content:
+ *                  application/json:
+ *                       schema:
+ *                          $ref: '#components/schemas/responseMessage'
+ *      security:
+ *          - bearerAuth: []
+ */
 router.get('/getParametros', checkAuth, checkUserType([Type.Admin]), checkRoleAdminAuth([RoleAdmin.Employee, RoleAdmin.Boss]), getParametros)
 router.get('/getNames', checkAuth, checkUserType([Type.Proveedor]), checkRoleAuth([Role.Basico, Role.Premium]), getNames)
 /**
