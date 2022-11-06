@@ -1,0 +1,5 @@
+export * from './admin.schema.docs'
+export * from './responseAdmin.schema.docs'
+export * from './responseMessage.schema.docs'
+export * from './responseCalculo.schema.docs'
+export * from './parametroName.schema.docs'
