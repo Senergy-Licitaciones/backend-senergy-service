@@ -17,3 +17,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./responseAdmin.schema.docs"), exports);
 __exportStar(require("./responseCalculo.schema.docs"), exports);
 __exportStar(require("./responseMessage.schema.docs"), exports);
+__exportStar(require("./loginResponse.schema.docs"), exports);

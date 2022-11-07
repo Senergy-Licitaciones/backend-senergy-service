@@ -4,12 +4,12 @@ exports.UpdateParametersByDateSchemaRequest = void 0;
 exports.UpdateParametersByDateSchemaRequest = {
     type: 'object',
     properties: {
-        date: {
+        fecha: {
             type: 'string',
             example: '8-2022',
             description: 'El formato debe ser de la siguiente manera {Mes}-{Año}'
         },
-        parameters: {
+        parametros: {
             type: 'array',
             items: {
                 type: 'object',

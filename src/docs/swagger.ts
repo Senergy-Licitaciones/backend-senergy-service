@@ -30,6 +30,6 @@ const swaggerDefinition: OAS3Definition = {
 }
 const swaggerOptions: OAS3Options = {
   swaggerDefinition,
-  apis: [`${path.join(__dirname, '../apiServices/*/route.ts')}`]
+  apis: [`${path.join(__dirname, '../apiServices/*/route.{ts,js}')}`]
 }
 export default swaggerJSDoc(swaggerOptions)
