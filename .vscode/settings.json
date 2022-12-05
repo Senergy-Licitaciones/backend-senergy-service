@@ -31,5 +31,8 @@
         "/src/dao/tarifa-energia-hp",
         "/src/services/tarifa-energia-hfp",
         "/src/dao/tarifa-energia-hfp"
+    ],
+    "cSpell.words": [
+        "Senergy"
     ]
 }

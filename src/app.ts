@@ -36,5 +36,6 @@ app.use('/api/brg', routerBrg)
 app.use('/api/puntoSum', routerPuntoSum)
 app.use('/api/servicio', routerServicio)
 app.use('/api/oferta', routerOferta)
-app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerSetup))
+const options = { customCssUrl: '/public/swagger-ui.css', customSiteTitle: 'Senergy API - Swagger' }
+app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerSetup, options))
 export default app

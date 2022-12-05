@@ -40,5 +40,6 @@ app.use('/api/brg', route_5.default);
 app.use('/api/puntoSum', route_6.default);
 app.use('/api/servicio', route_7.default);
 app.use('/api/oferta', route_8.default);
-app.use('/documentation', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default));
+const options = { customCssUrl: '/public/swagger-ui.css', customSiteTitle: 'Senergy API - Swagger' };
+app.use('/documentation', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default, options));
 exports.default = app;
