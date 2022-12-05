@@ -23,7 +23,6 @@ const route_12 = __importDefault(require("./apiServices/tarifa-energia-hfp/route
 const route_13 = __importDefault(require("./apiServices/tarifa-potencia/route"));
 const app = (0, express_1.default)();
 app.use((0, morgan_1.default)('dev'));
-app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 // routes
@@ -40,6 +39,5 @@ app.use('/api/brg', route_5.default);
 app.use('/api/puntoSum', route_6.default);
 app.use('/api/servicio', route_7.default);
 app.use('/api/oferta', route_8.default);
-const options = { customCssUrl: '/public/swagger-ui.css', customSiteTitle: 'Senergy API - Swagger' };
-app.use('/documentation', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default, options));
+app.use('/documentation', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swagger_1.default));
 exports.default = app;

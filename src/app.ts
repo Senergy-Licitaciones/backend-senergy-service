@@ -19,7 +19,6 @@ import routerTarifaPotencia from './apiServices/tarifa-potencia/route'
 const app = express()
 
 app.use(morgan('dev'))
-app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(cors())
 // routes
@@ -36,6 +35,5 @@ app.use('/api/brg', routerBrg)
 app.use('/api/puntoSum', routerPuntoSum)
 app.use('/api/servicio', routerServicio)
 app.use('/api/oferta', routerOferta)
-const options = { customCssUrl: '/public/swagger-ui.css', customSiteTitle: 'Senergy API - Swagger' }
-app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerSetup, options))
+app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerSetup))
 export default app
