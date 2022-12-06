@@ -19,5 +19,6 @@ router.get('/users', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.
 router.post('/generate-file-to-months-details', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.User]), (0, roleAuth_1.default)([enums_1.Role.Basico, enums_1.Role.Premium]), controller_1.generateFileToMonthsDetails);
 router.get('/download/especificacionMes/:filename', controller_1.getEspecificacionMes);
 router.post('/validate-file/:filename', uploadFileEspecificacion_1.default, controller_1.validateFile);
+router.post('/addUser', checkAuth_1.default, (0, checkUserType_1.default)([enums_1.Type.Admin]), (0, roleAdminAuth_1.checkRoleAdminAuth)([enums_1.RoleAdmin.Employee, enums_1.RoleAdmin.Boss]), controller_1.addUserController);
 router.param('filename', controller_1.filename);
 exports.default = router;

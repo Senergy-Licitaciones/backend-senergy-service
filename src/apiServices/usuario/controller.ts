@@ -1,8 +1,9 @@
 import { RequestHandler, RequestParamHandler } from 'express'
 import { Types } from 'mongoose'
 import { httpError } from '../../helpers/handleError'
-import { changeStatusService, generateFileToMonthsDetailsService, getInfoUserService, getLicitacionesByUser, getUsersService, validateFileService } from '../../services/usuario'
+import { addUserService, changeStatusService, generateFileToMonthsDetailsService, getInfoUserService, getLicitacionesByUser, getUsersService, validateFileService } from '../../services/usuario'
 import { DocType, User } from '../../types/data'
+import { Role } from '../../types/data/enums'
 import { Estado } from '../../types/form/enums'
 
 export const changeStatus: RequestHandler = async (req, res) => {
@@ -71,5 +72,14 @@ export const validateFile: RequestHandler = (req, res) => {
     return res.status(200).send(response)
   } catch (err) {
     return httpError(res, err)
+  }
+}
+export const addUserController: RequestHandler = async (req, res) => {
+  try {
+    const payload = req.body as {empresa: string, address: string, correo: string, password: string, role: Role, web: string, phone: string, ruc: string}
+    const response = await addUserService(payload)
+    return res.status(200).send(response)
+  } catch (e) {
+    return httpError(res, e)
   }
 }

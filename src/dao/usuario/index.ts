@@ -4,7 +4,7 @@ import { DocType, ResponseId, ResponseParent, User } from '../../types/data'
 import { UserRegisterFields } from '../../types/form'
 import { Types } from 'mongoose'
 import { Dao, DaoWithoutParam } from '../../types/methods'
-import { Estado } from '../../types/data/enums'
+import { Estado, Role } from '../../types/data/enums'
 export const crearUsuarioDao: Dao<UserRegisterFields, DocType<User>> = async (fields) => {
   try {
     const user = await UsuarioModel.create({ ...fields })
@@ -55,6 +55,7 @@ export const getUserHashDao: Dao<string, DocType<User>> = async (correo) => {
     if (response == null) throw new Error('Correo no registrado')
     return response
   } catch (err) {
+    console.log('error en datos', err)
     throw handleError(err, 'Ha ocurrido un error en la capa de datos')
   }
 }
@@ -74,5 +75,17 @@ export const getUsersDao: DaoWithoutParam<Array<DocType<Pick<User, 'correo'| 'em
     return users
   } catch (err) {
     throw handleError(err, 'Ha ocurrido un error en la capa de datos al obtener la lista de usuarios')
+  }
+}
+export const createUserDao: Dao<{empresa: string, address: string, correo: string, password: string, role: Role, web: string, phone: string, ruc: string}, {message: string}> = async (payload) => {
+  try {
+    const user = await UsuarioModel.create({ ...payload })
+    const response = await user.save()
+    console.log(response)
+    return {
+      message: 'Usuario creado correctamente'
+    }
+  } catch (e) {
+    throw handleError(e, 'Ha ocurrido un error en la capa de datos al crear el usuario')
   }
 }

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateFile = exports.getEspecificacionMes = exports.filename = exports.generateFileToMonthsDetails = exports.getInfoUser = exports.showLicitaciones = exports.showUsers = exports.changeStatus = void 0;
+exports.addUserController = exports.validateFile = exports.getEspecificacionMes = exports.filename = exports.generateFileToMonthsDetails = exports.getInfoUser = exports.showLicitaciones = exports.showUsers = exports.changeStatus = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const usuario_1 = require("../../services/usuario");
 const changeStatus = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -97,3 +97,14 @@ const validateFile = (req, res) => {
     }
 };
 exports.validateFile = validateFile;
+const addUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const payload = req.body;
+        const response = yield (0, usuario_1.addUserService)(payload);
+        return res.status(200).send(response);
+    }
+    catch (e) {
+        return (0, handleError_1.httpError)(res, e);
+    }
+});
+exports.addUserController = addUserController;

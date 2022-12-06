@@ -1,13 +1,14 @@
 import { Types } from 'mongoose'
 import { getLicitacionesByUserDao, updateLicitacionDao } from '../../dao/licitacion'
 import { getProveedorNameByIdDao } from '../../dao/proveedor'
-import { getUsersDao } from '../../dao/usuario'
+import { createUserDao, getUsersDao } from '../../dao/usuario'
 import { handleError } from '../../helpers/handleError'
 import { DocType, Info, Licitacion, ResponseParent, User } from '../../types/data'
 import { Estado } from '../../types/form/enums'
 import { Service, ServiceWithoutParam } from '../../types/methods'
 import XLSX from 'xlsx'
 import fs from 'fs'
+import { Role } from '../../types/data/enums'
 
 export const getInfoUserService: Service<DocType<User>, Info> = async (user) => {
   try {
@@ -105,5 +106,13 @@ export const validateFileService = (filename: string): Array<{mes: string, hp: n
     return meses
   } catch (err) {
     throw handleError(err)
+  }
+}
+export const addUserService: Service<{empresa: string, address: string, correo: string, password: string, role: Role, web: string, phone: string, ruc: string}, {message: string}> = async (payload) => {
+  try {
+    const response = await createUserDao(payload)
+    return response
+  } catch (e) {
+    throw handleError(e)
   }
 }

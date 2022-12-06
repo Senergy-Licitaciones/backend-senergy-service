@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validateFileService = exports.generateFileToMonthsDetailsService = exports.getLicitacionesByUser = exports.getUsersService = exports.changeStatusService = exports.getInfoUserService = void 0;
+exports.addUserService = exports.validateFileService = exports.generateFileToMonthsDetailsService = exports.getLicitacionesByUser = exports.getUsersService = exports.changeStatusService = exports.getInfoUserService = void 0;
 const mongoose_1 = require("mongoose");
 const licitacion_1 = require("../../dao/licitacion");
 const proveedor_1 = require("../../dao/proveedor");
@@ -135,3 +135,13 @@ const validateFileService = (filename) => {
     }
 };
 exports.validateFileService = validateFileService;
+const addUserService = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const response = yield (0, usuario_1.createUserDao)(payload);
+        return response;
+    }
+    catch (e) {
+        throw (0, handleError_1.handleError)(e);
+    }
+});
+exports.addUserService = addUserService;

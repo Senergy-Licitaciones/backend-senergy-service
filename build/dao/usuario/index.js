@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUsersDao = exports.getUserHashDao = exports.confirmUserDao = exports.updateUsuarioDao = exports.verifyCorreoDao = exports.crearUsuarioDao = void 0;
+exports.createUserDao = exports.getUsersDao = exports.getUserHashDao = exports.confirmUserDao = exports.updateUsuarioDao = exports.verifyCorreoDao = exports.crearUsuarioDao = void 0;
 const handleError_1 = require("../../helpers/handleError");
 const model_1 = __importDefault(require("../../apiServices/usuario/model"));
 const enums_1 = require("../../types/data/enums");
@@ -79,6 +79,7 @@ const getUserHashDao = (correo) => __awaiter(void 0, void 0, void 0, function* (
         return response;
     }
     catch (err) {
+        console.log('error en datos', err);
         throw (0, handleError_1.handleError)(err, 'Ha ocurrido un error en la capa de datos');
     }
 });
@@ -103,3 +104,17 @@ const getUsersDao = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getUsersDao = getUsersDao;
+const createUserDao = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const user = yield model_1.default.create(Object.assign({}, payload));
+        const response = yield user.save();
+        console.log(response);
+        return {
+            message: 'Usuario creado correctamente'
+        };
+    }
+    catch (e) {
+        throw (0, handleError_1.handleError)(e, 'Ha ocurrido un error en la capa de datos al crear el usuario');
+    }
+});
+exports.createUserDao = createUserDao;
